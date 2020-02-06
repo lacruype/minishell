@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+         #
+#    By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/02/05 12:11:48 by rledrin          ###   ########.fr        #
+#    Updated: 2020/02/06 13:05:06 by lacruype         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,11 @@ NAME = Minishell
 
 PATH = srcs/
 
-SRCS =  $(PATH)main.c\
-	$(PATH)ft_echo.c\
+SRCS =  $(PATH)main.c \
+		$(PATH)ft_echo.c \
+		$(PATH)ft_utils.c \
+		$(PATH)get_next_line.c \
+		$(PATH)get_next_line_utils.c \
 
 LIB = includes
 
