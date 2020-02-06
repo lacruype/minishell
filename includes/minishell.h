@@ -18,7 +18,7 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <signal.h>
-# include <sys/wait.h>
+
 # include <stdio.h>
 # include "libft.h"
 # include "get_next_line.h"

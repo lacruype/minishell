@@ -14,11 +14,12 @@ NAME = Minishell
 
 PATH = srcs/
 
-SRCS =  $(PATH)main.c \
+SRCS =	$(PATH)main.c \
 		$(PATH)ft_echo.c \
 		$(PATH)ft_utils.c \
 		$(PATH)get_next_line.c \
 		$(PATH)get_next_line_utils.c \
+		$(PATH)ft_pwd.c \
 
 LIB = includes
 

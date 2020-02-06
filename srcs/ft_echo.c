@@ -21,7 +21,7 @@ void	ft_echo(char *str, char *file_name, int option)
 		fd = 1;
 	write(fd, str, ft_strlen(str));
 	if (option)
-		write(fd, "\n", 2);
+		write(fd, "\n", 1);
 	if (file_name)
 		close(fd);
 }
