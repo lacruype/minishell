@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:14:32 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/10 12:57:38 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/10 14:20:18 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int		ft_is_space(char *str)
+{
+	int i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == ' ' && str[i + 1] == ' ')
+		return (-1);
+	}
+	return (1);
+}
 
 void	ft_freestrarr(char **arr)
 {
@@ -57,6 +70,7 @@ int		init_g_envv(char **env)
 		return (-1);
 	while (env[++i])
 		g_envv[i] = ft_strdup((const char *)env[i]);
+	g_envv[i] = NULL;
 	return (0);
 }
 
@@ -101,14 +115,13 @@ int		start_minishell(void)
 		i = 0;
 		display_prompt();
 		ret = get_next_line(0, &cmd_line);
-		if (cmd_line[0] != '\0')
-		{
-			cmd_line_split = ft_split(cmd_line, ' ');
+		cmd_line_split = ft_split(cmd_line, ' ');
+		if (cmd_line_split[0] != NULL)
 			if (search_function(cmd_line_split) == -1)
 				check_exit = 1;
-			ft_freestrarr(cmd_line_split);
-		}
+		ft_freestrarr(cmd_line_split);
 		free(cmd_line);
+
 	}
 	return (0);
 }
@@ -122,6 +135,6 @@ int		main(int ac, char **av, char **env)
 		return (-1);
 	if (start_minishell() == -1)
 		return (-1);
-	//ft_free(g_envv);
+	ft_freestrarr(g_envv);
 	return (0);
 }
