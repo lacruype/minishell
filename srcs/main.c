@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:14:32 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/10 14:20:18 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/10 14:54:02 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,11 @@ void	ft_freestrarr(char **arr)
 	i = -1;
 	if (!arr)
 		return ;
-	while (arr[++i])
-		free(arr[i]);
+	if (*arr)
+	{
+		while (arr[++i])
+			free(arr[i]);
+	}
 	free(arr);
 	arr = NULL;
 }
@@ -115,7 +118,9 @@ int		start_minishell(void)
 		i = 0;
 		display_prompt();
 		ret = get_next_line(0, &cmd_line);
+		write(1, "HEY\n", 4);
 		cmd_line_split = ft_split(cmd_line, ' ');
+		write(1, "HOH\n", 4);
 		if (cmd_line_split[0] != NULL)
 			if (search_function(cmd_line_split) == -1)
 				check_exit = 1;
@@ -135,6 +140,6 @@ int		main(int ac, char **av, char **env)
 		return (-1);
 	if (start_minishell() == -1)
 		return (-1);
-	ft_freestrarr(g_envv);
+	//ft_freestrarr(g_envv);
 	return (0);
 }
