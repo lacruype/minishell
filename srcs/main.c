@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:14:32 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/10 12:47:03 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/10 12:57:38 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	ft_free(char **arr)
+void	ft_freestrarr(char **arr)
 {
 	int i;
 
@@ -35,6 +35,7 @@ void	display_prompt(void)
 	//MESSAGE DERREUR NOM TROP LONG
 	ft_putstr_fd(buf, 0);
 	ft_putstr_fd(" ➡ ", 0);
+	free(buf);
 }
 
 int		get_size_env(char **env)
@@ -59,7 +60,7 @@ int		init_g_envv(char **env)
 	return (0);
 }
 
-int		search_function(char **cmd_line_split, char **env)
+int		search_function(char **cmd_line_split)
 {
 	int i;
 	char **path;
@@ -69,10 +70,10 @@ int		search_function(char **cmd_line_split, char **env)
 		ft_strlen((const char*)cmd_line_split[0])) == 0)
 			return (-1);
 	i = 0;
-	while (env[i] != NULL)
+	while (g_envv[i] != NULL)
 	{
-		if (ft_strncmp((const char*)env[i], "PATH", 4) == 0)
-			path = ft_split((const char*)env[i], ':');
+		if (ft_strncmp((const char*)g_envv[i], "PATH", 4) == 0)
+			path = ft_split((const char*)g_envv[i], ':');
 		i++;
 	}
 	i = 0;
@@ -81,10 +82,11 @@ int		search_function(char **cmd_line_split, char **env)
 		printf("PATH %d = %s\n", i, path[i]);
 		i++;
 	}
+	ft_freestrarr(path);
 	return (0);
 }
 
-int		start_minishell(char **env)
+int		start_minishell(void)
 {
 	int		i;
 	int		ret;
@@ -92,7 +94,6 @@ int		start_minishell(char **env)
 	char	*cmd_line;
 	char	**cmd_line_split;
 
-	(void)env;
 	ret = 1;
 	check_exit = 0;
 	while (ret == 1 && check_exit == 0)
@@ -103,11 +104,11 @@ int		start_minishell(char **env)
 		if (cmd_line[0] != '\0')
 		{
 			cmd_line_split = ft_split(cmd_line, ' ');
-			if (search_function(cmd_line_split, env) == -1)
+			if (search_function(cmd_line_split) == -1)
 				check_exit = 1;
-			ft_free(cmd_line_split);
-			free(cmd_line);
+			ft_freestrarr(cmd_line_split);
 		}
+		free(cmd_line);
 	}
 	return (0);
 }
@@ -119,7 +120,7 @@ int		main(int ac, char **av, char **env)
 		return (0);
 	if (init_g_envv(env) == -1)
 		return (-1);
-	if (start_minishell(env) == -1)
+	if (start_minishell() == -1)
 		return (-1);
 	//ft_free(g_envv);
 	return (0);
