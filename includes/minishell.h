@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/06 14:56:34 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/10 12:23:01 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,18 @@
 # include <signal.h>
 
 # include <stdio.h>
+# include <limits.h>
 # include "libft.h"
 # include "get_next_line.h"
+
+char	**g_envv;
 
 /*
 **		main.c
 */
 
-int		start_minishell();
+int		search_function(char **cmd_line_split, char **env);
+int		start_minishell(char **env);
 
 /*
 **		ft_utils.c.c
