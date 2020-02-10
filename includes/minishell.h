@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/10 12:57:15 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/10 15:51:35 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,33 @@ char	**g_envv;
 **		main.c
 */
 
-int		search_function(char **cmd_line_split);
-int		start_minishell(void);
+int		search_function(char *cmd_line, char **path);
+int		start_minishell(char **path);
 
 /*
-**		ft_utils.c.c
+**		ft_utils.c
 */
 
 void	*ft_realloc(void *dst, size_t new_size);
-int		ft_jump_space(char *str, int i);
+void	ft_freestrarr(char **arr);
+char	*ft_jump_space(char *str);
 
 /*
 **		ft_parsing01.c
 */
 
 int		ft_parsing(char *command_line);
+
+/*
+**		ft_echo.c
+*/
+
+void	ft_echo(char *str, char *file_name, int option);
+
+/*
+**		ft_envv.c
+*/
+
+int				init_g_envv(char **env);
 
 #endif

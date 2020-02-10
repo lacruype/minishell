@@ -6,7 +6,7 @@
 #    By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/02/06 13:05:06 by lacruype         ###   ########.fr        #
+#    Updated: 2020/02/10 15:51:56 by lacruype         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ SRCS =	$(PATH)main.c \
 		$(PATH)get_next_line.c \
 		$(PATH)get_next_line_utils.c \
 		$(PATH)ft_pwd.c \
+		$(PATH)ft_envv.c \
 
 LIB = includes
 
