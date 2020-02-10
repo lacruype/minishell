@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:14:32 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/10 12:36:38 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/10 12:47:03 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	display_prompt(void)
 		return ;
 	//MESSAGE DERREUR NOM TROP LONG
 	ft_putstr_fd(buf, 0);
+	ft_putstr_fd(" ➡ ", 0);
 }
 
 int		get_size_env(char **env)
@@ -97,15 +98,16 @@ int		start_minishell(char **env)
 	while (ret == 1 && check_exit == 0)
 	{
 		i = 0;
-		write(1, "B\n", 2);
 		display_prompt();
-		// ft_putstr_fd("Minishell ➡ ", 0);
 		ret = get_next_line(0, &cmd_line);
-		cmd_line_split = ft_split(cmd_line, ' ');
-		if (search_function(cmd_line_split, env) == -1)
-			check_exit = 1;
-		ft_free(cmd_line_split);
-		free(cmd_line);
+		if (cmd_line[0] != '\0')
+		{
+			cmd_line_split = ft_split(cmd_line, ' ');
+			if (search_function(cmd_line_split, env) == -1)
+				check_exit = 1;
+			ft_free(cmd_line_split);
+			free(cmd_line);
+		}
 	}
 	return (0);
 }
