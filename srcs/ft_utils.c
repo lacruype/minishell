@@ -53,3 +53,61 @@ char	*ft_jump_space(char *str)
 		i++;
 	return (&str[i]);
 }
+
+int		create_file(char *filename, int app, int quote)
+{
+	int	fd;
+	int	i;
+
+	i = 0;
+	if (!filename)
+		return(1);
+	if (ft_strlen(filename) > 255)
+		return (-1);
+	while (filename[i] && !quote)
+	{
+		if (ft_strchr("|", filename[i]))
+			return (-1);
+		i++;
+	}
+	if (ft_strncmp(filename, "..", 3) = 0 || ft_strncmp(filename, ".", 2) == 0)
+		return (-1);
+	if (app)
+		fd = open(filename, O_CREAT | O_APPEND | O_WRONLY);
+	else
+		fd = open(filename, O_CREAT | O_WRONLY);
+	return (fd);
+}
+
+char		*quote(char *cmd)
+{
+	int		i;
+	int		quote;
+
+	i = 0;
+	if (cmd[i] == '\'')
+	{
+		quote = 1;
+		while (quote)
+		{
+			if (!cmd[i++])
+				return(0);
+			if (cmd[i] == '\'')
+				quotes = 0;
+		}
+	}
+	if (cmd[i] == '\"')
+	{
+		quote = 1;
+		while (quote)
+		{
+			if (!cmd[i++])
+				return(0);
+			if (cmd[i] == '\"')
+				quotes = 0;
+		}
+	}
+	if (i != 0)
+		return(&cmd[i]);
+	return(0);
+}

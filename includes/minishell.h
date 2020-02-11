@@ -40,6 +40,9 @@ int		start_minishell(char **path);
 void	*ft_realloc(void *dst, size_t new_size);
 void	ft_freestrarr(char **arr);
 char	*ft_jump_space(char *str);
+int		create_file(char *filename, int app, int quote);
+char	*quote(char *cmd);
+
 
 /*
 **		ft_parsing01.c
