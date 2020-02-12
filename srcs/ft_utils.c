@@ -3,30 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 12:33:14 by lacruype          #+#    #+#             */
-/*   Updated: 2020/02/10 15:36:59 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/12 18:35:13 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	*ft_realloc(void *dst, size_t new_size)
+void	*ft_realloc(void *ptr, size_t size)
 {
-	size_t	cur_size;
-	char	*newdst;
+	char	*newptr;
 
-	if (dst == 0)
-		return (malloc(new_size));
-	cur_size = sizeof(dst);
-	if (new_size <= cur_size)
-		return (dst);
-	newdst = malloc(new_size);
-	ft_memcpy(dst, newdst, (int)cur_size);
-	free(dst);
-	return (newdst);
+	if (!size && ptr)
+	{
+		if (!(newptr = (char *)malloc(1)))
+			return (0);
+		free(ptr);
+		return (newptr);
+	}
+	if (!(newptr = (char *)malloc(size)))
+		return (0);
+	if (ptr)
+	{
+		ft_memcpy(newptr, ptr, size);
+		free(ptr);
+	}
+	return (newptr);
 }
+
 
 void	ft_freestrarr(char **arr)
 {
@@ -41,7 +47,7 @@ void	ft_freestrarr(char **arr)
 			free(arr[i]);
 	}
 	free(arr);
-	arr = NULL;
+	arr = 0;
 }
 
 char	*ft_jump_space(char *str)
@@ -60,7 +66,7 @@ int		create_file(char *filename, int app, int quote)
 	int	i;
 
 	i = 0;
-	if (!filename)
+	if (!filename[0])
 		return(1);
 	if (ft_strlen(filename) > 255)
 		return (-1);
@@ -70,44 +76,41 @@ int		create_file(char *filename, int app, int quote)
 			return (-1);
 		i++;
 	}
-	if (ft_strncmp(filename, "..", 3) = 0 || ft_strncmp(filename, ".", 2) == 0)
+	if (ft_strncmp(filename, "..", 3) == 0 || ft_strncmp(filename, ".", 2) == 0)
 		return (-1);
 	if (app)
-		fd = open(filename, O_CREAT | O_APPEND | O_WRONLY);
+		fd = open(filename, O_CREAT | O_APPEND | O_WRONLY, 0666);
 	else
-		fd = open(filename, O_CREAT | O_WRONLY);
+		fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	return (fd);
 }
 
-char		*quote(char *cmd)
+int		quote(char *cmd)
 {
 	int		i;
-	int		quote;
 
 	i = 0;
 	if (cmd[i] == '\'')
 	{
-		quote = 1;
-		while (quote)
+		while (1)
 		{
 			if (!cmd[i++])
-				return(0);
+				return (0);
 			if (cmd[i] == '\'')
-				quotes = 0;
+				break ;
 		}
 	}
-	if (cmd[i] == '\"')
+	if (cmd[i] == '"')
 	{
-		quote = 1;
-		while (quote)
+		while (1)
 		{
 			if (!cmd[i++])
-				return(0);
-			if (cmd[i] == '\"')
-				quotes = 0;
+				return (0);
+			if (cmd[i] == '"')
+				break;
 		}
 	}
 	if (i != 0)
-		return(&cmd[i]);
-	return(0);
+		return(i - 1);
+	return (0);
 }

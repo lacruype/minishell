@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/10 15:51:35 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/12 18:18:29 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,29 +37,35 @@ int		start_minishell(char **path);
 **		ft_utils.c
 */
 
-void	*ft_realloc(void *dst, size_t new_size);
+void	*ft_realloc(void *src, size_t new_size);
 void	ft_freestrarr(char **arr);
 char	*ft_jump_space(char *str);
 int		create_file(char *filename, int app, int quote);
-char	*quote(char *cmd);
+int		quote(char *cmd);
 
 
 /*
 **		ft_parsing01.c
 */
 
-int		ft_parsing(char *command_line);
+int		ft_parsing(char **command_line);
 
 /*
 **		ft_echo.c
 */
 
-void	ft_echo(char *str, char *file_name, int option);
+void	ft_echo(char *cmd);
 
 /*
 **		ft_envv.c
 */
 
 int				init_g_envv(char **env);
+
+/*
+**		ft_error.c
+*/
+
+void	ft_error(int error);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:14:32 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/10 15:50:20 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/12 17:52:05 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,11 @@ int		search_function(char *cmd_line, char **path)
 	int i;
 
 	(void)path;
+	// cmd_line[3] = '\0';
+
+	//printf (" ceci = %s\n", cmd_line);
 	i = (ft_jump_space(cmd_line) - cmd_line);
-	if (ft_strncmp((const char*)&cmd_line[i], "exit", 4) == 0)
+	if (ft_strncmp((const char*)&cmd_line[i], "exit", 4) == 0 && ft_strchr(" ;",cmd_line[4]))
 		return (-1);
 	return (0);
 }
@@ -66,8 +69,12 @@ int		start_minishell(char **path)
 		display_prompt();
 		ret = get_next_line(0, &cmd_line);
 		if (cmd_line != NULL)
+		{
+			ft_parsing(&cmd_line);
+			printf("SALUTYAAA = %s\n", cmd_line);
 			if (search_function(cmd_line, path) == -1)
 				check_exit = 1;
+		}
 		free(cmd_line);
 	}
 	if (check_exit == 1)

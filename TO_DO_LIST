@@ -1,0 +1,6 @@
+Check double operateurs sur la ligne de commande + creer le pool des operateurs  ✅
+
+Remplacer les variable environnementales par leurs valeurs en reallocant la ligne de commande
+
+Ensuite Spliter la ligne entre chaque point-virgule sans compter ceux entre guillemets
+
