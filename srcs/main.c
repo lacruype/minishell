@@ -22,7 +22,7 @@ char	**init_path(void)
 	while (g_envv[i] != NULL)
 	{
 		if (ft_strncmp((const char*)g_envv[i], "PATH", 4) == 0)
-			path = ft_split((const char*)g_envv[i], ':');
+			path = ft_split((const char*)&g_envv[i][5], ':');
 		i++;
 	}
 	return (path);

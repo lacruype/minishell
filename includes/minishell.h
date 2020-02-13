@@ -6,7 +6,7 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/13 12:17:39 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/13 13:38:31 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 # include <stdio.h>
 # include <limits.h>
+# include <dirent.h>
 # include "libft.h"
 # include "get_next_line.h"
 
@@ -41,7 +42,7 @@ void	*ft_realloc(void *src, size_t new_size);
 void	ft_freestrarr(char **arr);
 char	*ft_jump_space(char *str);
 int		create_file(char *filename, int app, int quote);
-char    *quote(char *cmd);
+int		quote(char *cmd);
 
 
 /*

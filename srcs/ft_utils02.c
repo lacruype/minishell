@@ -6,42 +6,12 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 11:15:34 by lacruype          #+#    #+#             */
-/*   Updated: 2020/02/13 12:17:12 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/13 13:18:20 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <libc.h>
-
-char	*quote(char *cmd)
-{
-	int		i;
-
-	i = 0;
-	if (cmd[i] == '\'')
-	{
-		while (1)
-		{
-			if (!cmd[i++])
-				return (NULL);
-			if (cmd[i] == '\'')
-				break ;
-		}
-	}
-	if (cmd[i] == '"')
-	{
-		while (1)
-		{
-			if (!cmd[i++])
-				return (NULL);
-			if (cmd[i] == '"')
-				break;
-		}
-	}
-	if (i != 0)
-		return(&cmd[i]);
-	return (NULL);
-}
 
 static int		nombre_mots(char const *str, char c)
 {
@@ -52,11 +22,23 @@ static int		nombre_mots(char const *str, char c)
 	mots = 0;
 	while (str[i])
 	{
+		if (str[i] == '"')
+		{
+			i++;
+			while (str[i] != '"' && str[i])
+				i++;
+		}
+		if (str[i] == '\'')
+		{
+			i++;
+			while (str[i] != '\'' && str[i])
+				i++;
+		}
 		while (str[i] == c)
 			i++;
-		if (str[i] != c && str[i] != '\0')
+		if (str[i] != c && str[i] != '\0' && str[i] != '"' && str[i] != '\'')
 			mots++;
-		while (str[i] != c && str[i] != '\0')
+		while (str[i] != c && str[i] != '\0' && str[i] != '"' && str[i] != '\'')
 		{
 			i++;
 		}
@@ -76,10 +58,22 @@ static char	**taille_mots(char const *str, char c, char **tab)
 	mots = 0;
 	while (str[i])
 	{
+		if (str[i] == '"')
+		{
+			i++;
+			while (str[i] != '"' && str[i])
+				i++;
+		}
+		if (str[i] == '\'')
+		{
+			i++;
+			while (str[i] != '\'' && str[i])
+				i++;
+		}
 		while (str[i] == c)
 			i++;
 		taille = 0;
-		while (str[i] != c && str[i] != '\0')
+		while (str[i] != c && str[i] != '\0' && str[i] != '"' && str[i] != '\'')
 		{
 			taille++;
 			i++;
@@ -102,11 +96,34 @@ static char	**place_mots(char const *str, char c, char **tab)
 	mots = 0;
 	while (str[i])
 	{
-
+		if (str[i] == '"')
+		{
+			tab[mots][taille] = str[i];
+			taille++;
+			i++;
+			while (str[i] != '"' && str[i])
+			{
+				tab[mots][taille] = str[i];
+				taille++;
+				i++;
+			}
+		}
+		if (str[i] == '\'')
+		{
+			tab[mots][taille] = str[i];
+			taille++;
+			i++;
+			while (str[i] != '\'' && str[i])
+			{
+				tab[mots][taille] = str[i];
+				taille++;
+				i++;
+			}
+		}
 		while (str[i] == c)
 			i++;
 		taille = 0;
-		while (str[i] != c && str[i] != '\0')
+		while (str[i] != c && str[i] != '\0' && str[i] != '"' && str[i] != '\'')
 		{
 			tab[mots][taille] = str[i];
 			taille++;
