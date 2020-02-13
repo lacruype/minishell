@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/13 10:38:04 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/13 11:18:37 by rledrin          ###   ########.fr       */
+/*   Created: 2020/02/13 10:37:54 by rledrin           #+#    #+#             */
+/*   Updated: 2020/02/13 11:18:08 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-
-void		ft_pwd(char *cmd)
+void		ft_env(char *cmd)
 {
-	int		fd;
 	int		i;
-	char	*filename;
 	int		app;
-	int		quotes;
+	char	*filename;
 	int		filesize;
+	int		quotes;
 	int		j;
+	int		fd;
 
-	app = 0;
-	j = 0;
-	quotes = 0;
 	filename = ft_strdup("");
-	i = 0;
 	fd = 1;
+	j = 0;
+	i = 0;
+	app = 0;
+	quotes = 0;
 	i = ft_jump_space(&cmd[i]) - cmd;
 	i = ft_jump_space(&cmd[i + 3]) - cmd;
 	if (cmd[i] == '>')
@@ -63,11 +62,13 @@ void		ft_pwd(char *cmd)
 				; //ERROR
 		}
 	}
-	while(g_envv[i] && ft_strncmp(g_envv[i], "PWD=", 4) != 0)
-		i++;
 	fd = create_file(filename, app, quotes);
-	write(fd, &g_envv[i][4], ft_strlen(&g_envv[i][4]));
-	write(fd, "\n", 1);
+	while (g_envv[i])
+	{
+		write(fd, g_envv[i], ft_strlen(g_envv[i]));
+		write(fd, "\n", 1);
+		i++;
+	}
 	if (filename)
 		close(fd);
 	free(filename);

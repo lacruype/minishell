@@ -6,7 +6,7 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/12 18:18:29 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/13 11:15:09 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,20 @@ int		ft_parsing(char **command_line);
 */
 
 void	ft_echo(char *cmd);
+
+/*
+**		ft_pwd.c
+*/
+
+void	ft_pwd(char *cmd);
+
+/*
+**		ft_env.c
+*/
+
+void	ft_env(char *cmd);
+
+
 
 /*
 **		ft_envv.c
