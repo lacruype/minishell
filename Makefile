@@ -6,7 +6,7 @@
 #    By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/02/13 11:48:40 by rledrin          ###   ########.fr        #
+#    Updated: 2020/02/13 13:57:44 by rledrin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,8 @@ SRCS =	$(PATH)main.c \
 		$(PATH)ft_error.c \
 		$(PATH)ft_parsing01.c \
 		$(PATH)ft_env.c \
+		$(PATH)ft_split_semicolon.c \
+		$(PATH)ft_path.c \
 
 LIB = includes
 

@@ -1,6 +1,4 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "../includes/minishell.h"
 
 static int        nombre_mots(char const *str, char c)
 {
@@ -158,23 +156,3 @@ char    **ft_split_semicolon(char const *s, char c)
     tab[nb_mots] = NULL;
     return (tab);
 }
-
-int main(int ac, char **av)
-{
-    char **tab;
-    char str[20] = "Salut\";\"Yes";
-    int i;
-
-    i = 0;
-
-    tab = ft_split_semicolon(av[1], ';');
-    while (tab[i])
-    {
-        printf("tab[%d] = [%s]\n", i, tab[i]);
-        free(tab[i]);
-        i++;
-    }
-    free(tab);
-    return (0);
-}
-

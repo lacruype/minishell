@@ -6,7 +6,7 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 12:15:53 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/13 13:56:05 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/13 13:58:10 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int					ft_path(char *cmd, char **path)
 
 	i = 0;
 	j = 0;
-	size = 0; // ////////////////
+	size = 0;
 	i = ft_jump_space(&cmd[i]) - cmd;
 	while (!ft_strchr(" ;\"'", cmd[i + size])&& cmd[i + size])
 		size++;
@@ -51,30 +51,4 @@ int					ft_path(char *cmd, char **path)
 		j++;
 	}
 	return (0);
-}
-
-static char	**init_path(char **env)
-{
-	int i;
-	char **path;
-
-	i = 0;
-	while (env[i] != NULL)
-	{
-		if (ft_strncmp((const char*)env[i], "PATH", 4) == 0)
-			path = ft_split((const char*)&env[i][5], ':');
-		i++;
-	}
-	return (path);
-}
-
-int main (int ac, char **av, char **env)
-{
-	char **p;
-
-	p = init_path(env);
-	int i = 0;
-	// while (p[i])
-	// 	printf ("%s\n", p[i++]);
-	ft_path(av[1], p);
 }

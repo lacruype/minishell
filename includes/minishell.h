@@ -6,7 +6,7 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/13 13:38:31 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/13 14:00:03 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,26 @@ void	ft_env(char *cmd);
 **		ft_envv.c
 */
 
-int				init_g_envv(char **env);
+int		init_g_envv(char **env);
 
 /*
 **		ft_error.c
 */
 
 void	ft_error(int error);
+
+/*
+**		LE_SPLIT.c
+*/
+
+char	**ft_split_semicolon(char const *s, char c);
+
+/*
+**		ft_path.c
+*/
+
+int		ft_path(char *cmd, char **path);
+
+
 
 #endif
