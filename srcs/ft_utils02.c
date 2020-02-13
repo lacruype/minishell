@@ -6,13 +6,14 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 11:15:34 by lacruype          #+#    #+#             */
-/*   Updated: 2020/02/12 14:30:31 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/13 12:17:12 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <libc.h>
 
-char		*quote(char *cmd)
+char	*quote(char *cmd)
 {
 	int		i;
 

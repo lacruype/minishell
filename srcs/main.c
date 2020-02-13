@@ -72,9 +72,12 @@ int		start_minishell(char **path)
 		if (cmd_line != NULL)
 		{
 			ft_parsing(&cmd_line);
-			printf("SALUTYAAA = %s\n", cmd_line);
-			if (search_function(cmd_line, path) == -1)
-				check_exit = 1;
+			if (cmd_line)
+			{
+				printf("SALUTYAAA = [%s]\n", cmd_line);
+				if (search_function(cmd_line, path) == -1)
+					check_exit = 1;
+			}
 		}
 		free(cmd_line);
 	}

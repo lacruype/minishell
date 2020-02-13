@@ -6,7 +6,7 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/13 11:15:09 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/13 12:17:39 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	*ft_realloc(void *src, size_t new_size);
 void	ft_freestrarr(char **arr);
 char	*ft_jump_space(char *str);
 int		create_file(char *filename, int app, int quote);
-int		quote(char *cmd);
+char    *quote(char *cmd);
 
 
 /*
