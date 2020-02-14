@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_path.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 12:15:53 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/13 13:58:10 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/14 10:16:42 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int					ft_path(char *cmd, char **path)
 		if (pDir == NULL)
 		{
 			printf ("Cannot open directory ''\n");
-			return 1;
+			return (-1);
 		}
 		while ((pDirent = readdir(pDir)) != NULL)
 		{

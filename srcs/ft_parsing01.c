@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parsing01.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 12:31:15 by lacruype          #+#    #+#             */
-/*   Updated: 2020/02/13 12:15:16 by marvin           ###   ########.fr       */
+/*   Updated: 2020/02/14 08:51:44 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,16 @@ static char		*ft_cmd_env(char *cmd)
 			{
 				while (!ft_strchr(" ;\"'", cmd[i + size])&& cmd[i + size])
 					size++;
-				printf("SIZE = [%zu]\n", size);
 				while (g_envv[j] && ft_strncmp(g_envv[j], &cmd[i + 1], size - 1) != 0)
 					j++;
 				if (!g_envv[j])
 					return (cmd);
-				printf("HAHA = [%s]\nHEHE = [%s]\n", cmd, g_envv[j]);
 				len = ft_strlen(cmd) + ft_strlen(g_envv[j]) - ((size + 1) * 2);
 				if (!(new_ptr = calloc(len + 1, sizeof(char))))
 					return (cmd);
 				len = ft_strlen(g_envv[j]) - (size + 1);
 				ft_memcpy(new_ptr, cmd, (size_t)i);
-				//ft_putstr(cmd);
-				printf("CMD1 = [%s]\n", new_ptr);
 				ft_memcpy(&new_ptr[i], &g_envv[j][size], len + 1);
-				printf("CMD2 = [%s]\n", new_ptr);
 				ft_memcpy(&new_ptr[i + len + 1], &cmd[i + size], strlen(&cmd[i +size]));
 				free(cmd);
 				cmd = new_ptr;
@@ -118,7 +113,7 @@ int		ft_parsing(char **command_line)
 	if (ft_double_op(*command_line) == -1)
 		ft_error(1);
 	*command_line = ft_cmd_env(*command_line);
-	if (*command_line)
-		printf("CMD3 = [%s]\n", *command_line);
+	// if (*command_line)
+	// 	printf("CMD3 = [%s]\n", *command_line);
 	return (0);
 }

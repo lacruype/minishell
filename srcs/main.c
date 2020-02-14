@@ -45,12 +45,10 @@ int		search_function(char *cmd_line, char **path)
 {
 	int i;
 
-	(void)path;
-	// cmd_line[3] = '\0';
-
-	//printf (" ceci = %s\n", cmd_line);
 	i = (ft_jump_space(cmd_line) - cmd_line);
 	if (ft_strncmp((const char*)&cmd_line[i], "exit", 4) == 0 && ft_strchr(" ;",cmd_line[4]))
+		return (-1);
+	else if(ft_path(cmd_line, path) == -1)
 		return (-1);
 	return (0);
 }
@@ -61,12 +59,14 @@ int		start_minishell(char **path)
 	int		ret;
 	int		check_exit;
 	char	*cmd_line;
+	char	**tab_cmd_line;
+	int		child_status;
+	pid_t	pid;
 
 	ret = 1;
 	check_exit = 0;
 	while (ret == 1 && check_exit == 0)
 	{
-		i = 0;
 		display_prompt();
 		ret = get_next_line(0, &cmd_line);
 		if (cmd_line != NULL)
@@ -74,14 +74,31 @@ int		start_minishell(char **path)
 			ft_parsing(&cmd_line);
 			if (cmd_line)
 			{
-				printf("SALUTYAAA = [%s]\n", cmd_line);
-				if (search_function(cmd_line, path) == -1)
-					check_exit = 1;
+				if ((tab_cmd_line = ft_split_semicolon(cmd_line, ';')) != NULL)
+				{
+					i = 0;
+					while (tab_cmd_line[i] != NULL)
+					{
+						if ((pid = fork()) == 0)
+						{
+							if (search_function(tab_cmd_line[i], path) == -1)
+								exit(17);
+						}
+						waitpid(pid, &child_status, 0);
+						if ((WEXITSTATUS(child_status)) == 17)
+						{
+							check_exit = 1;
+							printf("%d\n", WEXITSTATUS(child_status));
+						}
+						i++;
+					}
+					ft_freestrarr(tab_cmd_line);
+				}
 			}
+			free(cmd_line);
 		}
-		free(cmd_line);
 	}
-	if (check_exit == 1)
+	if (check_exit)
 		ft_putstr_fd("exit\n", 1);
 	return (0);
 }
