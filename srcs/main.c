@@ -13,6 +13,23 @@
 
 #include "../includes/minishell.h"
 
+void	ft_update_g_envv(int child_status)
+{
+	char *tmp;
+	int i;
+
+	i = 0;
+	while (ft_strncmp(g_envv[i], "?=", 2) != 0 && g_envv[i] != NULL)
+		i++;
+	if (g_envv[i] == NULL)
+		return ; //ERROR
+	tmp = g_envv[i];
+	free(tmp);
+	tmp = ft_itoa((WEXITSTATUS(child_status)));
+	g_envv[i] = ft_strjoin("?=", tmp);
+	free(tmp);
+}
+
 char	**init_path(void)
 {
 	int i;
@@ -30,15 +47,13 @@ char	**init_path(void)
 
 void	display_prompt(void)
 {
-	char *buf;
+	int i;
 
-	buf = NULL;
-	if ((buf = getcwd(buf, 255)) == NULL)
-		return ;
-	//MESSAGE DERREUR NOM TROP LONG
-	ft_putstr_fd(buf, 0);
+	i = 0;
+	while (ft_strncmp(g_envv[i], "PWD=", 4) != 0)
+		i++;
+	ft_putstr_fd(&g_envv[i][4], 1);
 	ft_putstr_fd(" ➡ ", 0);
-	free(buf);
 }
 
 int		search_function(char *cmd_line, char **path)
@@ -69,6 +84,7 @@ int		start_minishell(char **path)
 	{
 		display_prompt();
 		ret = get_next_line(0, &cmd_line);
+
 		if (cmd_line != NULL)
 		{
 			ft_parsing(&cmd_line);
@@ -85,11 +101,10 @@ int		start_minishell(char **path)
 								exit(17);
 						}
 						waitpid(pid, &child_status, 0);
+						ft_update_g_envv(child_status);
 						if ((WEXITSTATUS(child_status)) == 17)
-						{
 							check_exit = 1;
-							printf("%d\n", WEXITSTATUS(child_status));
-						}
+						
 						i++;
 					}
 					ft_freestrarr(tab_cmd_line);
@@ -97,10 +112,22 @@ int		start_minishell(char **path)
 			}
 			free(cmd_line);
 		}
-	}
-	if (check_exit)
+	}	
+	if (ret == 0)
+		ft_putstr_fd("\nexit\n", 1);
+	else if (check_exit == 1)
 		ft_putstr_fd("exit\n", 1);
 	return (0);
+}
+
+void	handle_sigint(int sig)
+{
+	if (sig == SIGINT)
+	{
+		ft_putchar_fd('\n', 1);
+		display_prompt();
+		signal(SIGINT, handle_sigint);
+	}
 }
 
 int		main(int ac, char **av, char **env)
@@ -109,6 +136,7 @@ int		main(int ac, char **av, char **env)
 	char **path;
 	if (ac != 1)
 		return (0);
+	signal(SIGINT, handle_sigint);
 	if (init_g_envv(env) == -1)
 		return (-1);
 	path = init_path();

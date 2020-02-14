@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/10 15:48:18 by lacruype          #+#    #+#             */
-/*   Updated: 2020/02/10 15:53:01 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/14 15:02:29 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ int				init_g_envv(char **env)
 	int i;
 
 	i = -1;
-	if (!(g_envv = malloc(sizeof(char*) * (get_size_env(env) + 1))))
+	if (!(g_envv = malloc(sizeof(char*) * (get_size_env(env) + 2))))
 		return (-1);
 	while (env[++i])
 		g_envv[i] = ft_strdup((const char *)env[i]);
-	g_envv[i] = NULL;
+		g_envv[i] = ft_strdup("?=0");
+	g_envv[i + 1] = NULL;
 	return (0);
 }
