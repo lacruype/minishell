@@ -56,19 +56,19 @@ void	display_prompt(void)
 	ft_putstr_fd(" ➡ ", 0);
 }
 
-int		search_function(char *cmd_line, char **path)
+int		search_function(char *cmd_line, char **path, int *pip)
 {
 	int i;
 
 	i = (ft_jump_space(cmd_line) - cmd_line);
 	if (ft_strncmp((const char*)&cmd_line[i], "exit", 4) == 0 && ft_strchr(" ;",cmd_line[4]))
 		return (-1);
-	else if(ft_path(cmd_line, path) == -1)
+	else if(ft_path(cmd_line, path, pip) == -1)
 		return (-1);
 	return (0);
 }
 
-int		start_minishell(char **path)
+int		start_minishell(char **path, int *pip)
 {
 	int		i;
 	int		ret;
@@ -97,7 +97,7 @@ int		start_minishell(char **path)
 					{
 						if ((pid = fork()) == 0)
 						{
-							if (search_function(tab_cmd_line[i], path) == -1)
+							if (search_function(tab_cmd_line[i], path, pip) == -1)
 								exit(17);
 						}
 						waitpid(pid, &child_status, 0);
@@ -133,14 +133,17 @@ void	handle_sigint(int sig)
 int		main(int ac, char **av, char **env)
 {
 	(void)av;
-	char **path;
-	if (ac != 1)
+	char	**path;
+	int		pip[2];
+
+	if (pipe(pip) == -1|| ac != 1)
 		return (0);
 	signal(SIGINT, handle_sigint);
 	if (init_g_envv(env) == -1)
 		return (-1);
 	path = init_path();
-	if (start_minishell(path) == -1)
+
+	if (start_minishell(path, pip) == -1)
 		return (-1);
 	ft_freestrarr(path);
 	return (0);

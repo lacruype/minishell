@@ -1,6 +1,17 @@
 Check double operateurs sur la ligne de commande + creer le pool des operateurs ✅
 
-Remplacer les variable environnementales par leurs valeurs en reallocant la ligne de commande 
+Remplacer les variable environnementales par leurs valeurs en reallocant la ligne de commande ✅
 
-Ensuite Spliter la ligne entre chaque point-virgule sans compter ceux entre guillemets
+Ensuite Spliter la ligne entre chaque point-virgule sans compter ceux entre guillemets ✅
 
+Checker la validité d'un dup par rapport aux processus ✅
+
+Reorganiser le parsing 
+
+L'histoire des backslashe
+
+Effacer un carac de stdin pour enlever ctrl+C
+
+Integrer le Escape_char
+
+Parcourir cmd dans search function dans le cas : cat file | sort | grep maligne

@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 12:31:15 by lacruype          #+#    #+#             */
-/*   Updated: 2020/02/14 08:51:44 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/17 15:54:59 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,27 +68,6 @@ char	*ft_strchr(const char *str, int c)
 	return ((char*)(str + i));
 }
 
-int		jump_quotes(const char *str, int i)
-{
-	if (str[i] == '\'')
-	{
-		while (str[++i] != '\'')
-		{
-			if (str[i] == '\0')
-				return (-1);
-		}
-	}
-	// else if (str[i] == '"')
-	// {
-	// 	while (str[++i] != '"')
-	// 	{
-	// 		if (str[i] == '\0')
-	// 			return (-1);
-	// 	}
-	// }
-	return (i);
-}
-
 int 	ft_double_op(char *cmd)
 {
 	int i;
@@ -107,12 +86,12 @@ int 	ft_double_op(char *cmd)
 	return (0);
 }
 
-
 int		ft_parsing(char **command_line)
 {
 	if (ft_double_op(*command_line) == -1)
 		ft_error(1);
 	*command_line = ft_cmd_env(*command_line);
+	
 	// if (*command_line)
 	// 	printf("CMD3 = [%s]\n", *command_line);
 	return (0);

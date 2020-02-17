@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+         #
+#    By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/02/13 13:57:44 by rledrin          ###   ########.fr        #
+#    Updated: 2020/02/17 15:56:54 by lacruype         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,6 @@ PATH = srcs/
 SRCS =	$(PATH)main.c \
 		$(PATH)ft_echo.c \
 		$(PATH)ft_utils.c \
-		$(PATH)get_next_line.c \
-		$(PATH)get_next_line_utils.c \
 		$(PATH)ft_pwd.c \
 		$(PATH)ft_envv.c \
 		$(PATH)ft_error.c \
@@ -26,6 +24,7 @@ SRCS =	$(PATH)main.c \
 		$(PATH)ft_env.c \
 		$(PATH)ft_split_semicolon.c \
 		$(PATH)ft_path.c \
+		$(PATH)ft_escape_char.c \
 
 LIB = includes
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/13 14:00:03 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/17 15:56:31 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include <limits.h>
 # include <dirent.h>
 # include "libft.h"
-# include "get_next_line.h"
 
 char	**g_envv;
 
@@ -31,8 +30,8 @@ char	**g_envv;
 **		main.c
 */
 
-int		search_function(char *cmd_line, char **path);
-int		start_minishell(char **path);
+int		search_function(char *cmd_line, char **path, int *pip);
+int		start_minishell(char **path, int *pip);
 
 /*
 **		ft_utils.c
@@ -43,7 +42,6 @@ void	ft_freestrarr(char **arr);
 char	*ft_jump_space(char *str);
 int		create_file(char *filename, int app, int quote);
 int		quote(char *cmd);
-
 
 /*
 **		ft_parsing01.c
@@ -81,7 +79,7 @@ int		init_g_envv(char **env);
 **		ft_error.c
 */
 
-void	ft_error(int error);
+int		ft_error(int error);
 
 /*
 **		LE_SPLIT.c
@@ -93,8 +91,12 @@ char	**ft_split_semicolon(char const *s, char c);
 **		ft_path.c
 */
 
-int		ft_path(char *cmd, char **path);
+int		ft_path(char *cmd, char **path, int *pip);
 
+/*
+**		ft_escape_char.c
+*/
 
+int		jump_quotes(const char *str, int i);
 
 #endif

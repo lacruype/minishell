@@ -6,13 +6,13 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 12:15:53 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/14 15:18:45 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/17 15:46:19 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int					ft_path(char *cmd, char **path)
+int					ft_path(char *cmd, char **path, int *pip)
 {
 	int				i;
 	int				j;
@@ -22,11 +22,15 @@ int					ft_path(char *cmd, char **path)
 	char			*file;
 	char			*tmp;
 	int				flag;
+	int				pipe_a;
+	int				pipe_b;
 
 	i = 0;
 	j = 0;
 	flag = 0;
 	size = 0;
+	pipe_a = 0;
+	pipe_b = 0;
 	i = ft_jump_space(&cmd[i]) - cmd;
 	while (!ft_strchr(" ;\"'", cmd[i + size])&& cmd[i + size])
 		size++;
@@ -48,6 +52,10 @@ int					ft_path(char *cmd, char **path)
 					tmp = file;
 					file = ft_strjoin(file, pDirent->d_name);
 					free(tmp);
+					if (pipe_a)
+						dup2(pip[0], 1);
+					if (pipe_b)
+						dup2(pip[1], 0);
 					execve(file, ft_split(cmd, ' '), g_envv);
 					flag = 1;
 				}

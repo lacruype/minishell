@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 14:05:05 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/14 15:04:20 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/17 10:38:31 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void		ft_cd(char *cmd)
 			i++;
 		}
 	}
+	
 	pDir = opendir(loc);
 	if (!pDir)
 	{

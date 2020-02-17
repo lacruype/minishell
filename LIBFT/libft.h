@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 14:09:50 by lacruype          #+#    #+#             */
-/*   Updated: 2020/02/17 15:54:46 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/17 15:52:53 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ size_t			ft_strlcpy(char *dst, const char *src, size_t size);
 size_t			ft_strlen(const char *str);
 int				ft_strncmp(const char *s1, const char *s2, size_t size);
 char			*ft_strnstr(const char *big, \
-				const char *little, size_t len);
+		const char *little, size_t len);
 char			*ft_strrchr(const char *str, int c);
 int				ft_tolower(int c);
 int				ft_toupper(int c);
@@ -69,9 +69,9 @@ char			*ft_substr_gnl(char *s, unsigned int start, int len);
 char			*ft_strdup_gnl(char *s);
 char			*ft_strchr_gnl(char *s, int c);
 char			*ft_strjoin_gnl(char *s1, char *s2);
-int				ft_strlen_gnl(char *str);
-int				ft_new_line(char **gnl, char **line, int fd, ssize_t ret);
-int				get_next_line(int fd, char **line);
+int			ft_strlen_gnl(char *str);
+int			ft_new_line(char **gnl, char **line, int fd, ssize_t ret);
+int			get_next_line(int fd, char **line);
 char			*ft_strnew(int size);
 void			ft_swapfree(char **gnl, char *tmp, int fd);
 
