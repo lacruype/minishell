@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/17 15:56:31 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/20 14:09:53 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,17 @@
 
 char	**g_envv;
 
+typedef struct	variables_minishell
+{
+	int		ret_gnl;
+	int		ret_sf;
+	int		check_exit;
+	int		child_status;
+	char	*cmd_line;
+	char	**tab_cmd_line;
+	pid_t	pid;
+}				var_minishell;
+
 /*
 **		main.c
 */
@@ -44,10 +55,16 @@ int		create_file(char *filename, int app, int quote);
 int		quote(char *cmd);
 
 /*
+**		ft_utils.c
+*/
+
+char	*ft_escape_char(char *str);
+
+/*
 **		ft_parsing01.c
 */
 
-int		ft_parsing(char **command_line);
+char	*ft_parsing(char *command_line);
 
 /*
 **		ft_echo.c
@@ -66,8 +83,6 @@ void	ft_pwd(char *cmd);
 */
 
 void	ft_env(char *cmd);
-
-
 
 /*
 **		ft_envv.c

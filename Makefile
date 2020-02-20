@@ -6,7 +6,7 @@
 #    By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/02/17 15:56:54 by lacruype         ###   ########.fr        #
+#    Updated: 2020/02/20 12:27:59 by lacruype         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ PATH = srcs/
 SRCS =	$(PATH)main.c \
 		$(PATH)ft_echo.c \
 		$(PATH)ft_utils.c \
+		$(PATH)ft_utils02.c \
 		$(PATH)ft_pwd.c \
 		$(PATH)ft_envv.c \
 		$(PATH)ft_error.c \
@@ -31,6 +32,7 @@ LIB = includes
 OBJS = ${SRCS:.c:=.o}
 
 FLAGS = -Wall -Werror -Wextra
+#FLAGS += -fsanitize=address,undefined
 
 all:${NAME}
 

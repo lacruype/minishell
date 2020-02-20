@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 08:31:47 by lacruype          #+#    #+#             */
-/*   Updated: 2020/02/17 10:38:29 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/20 11:22:55 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,6 @@ char		**ft_split_semicolon(char const *s, char c)
 	place_words_semicolon(s, c, tab);
 	if (tab[nb_words] && tab[nb_words][0] == '\0')
 		free(tab[nb_words]);
-	tab[nb_words] = NULL;
+	// tab[nb_words] = NULL;
 	return (tab);
 }

@@ -15,3 +15,6 @@ Effacer un carac de stdin pour enlever ctrl+C
 Integrer le Escape_char
 
 Parcourir cmd dans search function dans le cas : cat file | sort | grep maligne
+
+Proteger si ya pas d'environnementales
+

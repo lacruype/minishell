@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 12:15:53 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/17 15:46:19 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/20 15:18:54 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,7 @@ int					ft_path(char *cmd, char **path, int *pip)
 	{
 		pDir = opendir (path[j]);
 		if (pDir == NULL)
-		{
-			printf ("Cannot open directory ''\n");
 			return (-1);
-		}
 		while ((pDirent = readdir(pDir)) != NULL)
 		{
 			if (size == ft_strlen(pDirent->d_name))
