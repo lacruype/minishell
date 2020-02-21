@@ -56,14 +56,17 @@ void	display_prompt(void)
 	ft_putstr_fd(" ➡ ", 0);
 }
 
-int		search_function(char *cmd_line, char **path, int *pip)
+int		search_function(char *cmd_line, char **path)
 {
 	int i;
+	char **split_cmd;
 
-	i = (ft_jump_space(cmd_line) - cmd_line);
-	if (ft_strncmp((const char*)&cmd_line[i], "exit", 4) == 0)
+	i = 0;
+	split_cmd = ft_split_cmd(cmd_line); // il faut gerer les quotes
+
+	if (ft_strncmp(split_cmd[0], "exit", 4) == 0) // gerer le cas exit | echo
 		return (1);
-	else if(ft_path(cmd_line, path, pip) == -1)
+	if (ft_path(split_cmd, path) == -1)
 		return (ft_error(5));
 	return (0);
 }
@@ -71,6 +74,8 @@ int		search_function(char *cmd_line, char **path, int *pip)
 int		start_minishell(char **path, int *pip)
 {
 	int		i;
+	int		j;
+	int		k;
 	var_minishell t;
 
 	t.ret_gnl = 1;
@@ -88,17 +93,49 @@ int		start_minishell(char **path, int *pip)
 					i = 0;
 					while (t.tab_cmd_line[i] != NULL)
 					{
-						if ((t.pid = fork()) == 0)
+						j = 0;
+						//printf ("char = %c",t.tab_cmd_line[i][j]);
+						while (t.tab_cmd_line[i][j])
 						{
-							if ((t.ret_sf = search_function(t.tab_cmd_line[i], path, pip)) == 1)
-								exit(17);
-							else if (t.ret_sf == -1)
-								exit(18);
+							k = 0;
+							while (t.tab_cmd_line[i][j + k] && t.tab_cmd_line[i][j + k] != '|')
+							{
+								//printf ("K = %d char = %c", k, t.tab_cmd_line[i][j + k]);
+								k++;
+							}
+							if ((t.pid = fork()) == 0)
+							{
+								if (t.tab_cmd_line[i][j] == '|')
+								{
+									//write(1, "first TEST\n", 5);
+									dup2(pip[0], 0);
+									j++;
+									//printf ("char = %c\n",t.tab_cmd_line[i][j]);
+								}
+								else
+									close(pip[0]);
+								if (t.tab_cmd_line[i][j + k] == '|')
+								{
+									//write(1, "second TEST\n", 5);
+									dup2(pip[1], 1);
+								}
+								else
+									close(pip[1]);
+								if ((t.ret_sf = search_function(&t.tab_cmd_line[i][j], path)) == 1)
+									exit(17);
+								else if (t.ret_sf == -1)
+									exit(18);
+								
+							}
+							waitpid(t.pid, &t.child_status, 0);
+							ft_update_g_envv(t.child_status);
+							if ((WEXITSTATUS(t.child_status)) == 17)
+							{
+								t.check_exit = 1;
+								break ;
+							}
+							j += k;
 						}
-						waitpid(t.pid, &t.child_status, 0);
-						ft_update_g_envv(t.child_status);
-						if ((WEXITSTATUS(t.child_status)) == 17)
-							t.check_exit = 1;
 						i++;
 					}
 					ft_freestrarr(t.tab_cmd_line);
@@ -140,7 +177,5 @@ int		main(int ac, char **av, char **env)
 	if (start_minishell(path, pip) == -1)
 		return (-1);
 	ft_freestrarr(path);
-	while (1)
-		;
 	return (0);
 }

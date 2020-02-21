@@ -16,5 +16,12 @@ Integrer le Escape_char
 
 Parcourir cmd dans search function dans le cas : cat file | sort | grep maligne
 
+Gerer les pipes
+
+Spliter cmd par ' ' avant de l'envoyer dans les fonction (gerer les quotes)
+
 Proteger si ya pas d'environnementales
 
+gerer le cas exit | echo
+
+gerer le ./Minishell

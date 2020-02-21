@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/20 14:09:53 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/21 15:14:35 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct	variables_minishell
 **		main.c
 */
 
-int		search_function(char *cmd_line, char **path, int *pip);
+int		search_function(char *cmd_line, char **path);
 int		start_minishell(char **path, int *pip);
 
 /*
@@ -106,12 +106,15 @@ char	**ft_split_semicolon(char const *s, char c);
 **		ft_path.c
 */
 
-int		ft_path(char *cmd, char **path, int *pip);
+int		ft_path(char **cmd, char **path);
 
 /*
 **		ft_escape_char.c
 */
 
 int		jump_quotes(const char *str, int i);
+
+
+char	**ft_split_cmd(char *cmd);
 
 #endif

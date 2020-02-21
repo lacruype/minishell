@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 13:42:31 by lacruype          #+#    #+#             */
-/*   Updated: 2020/02/20 11:48:33 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/02/21 14:10:41 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,5 @@ int		ft_error(int error)
 		ft_putstr_fd("Escaping chars has failed !\n", 1);
 	else if(error == 5)
 		ft_putstr_fd("Command doesn't exit !\n", 1);
-	return (-1);
+	return (1);
 }

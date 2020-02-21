@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+         #
+#    By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/02/20 12:27:59 by lacruype         ###   ########.fr        #
+#    Updated: 2020/02/21 15:09:41 by rledrin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SRCS =	$(PATH)main.c \
 		$(PATH)ft_split_semicolon.c \
 		$(PATH)ft_path.c \
 		$(PATH)ft_escape_char.c \
+		$(PATH)ft_split_cmd.c \
 
 LIB = includes
 

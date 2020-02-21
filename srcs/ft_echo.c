@@ -6,7 +6,7 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 11:25:16 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/13 11:03:03 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/21 13:32:46 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,4 +119,5 @@ void		ft_echo(char *cmd)
 		write(fd, "\n", 1);
 	if (filename[0])
 		close(fd);
+	exit(EXIT_SUCCESS);
 }
