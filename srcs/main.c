@@ -13,6 +13,7 @@
 
 #include "../includes/minishell.h"
 
+int pid;
 void	ft_update_g_envv(int child_status)
 {
 	char *tmp;
@@ -82,82 +83,81 @@ int		start_minishell(char **path, int *pip)
 	t.check_exit = 0;
 	while (t.ret_gnl == 1 && t.check_exit == 0)
 	{
-		display_prompt();
-		t.ret_gnl = get_next_line(0, &t.cmd_line);
-		if (t.cmd_line != NULL && (t.cmd_line = ft_parsing(t.cmd_line)) != NULL)
+		if ((WEXITSTATUS(t.child_status)) == 56)
+			exit(0);
+		if ((pid = fork()) == 0)
 		{
-			if (t.cmd_line)
+			display_prompt();
+			t.ret_gnl = get_next_line(0, &t.cmd_line);
+			if (t.cmd_line != NULL && (t.cmd_line = ft_parsing(t.cmd_line)) != NULL)
 			{
-				if ((t.tab_cmd_line = ft_split_semicolon(t.cmd_line, ';')) != NULL)
+				if (t.cmd_line)
 				{
-					i = 0;
-					while (t.tab_cmd_line[i] != NULL)
+					if ((t.tab_cmd_line = ft_split_semicolon(t.cmd_line, ';')) != NULL)
 					{
-						j = 0;
-						//printf ("char = %c",t.tab_cmd_line[i][j]);
-						while (t.tab_cmd_line[i][j])
+						i = 0;
+						while (t.tab_cmd_line[i] != NULL)
 						{
-							k = 0;
-							while (t.tab_cmd_line[i][j + k] && t.tab_cmd_line[i][j + k] != '|')
+							j = 0;
+							while (t.tab_cmd_line[i][j])
 							{
-								//printf ("K = %d char = %c", k, t.tab_cmd_line[i][j + k]);
-								k++;
-							}
-							if ((t.pid = fork()) == 0)
-							{
-								if (t.tab_cmd_line[i][j] == '|')
+								k = 0;
+								while (t.tab_cmd_line[i][j + k] && t.tab_cmd_line[i][j + k] != '|')
+									k++;
+								if ((t.pid = fork()) == 0)
 								{
-									//write(1, "first TEST\n", 5);
-									dup2(pip[0], 0);
-									j++;
-									//printf ("char = %c\n",t.tab_cmd_line[i][j]);
+									if (t.tab_cmd_line[i][j] == '|')
+									{
+										dup2(pip[0], 0);
+										j++;
+									}
+									else
+										close(pip[0]);
+									if (t.tab_cmd_line[i][j + k] == '|')
+										dup2(pip[1], 1);
+									else
+										close(pip[1]);
+									if ((t.ret_sf = search_function(&t.tab_cmd_line[i][j], path)) == 1)
+										exit(17);
+									else if (t.ret_sf == -1)
+										exit(18);
 								}
-								else
-									close(pip[0]);
-								if (t.tab_cmd_line[i][j + k] == '|')
+								waitpid(t.pid, &t.child_status, 0);
+								ft_update_g_envv(t.child_status);
+								if ((WEXITSTATUS(t.child_status)) == 17)
 								{
-									//write(1, "second TEST\n", 5);
-									dup2(pip[1], 1);
+									t.check_exit = 1;
+									break ;
 								}
-								else
-									close(pip[1]);
-								if ((t.ret_sf = search_function(&t.tab_cmd_line[i][j], path)) == 1)
-									exit(17);
-								else if (t.ret_sf == -1)
-									exit(18);
-								
+								j += k;
 							}
-							waitpid(t.pid, &t.child_status, 0);
-							ft_update_g_envv(t.child_status);
-							if ((WEXITSTATUS(t.child_status)) == 17)
-							{
-								t.check_exit = 1;
-								break ;
-							}
-							j += k;
+							i++;
 						}
-						i++;
+						ft_freestrarr(t.tab_cmd_line);
 					}
-					ft_freestrarr(t.tab_cmd_line);
 				}
+				free(t.cmd_line);
 			}
-			free(t.cmd_line);
 		}
-	}	
+		waitpid(pid, &t.child_status, 0);
+	}
 	if (t.ret_gnl == 0)
 		ft_putstr_fd("\nexit\n", 1);
 	else if (t.check_exit == 1)
 		ft_putstr_fd("exit\n", 1);
+	exit(56);
 	return (0);
 }
 
 void	handle_sigint(int sig)
 {
-	if (sig == SIGINT)
+	if (sig == SIGINT && pid != 0)
 	{
 		ft_putchar_fd('\n', 1);
-		display_prompt();
+		//display_prompt();
 		signal(SIGINT, handle_sigint);
+		
+		kill(pid, 9);
 	}
 }
 

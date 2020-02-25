@@ -6,7 +6,7 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/21 14:51:52 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/21 15:41:46 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/25 12:52:54 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,11 @@ char		**ft_split_cmd(char *cmd)
 {
 	char	**cmd_split;
 	int		size;
-
+	
 	cmd_split = 0;
 	size = ft_nb_word(cmd);
-	cmd_split = ft_calloc(size + 1, sizeof(char*));
+	cmd_split = ft_calloc(size + 2 , sizeof(char*));
 	cmd_split = ft_fill(cmd_split, cmd);
+	cmd_split[size] = 0;
 	return (cmd_split);
 }

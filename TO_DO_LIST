@@ -25,3 +25,7 @@ Proteger si ya pas d'environnementales
 gerer le cas exit | echo
 
 gerer le ./Minishell
+
+gerer les > < >>
+
+Kill process ctrl c
