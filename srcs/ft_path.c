@@ -6,7 +6,7 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 12:15:53 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/21 14:06:02 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/25 14:51:43 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int					ft_path(char **cmd, char **path)
 		pDir = opendir (path[j]);
 		if (pDir == NULL)
 			return (-1);
+
 		while ((pDirent = readdir(pDir)) != NULL)
 		{
 			if (size == ft_strlen(pDirent->d_name))

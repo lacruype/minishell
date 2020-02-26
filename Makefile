@@ -6,7 +6,7 @@
 #    By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/02/21 15:09:41 by rledrin          ###   ########.fr        #
+#    Updated: 2020/02/25 14:23:34 by rledrin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ FLAGS = -Wall -Werror -Wextra
 all:${NAME}
 
 ${NAME}:	${OBJS}
-			gcc ${FLAGS} ${OBJS} -o ${NAME} -I ${LIB} LIBFT/libft.a
+			gcc ${OBJS} -o ${NAME} -I ${LIB} LIBFT/libft.a
 
 g3:	${OBJS}
 			gcc ${FLAGS} ${OBJS} -o ${NAME} -I ${LIB} LIBFT/libft.a -g3 -fsanitize=address

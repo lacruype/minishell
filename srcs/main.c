@@ -14,6 +14,7 @@
 #include "../includes/minishell.h"
 
 int pid;
+
 void	ft_update_g_envv(int child_status)
 {
 	char *tmp;
@@ -77,7 +78,7 @@ int		start_minishell(char **path, int *pip)
 	int		i;
 	int		j;
 	int		k;
-	var_minishell t;
+
 
 	t.ret_gnl = 1;
 	t.check_exit = 0;
@@ -88,7 +89,11 @@ int		start_minishell(char **path, int *pip)
 		if ((pid = fork()) == 0)
 		{
 			display_prompt();
-			t.ret_gnl = get_next_line(0, &t.cmd_line);
+			if (!get_next_line(0, &t.cmd_line))
+			{
+				ft_putstr_fd("\nexit\n", 1);
+				exit(56);
+			}
 			if (t.cmd_line != NULL && (t.cmd_line = ft_parsing(t.cmd_line)) != NULL)
 			{
 				if (t.cmd_line)
@@ -117,17 +122,19 @@ int		start_minishell(char **path, int *pip)
 										dup2(pip[1], 1);
 									else
 										close(pip[1]);
+									// (void)path;
 									if ((t.ret_sf = search_function(&t.tab_cmd_line[i][j], path)) == 1)
 										exit(17);
 									else if (t.ret_sf == -1)
 										exit(18);
+									exit(0);
 								}
 								waitpid(t.pid, &t.child_status, 0);
 								ft_update_g_envv(t.child_status);
 								if ((WEXITSTATUS(t.child_status)) == 17)
 								{
-									t.check_exit = 1;
-									break ;
+									ft_putstr_fd("exit\n", 1);
+									exit(56);
 								}
 								j += k;
 							}
@@ -138,14 +145,10 @@ int		start_minishell(char **path, int *pip)
 				}
 				free(t.cmd_line);
 			}
+			exit(0);
 		}
 		waitpid(pid, &t.child_status, 0);
 	}
-	if (t.ret_gnl == 0)
-		ft_putstr_fd("\nexit\n", 1);
-	else if (t.check_exit == 1)
-		ft_putstr_fd("exit\n", 1);
-	exit(56);
 	return (0);
 }
 
@@ -156,7 +159,6 @@ void	handle_sigint(int sig)
 		ft_putchar_fd('\n', 1);
 		//display_prompt();
 		signal(SIGINT, handle_sigint);
-		
 		kill(pid, 9);
 	}
 }

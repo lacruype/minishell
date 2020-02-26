@@ -6,7 +6,7 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/21 15:14:35 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/25 14:08:27 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 
 char	**g_envv;
 
+
 typedef struct	variables_minishell
 {
 	int		ret_gnl;
@@ -36,6 +37,8 @@ typedef struct	variables_minishell
 	char	**tab_cmd_line;
 	pid_t	pid;
 }				var_minishell;
+
+var_minishell t;
 
 /*
 **		main.c
