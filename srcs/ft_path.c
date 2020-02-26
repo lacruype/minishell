@@ -6,7 +6,7 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 12:15:53 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/25 14:51:43 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/26 12:01:58 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,11 @@ int					ft_path(char **cmd, char **path)
 					tmp = file;
 					file = ft_strjoin(file, pDirent->d_name);
 					free(tmp);
+					//cmd[1] = ft_strdup("");
+					//printf ("CMD = %s\n", cmd[0]);
 					execve(file, cmd, g_envv);
+					wait(0);
+					//ft_putstr_fd("TESTEST\n", 1);
 					flag = 1;
 				}
 			}

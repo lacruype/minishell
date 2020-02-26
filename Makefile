@@ -6,7 +6,7 @@
 #    By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/02/25 14:23:34 by rledrin          ###   ########.fr        #
+#    Updated: 2020/02/26 12:52:05 by rledrin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,10 +38,13 @@ FLAGS = -Wall -Werror -Wextra
 all:${NAME}
 
 ${NAME}:	${OBJS}
-			gcc ${OBJS} -o ${NAME} -I ${LIB} LIBFT/libft.a
+			gcc ${OBJS} -o ${NAME} -I ${LIB} LIBFT/libft.a 
 
-g3:	${OBJS}
+g3:			${OBJS}
 			gcc ${FLAGS} ${OBJS} -o ${NAME} -I ${LIB} LIBFT/libft.a -g3 -fsanitize=address
+
+opt:		${OBJS}
+			gcc ${FLAGS} -O3 ${OBJS} -o ${NAME} -I ${LIB} LIBFT/libft.a
 
 clean:
 	/bin/rm -f *.o
@@ -51,4 +54,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY:all clean fclean re g3
+.PHONY:all g3 opt clean fclean re

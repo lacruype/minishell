@@ -73,7 +73,7 @@ int		search_function(char *cmd_line, char **path)
 	return (0);
 }
 
-int		start_minishell(char **path, int *pip)
+int		start_minishell(char **path, int pip[2])
 {
 	int		i;
 	int		j;
@@ -107,26 +107,43 @@ int		start_minishell(char **path, int *pip)
 							while (t.tab_cmd_line[i][j])
 							{
 								k = 0;
+								if (t.tab_cmd_line[i][j] == '|')
+									j++;
 								while (t.tab_cmd_line[i][j + k] && t.tab_cmd_line[i][j + k] != '|')
 									k++;
 								if ((t.pid = fork()) == 0)
 								{
-									if (t.tab_cmd_line[i][j] == '|')
+									if (j > 0 && t.tab_cmd_line[i][j - 1] == '|')
 									{
 										dup2(pip[0], 0);
-										j++;
+										//char te = -12;
+										//write(pip[1], "FIN", 3);
+										// write(pip[1], "\0", 1);
+										//printf("J = %d char = [%c]\n", j, t.tab_cmd_line[i][j]);
+										close(pip[0]);
 									}
-									else
+									// else
 										close(pip[0]);
 									if (t.tab_cmd_line[i][j + k] == '|')
+									{
 										dup2(pip[1], 1);
-									else
+										//write (1, "QQQ", 3);
 										close(pip[1]);
+
+									}
+									// else
+										close(pip[1]);
+
+									//dup2(open("Makefile", O_RDWR), 0);
 									// (void)path;
+									//ft_putstr_fd("JE TEST A", 1);
 									if ((t.ret_sf = search_function(&t.tab_cmd_line[i][j], path)) == 1)
 										exit(17);
 									else if (t.ret_sf == -1)
 										exit(18);
+									//ft_putstr_fd("TESTEST\n", 1);
+									// close(pip[0]);
+									// close(pip[1]);
 									exit(0);
 								}
 								waitpid(t.pid, &t.child_status, 0);
@@ -136,6 +153,7 @@ int		start_minishell(char **path, int *pip)
 									ft_putstr_fd("exit\n", 1);
 									exit(56);
 								}
+								//printf("J = %d K = %d char = %c\n", j, k, t.tab_cmd_line[i][j]);
 								j += k;
 							}
 							i++;

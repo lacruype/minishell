@@ -6,7 +6,7 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/21 14:51:52 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/25 15:27:14 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/26 12:38:53 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char		**ft_fill(char **cmd_split, char *cmd)
 		{
 			cmd_split[j] = ft_calloc(k + 1, sizeof(char));
 			ft_memcpy(cmd_split[j], &cmd[i - k], k);
-			cmd_split[j][k + 1] = '\0';
+			cmd_split[j][k] = '\0';
 		}
 	}
 	return (cmd_split);

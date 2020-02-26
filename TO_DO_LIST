@@ -10,9 +10,9 @@ Reorganiser le parsing
 
 L'histoire des backslashe
 
-Effacer un carac de stdin pour enlever ctrl+C
+Effacer un carac de stdin pour enlever ctrl+C ✅
 
-Integrer le Escape_char
+Integrer le Escape_char ✅
 
 Parcourir cmd dans search function dans le cas : cat file | sort | grep maligne
 
@@ -28,4 +28,6 @@ gerer le ./Minishell
 
 gerer les > < >>
 
-Kill process ctrl c
+Kill process ctrl c ✅
+
+regler le probleme du double process

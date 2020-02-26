@@ -6,7 +6,7 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/25 14:08:27 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/26 12:16:35 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ var_minishell t;
 */
 
 int		search_function(char *cmd_line, char **path);
-int		start_minishell(char **path, int *pip);
+int		start_minishell(char **path, int pip[2]);
 
 /*
 **		ft_utils.c
