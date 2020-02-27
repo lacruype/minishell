@@ -90,6 +90,11 @@ int		cmpt_pipe(char *cmd)
 	return (nb_pipe);
 }
 
+void	reset_fd(int **pip1, int **pip2)
+{
+	
+}
+
 int		start_minishell(char **path)
 {
 	int		i;
