@@ -74,17 +74,37 @@ int		search_function(char *cmd_line, char **path)
 	return (0);
 }
 
+int		cmpt_pipe(char *cmd)
+{
+	int i;
+	int nb_pipe;
+
+	i = 0;
+	nb_pipe = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] == '|')
+			nb_pipe++;
+		i++;
+	}
+	return (nb_pipe);
+}
+
 int		start_minishell(char **path)
 {
 	int		i;
 	int		j;
 	int		k;
-	int		pip[2];
+	int		nb_pipe;
+	int		pipe_nb;
+	int		pip1[2];
+	int		pip2[2];
 
 	t.ret_gnl = 1;
 	t.check_exit = 0;
-
-	if (pipe(pip) == -1)
+	nb_pipe = 0;
+	pipe_nb = 0;
+	if (pipe(pip1) == -1 || pipe(pip2) == -1)
 		return (0);
 	while (t.ret_gnl == 1 && t.check_exit == 0)
 	{
@@ -105,7 +125,74 @@ int		start_minishell(char **path)
 				i = 0;
 				while (t.tab_cmd_line[i] != NULL)
 				{
+
+
+					pipe_nb = 0;
+					nb_pipe = cmpt_pipe(t.tab_cmd_line[i]);
 					j = 0;
+					while (t.tab_cmd_line[i][j])
+					{
+						k = 0;
+						if (t.tab_cmd_line[i][j] == '|')
+							j++;
+						while (t.tab_cmd_line[i][j + k] && t.tab_cmd_line[i][j + k] != '|')
+							k++;
+						if (fork == 0)
+						{
+							if (t.tab_cmd_line[i][j] == '|')
+							{
+								if (pipe_nb % 2 == 1)
+									dup2(pip1[0], 0);
+								else
+									dup2(pip2[0], 0);
+								pipe_nb++;
+							}
+							else
+							{
+								if (pipe_nb % 2 == 1)
+									close(pip1[0]);
+								else
+									close(pip2[0]);
+							}
+							if (t.tab_cmd_line[i][j + k] == '|')
+							{
+								if (pipe_nb % 2 == 1)
+									dup2(pip1[1], 0);
+								else
+									dup2(pip2[1], 0);
+								pipe_nb++;
+							}
+							else
+							{
+								if (pipe_nb % 2 == 1)
+									close(pip1[1]);
+								else
+									close(pip2[1]);
+							}
+							if ((t.ret_sf = search_function(&t.tab_cmd_line[i][j], path)) == -1)
+								reset_fd(&pip1, &pip2);
+						}
+
+
+
+
+
+					}
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 					while (t.tab_cmd_line[i][j])
 					{
 						k = 0;
@@ -162,6 +249,11 @@ int		start_minishell(char **path)
 						j += k;
 					}
 					i++;
+
+
+
+
+
 				}
 				ft_freestrarr(t.tab_cmd_line);
 			}
