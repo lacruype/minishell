@@ -73,97 +73,95 @@ int		search_function(char *cmd_line, char **path)
 	return (0);
 }
 
-int		start_minishell(char **path, int pip[2])
+int		start_minishell(char **path)
 {
 	int		i;
 	int		j;
 	int		k;
-
+	int		pip[2];
 
 	t.ret_gnl = 1;
 	t.check_exit = 0;
+
+	if (pipe(pip) == -1)
+		return (0);
+
 	while (t.ret_gnl == 1 && t.check_exit == 0)
 	{
 		if ((WEXITSTATUS(t.child_status)) == 56)
 			exit(0);
-		if ((pid = fork()) == 0)
+		display_prompt();
+		if (!get_next_line(0, &t.cmd_line))
 		{
-			display_prompt();
-			if (!get_next_line(0, &t.cmd_line))
+			ft_putstr_fd("\nexit\n", 1);
+			exit(56);
+		}
+		if (t.cmd_line != NULL && (t.cmd_line = ft_parsing(t.cmd_line)) != NULL)
+		{
+			if (t.cmd_line)
 			{
-				ft_putstr_fd("\nexit\n", 1);
-				exit(56);
-			}
-			if (t.cmd_line != NULL && (t.cmd_line = ft_parsing(t.cmd_line)) != NULL)
-			{
-				if (t.cmd_line)
+				if ((t.tab_cmd_line = ft_split_semicolon(t.cmd_line, ';')) != NULL)
 				{
-					if ((t.tab_cmd_line = ft_split_semicolon(t.cmd_line, ';')) != NULL)
+					i = 0;
+					while (t.tab_cmd_line[i] != NULL)
 					{
-						i = 0;
-						while (t.tab_cmd_line[i] != NULL)
+						j = 0;
+						while (t.tab_cmd_line[i][j])
 						{
-							j = 0;
-							while (t.tab_cmd_line[i][j])
+							k = 0;
+							if (t.tab_cmd_line[i][j] == '|')
+								j++;
+							while (t.tab_cmd_line[i][j + k] && t.tab_cmd_line[i][j + k] != '|')
+								k++;
+							if ((t.pid = fork()) == 0)
 							{
-								k = 0;
-								if (t.tab_cmd_line[i][j] == '|')
-									j++;
-								while (t.tab_cmd_line[i][j + k] && t.tab_cmd_line[i][j + k] != '|')
-									k++;
-								if ((t.pid = fork()) == 0)
+								if (j > 0 && t.tab_cmd_line[i][j - 1] == '|')
 								{
-									if (j > 0 && t.tab_cmd_line[i][j - 1] == '|')
-									{
-										dup2(pip[0], 0);
-										//char te = -12;
-										//write(pip[1], "FIN", 3);
-										// write(pip[1], "\0", 1);
-										//printf("J = %d char = [%c]\n", j, t.tab_cmd_line[i][j]);
-										close(pip[0]);
-									}
-									// else
-										close(pip[0]);
-									if (t.tab_cmd_line[i][j + k] == '|')
-									{
-										dup2(pip[1], 1);
-										//write (1, "QQQ", 3);
-										close(pip[1]);
-
-									}
-									// else
-										close(pip[1]);
-
-									//dup2(open("Makefile", O_RDWR), 0);
-									// (void)path;
-									//ft_putstr_fd("JE TEST A", 1);
-									if ((t.ret_sf = search_function(&t.tab_cmd_line[i][j], path)) == 1)
-										exit(17);
-									else if (t.ret_sf == -1)
-										exit(18);
-									//ft_putstr_fd("TESTEST\n", 1);
-									// close(pip[0]);
-									// close(pip[1]);
-									exit(0);
+									dup2(pip[0], 0);
+									//char te = -12;
+									//write(pip[1], "FIN", 3);
+									// write(pip[1], "\0", 1);
+									//printf("J = %d char = [%c]\n", j, t.tab_cmd_line[i][j]);
+									close(pip[0]);
 								}
-								waitpid(t.pid, &t.child_status, 0);
-								ft_update_g_envv(t.child_status);
-								if ((WEXITSTATUS(t.child_status)) == 17)
+								// else
+									close(pip[0]);
+								if (t.tab_cmd_line[i][j + k] == '|')
 								{
-									ft_putstr_fd("exit\n", 1);
-									exit(56);
+									dup2(pip[1], 1);
+									//write (1, "QQQ", 3);
+									close(pip[1]);
 								}
-								//printf("J = %d K = %d char = %c\n", j, k, t.tab_cmd_line[i][j]);
-								j += k;
+								// else
+									close(pip[1]);
+								//dup2(open("Makefile", O_RDWR), 0);
+								// (void)path;
+								//ft_putstr_fd("JE TEST A", 1);
+								if ((t.ret_sf = search_function(&t.tab_cmd_line[i][j], path)) == 1)
+									exit(17);
+								else if (t.ret_sf == -1)
+									exit(18);
+								//ft_putstr_fd("TESTEST\n", 1);
+								// close(pip[0]);
+								// close(pip[1]);
+								exit(0);
 							}
-							i++;
+							waitpid(t.pid, &t.child_status, 0);
+							ft_update_g_envv(t.child_status);
+							if ((WEXITSTATUS(t.child_status)) == 17)
+							{
+								ft_putstr_fd("exit\n", 1);
+								exit(56);
+							}
+							//printf("J = %d K = %d char = %c\n", j, k, t.tab_cmd_line[i][j]);
+							j += k;
 						}
-						ft_freestrarr(t.tab_cmd_line);
+						i++;
 					}
+					ft_freestrarr(t.tab_cmd_line);
 				}
-				free(t.cmd_line);
 			}
-			exit(0);
+			free(t.cmd_line);
 		}
 		waitpid(pid, &t.child_status, 0);
 	}
@@ -174,10 +172,15 @@ void	handle_sigint(int sig)
 {
 	if (sig == SIGINT && pid != 0)
 	{
-		ft_putchar_fd('\n', 1);
+		
 		//display_prompt();
 		signal(SIGINT, handle_sigint);
 		kill(pid, 9);
+	}
+	else
+	{
+		ft_putchar_fd('\n', 1);
+		display_prompt();
 	}
 }
 
@@ -185,16 +188,15 @@ int		main(int ac, char **av, char **env)
 {
 	(void)av;
 	char	**path;
-	int		pip[2];
 
-	if (pipe(pip) == -1|| ac != 1)
+	if (ac != 1)
 		return (0);
 	signal(SIGINT, handle_sigint);
 	if (init_g_envv(env) == -1)
 		return (-1);
 	path = init_path();
 
-	if (start_minishell(path, pip) == -1)
+	if (start_minishell(path) == -1)
 		return (-1);
 	ft_freestrarr(path);
 	return (0);
