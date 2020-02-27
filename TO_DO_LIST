@@ -30,4 +30,50 @@ gerer les > < >>
 
 Kill process ctrl c ✅
 
-regler le probleme du double process
+regler le probleme du double process ✅
+
+compter les pipes
+
+while (i < nbpipe)
+{
+	while(cmd[j])
+	{
+		k = 0;
+		if (fork == 0)
+		{
+			if (cmd[j] == '|')
+			{
+				if ((i%2) == 1)
+					dup2(pip1[0], 0);
+				else
+					dup2(pip2[0], 0);
+			}
+			else
+			{
+				if ((i%2) == 1)
+					close(pip1[0]);
+				else
+					close(pip2[0]);
+			}
+			if (cmd[j + k] == '|')
+			{
+				if ((i%2) == 1)
+					dup2(pip1[1], 0);
+				else
+					dup2(pip2[1], 0);
+			}
+			else
+			{
+				if ((i%2) == 1)
+					close(pip1[1]);
+				else
+					close(pip2[1]);
+			}
+			if (search function == -1)
+				reset (fd)
+		}
+		j += k;
+	}
+	i++;
+}
+wait(0);
