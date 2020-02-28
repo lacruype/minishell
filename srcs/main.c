@@ -14,7 +14,7 @@
 #include "../includes/minishell.h"
 
 int pid;
-int flag = 0;
+int flag_prompt = 0;
 
 void	ft_update_g_envv(int child_status)
 {
@@ -68,7 +68,10 @@ int		search_function(char *cmd_line, char **path)
 	split_cmd = ft_split_cmd(cmd_line); // il faut gerer les quotes
 
 	if (ft_strncmp(split_cmd[0], "exit", 4) == 0) // gerer le cas exit | echo
-		return (1);
+	{
+		write(1, "exit\n", 5);
+		exit(0);
+	}
 	if (ft_path(split_cmd, path) == -1)
 		return (ft_error(5));
 	return (0);
@@ -90,30 +93,70 @@ int		cmpt_pipe(char *cmd)
 	return (nb_pipe);
 }
 
+void	exec_pipe(char *cmd, char **path)
+{
+	int i;
+	int k;
+	int pid;
+	int child_status;
+	int pipe_fd[2];
+	int save_fd[2];
+
+	i = 0;
+	save_fd[0] = dup(0);
+	save_fd[1] = dup(1);
+	while (cmd[i])
+	{
+		if (pipe(pipe_fd) == -1)
+			write(1, "ERROR: PIPE\n", 13);
+		k = 0;
+		if (cmd[i] == '|')
+			i++;
+		while (cmd[i + k] && cmd[i + k] != '|')
+			k++;
+		if (cmd[i - 1] == '|')
+		{
+			close(pipe_fd[1]);
+			dup2(pipe_fd[0], 0);
+		}
+		else
+			close(pipe_fd[0]);
+		if (cmd[i + k] == '|')
+		{
+			dup2(pipe_fd[1], 1);
+			close(pipe_fd[0]);
+		}
+		else
+			close(pipe_fd[1]);
+		
+		if (search_function(cmd, path) == -1)
+			write(1, "COMMANDE PAS TROUVER\n", 22);
+		// waitpid(pid, &child_status, 0);
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+		
+		dup2(save_fd[0], 0);
+		dup2(save_fd[1], 1);
+		i += k;
+	}
+}
+
 int		start_minishell(char **path)
 {
 	int		i;
 	int		j;
 	int		k;
 	int		nb_pipe;
-	int		pipe_nb;
-	int		pip1[2];
-	int		pip2[2];
 	char	buf[20];
 
 	t.ret_gnl = 1;
 	t.check_exit = 0;
 	nb_pipe = 0;
-	pipe_nb = 0;
-	if (pipe(pip1) == -1 || pipe(pip2) == -1)
-		return (0);
 	while (t.ret_gnl == 1 && t.check_exit == 0)
 	{
-		if ((WEXITSTATUS(t.child_status)) == 56)
-			exit(0);
-		if (flag != 1)
+		if (flag_prompt != 1)
 			display_prompt();
-		flag = 0;
+		flag_prompt = 0;
 		if (!get_next_line(0, &t.cmd_line))
 		{
 			ft_putstr_fd("exit\n", 1);
@@ -126,151 +169,63 @@ int		start_minishell(char **path)
 				i = 0;
 				while (t.tab_cmd_line[i] != NULL)
 				{
-
-
-					pipe_nb = 0;
 					nb_pipe = cmpt_pipe(t.tab_cmd_line[i]);
 					j = 0;
-					while (t.tab_cmd_line[i][j])
-					{
-						k = 0;
-						if (t.tab_cmd_line[i][j] == '|')
-							j++;
-						while (t.tab_cmd_line[i][j + k] && t.tab_cmd_line[i][j + k] != '|')
-							k++;
-						if ((pid = fork()) == 0)
-						{
-							if (t.tab_cmd_line[i][j - 1] == '|')
-							{
-								if (pipe_nb % 2 == 0)
-								{
-									dup2(pip1[0], 0);
-									close(pip2[0]);
-								}
-								else
-								{
-									dup2(pip2[0], 0);
-									close(pip1[0]);
-								}
-							}
-							else
-							{
-								close(pip1[0]);
-								close(pip2[0]);
-							}
-							if (t.tab_cmd_line[i][j + k] == '|')
-							{
-								pipe_nb++;
-								if (pipe_nb % 2 == 1)
-								{
-									dup2(pip1[1], 1);
-									close(pip2[1]);
-								}
-								else
-								{
-									dup2(pip2[1], 1);
-									close(pip1[1]);
-								}
-							}
-							else
-							{
-								close(pip1[1]);
-								close(pip2[1]);
-							}
-							if ((t.ret_sf = search_function(&t.tab_cmd_line[i][j], path)) == -1)
-							{
-								
-							}
-						}
-						j += k;
-						write(1, "A", 1);
-
-
-
-					}
-					i++;
-					wait(0);
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					// while (t.tab_cmd_line[i][j])
+					k = 0;
+					// if (t.tab_cmd_line[i][j] == '|')
+					// 	j++;
+					// while (t.tab_cmd_line[i][j + k] && t.tab_cmd_line[i][j + k] != '|')
+					// 	k++;
+					// if (t.tab_cmd_line[i][j - 1] == '|')
 					// {
-					// 	k = 0;
-					// 	if (t.tab_cmd_line[i][j] == '|')
-					// 		j++;
-					// 	while (t.tab_cmd_line[i][j + k] && t.tab_cmd_line[i][j + k] != '|')
-					// 		k++;
-					// 	if ((pid = fork()) == 0)
+					// 	if (pipe_nb % 2 == 0)
 					// 	{
-					// 		if (j > 0 && t.tab_cmd_line[i][j - 1] == '|')
-					// 		{
-					// 			dup2(pip[0], 0);
-					// 			//char te = -12;
-					// 			//write(pip[1], "FIN", 3);
-					// 			// write(pip[1], "\0", 1);
-					// 			//printf("J = %d char = [%c]\n", j, t.tab_cmd_line[i][j]);
-					// 			//close(pip[0]);
-					// 		}
-					// 		else
-					// 			close(pip[0]);
-					// 		//ft_putstr_fd("JE TEST A", 1);
-					// 		if (t.tab_cmd_line[i][j + k] == '|')
-					// 		{
-					// 			dup2(pip[1], 1);
-					// 			//write (1, "QQQ", 3);
-					// 			//close(pip[1]);
-					// 		}
-					// 		else
-					// 			close(pip[1]);
-					// 		//dup2(open("Makefile", O_RDWR), 0);
-					// 		// (void)path;
-					// 		//ft_putstr_fd("JE TEST A", 1);
-					// 		if ((t.ret_sf = search_function(&t.tab_cmd_line[i][j], path)) == 1)
-					// 			exit(17);
-					// 		else if (t.ret_sf == -1)
-					// 			exit(18);
-					// 		//ft_putstr_fd("TESTEST\n", 1);
-					// 		// close(pip[0]);
-					// 		// close(pip[1]);
-					// 		exit(0);
+					// 		dup2(pip1[0], 0);
+					// 		close(pip1[1]);
 					// 	}
-					// 	waitpid(t.pid, &t.child_status, 0);
-					// 	ft_update_g_envv(t.child_status);
-					// 	if ((WEXITSTATUS(t.child_status)) == 17)
+					// 	else
 					// 	{
-					// 		ft_putstr_fd("exit\n", 1);
-					// 		exit(56);
+					// 		dup2(pip2[0], 0);
+					// 		close(pip2[1]);
 					// 	}
-					// 	close(pip[1]);
-					// 	dup2(pip[0], 0);
-					// 	execve("/bin/cat", ft_split("cat -e", ' '), NULL);
-					// 	close(pip[0]);
-					// 	//printf("J = %d K = %d char = %c\n", j, k, t.tab_cmd_line[i][j]);
-					// 	j += k;
 					// }
-					// i++;
-
-
-
-
-
+					// else
+					// {
+					// 	close(pip1[0]);
+					// 	close(pip2[0]);
+					// }
+					// if (t.tab_cmd_line[i][j + k] == '|')
+					// {
+					// 	pipe_nb++;
+					// 	if (pipe_nb % 2 == 1)
+					// 	{
+					// 		dup2(pip1[1], 1);
+					// 		close(pip1[0]);
+					// 	}
+					// 	else
+					// 	{
+					// 		dup2(pip2[1], 1);
+					// 		close(pip2[0]);
+					// 	}
+					// }
+					// else
+					// {
+					// 	close(pip1[1]);
+					// 	close(pip2[1]);
+					// }
+					if (nb_pipe == 0)
+						search_function(&t.tab_cmd_line[i][j], path);
+					else
+					{
+						exec_pipe(t.tab_cmd_line[i], path);
+					}
+						
+					i++;
 				}
 				ft_freestrarr(t.tab_cmd_line);
 			}
 			free(t.cmd_line);
 		}
-		waitpid(pid, &t.child_status, 0);
 	}
 	return (0);
 }
@@ -280,21 +235,19 @@ void	handle_sigint(int sig)
 	ft_putstr_fd("\b\b  \n", 1);
 	signal(SIGINT, handle_sigint);
 	display_prompt();
-	flag = 1;
+	flag_prompt = 1;
 }
 
 int		main(int ac, char **av, char **env)
 {
 	(void)av;
 	char	**path;
-
 	if (ac != 1)
 		return (0);
 	signal(SIGINT, handle_sigint);
 	if (init_g_envv(env) == -1)
 		return (-1);
 	path = init_path();
-
 	if (start_minishell(path) == -1)
 		return (-1);
 	ft_freestrarr(path);

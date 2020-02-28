@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 13:42:31 by lacruype          #+#    #+#             */
-/*   Updated: 2020/02/21 14:10:41 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/28 14:41:31 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int		ft_error(int error)
 		ft_putstr_fd("Didn't find the $? !\n", 1);
 	else if (error == 4)
 		ft_putstr_fd("Escaping chars has failed !\n", 1);
-	else if(error == 5)
+	else if (error == 5)
 		ft_putstr_fd("Command doesn't exit !\n", 1);
-	return (1);
+	return (-1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_path.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 12:15:53 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/26 12:01:58 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/02/28 15:19:17 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int					ft_path(char **cmd, char **path)
 	int				flag;
 
 	j = 0;
-	flag = 0;
 	size = 0;
 	while (!ft_strchr(" ;\"'", cmd[0][size])&& cmd[0][size])
 		size++;
@@ -32,7 +31,6 @@ int					ft_path(char **cmd, char **path)
 		pDir = opendir (path[j]);
 		if (pDir == NULL)
 			return (-1);
-
 		while ((pDirent = readdir(pDir)) != NULL)
 		{
 			if (size == ft_strlen(pDirent->d_name))
@@ -43,19 +41,14 @@ int					ft_path(char **cmd, char **path)
 					tmp = file;
 					file = ft_strjoin(file, pDirent->d_name);
 					free(tmp);
-					//cmd[1] = ft_strdup("");
-					//printf ("CMD = %s\n", cmd[0]);
-					execve(file, cmd, g_envv);
+					if (fork() == 0)
+						execve(file, cmd, g_envv);
 					wait(0);
-					//ft_putstr_fd("TESTEST\n", 1);
-					flag = 1;
 				}
 			}
 		}
 		closedir(pDir);
 		j++;
 	}
-	if (!flag)
-		exit(5);
 	return (0);
 }
