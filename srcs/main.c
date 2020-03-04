@@ -59,7 +59,7 @@ void	display_prompt(void)
 	ft_putstr_fd(" ➡ ", 1);
 }
 
-int		search_function(char *cmd_line, char **path)
+int		search_function(char *cmd_line, char **path, int nb_pipe)
 {
 	int i;
 	char **split_cmd;
@@ -72,8 +72,16 @@ int		search_function(char *cmd_line, char **path)
 		write(1, "exit\n", 5);
 		exit(0);
 	}
-	if (ft_path(split_cmd, path) == -1)
+	if (nb_pipe == 0)
+	{
+		if (ft_path(split_cmd, path) == -1)
 		return (ft_error(5));
+	}
+	else
+	{
+		if (ft_path_pipe(split_cmd, path) == -1)
+		return (ft_error(5));
+	}
 	return (0);
 }
 
@@ -93,51 +101,101 @@ int		cmpt_pipe(char *cmd)
 	return (nb_pipe);
 }
 
-void	exec_pipe(char *cmd, char **path)
+int					ft_path_pipe(char **cmd, char **path)
+{
+	int				j;
+	size_t			size;
+	struct dirent	*pDirent;
+	DIR				*pDir;
+	char			*file;
+	char			*tmp;
+	int				flag;
+
+	j = 0;
+	size = 0;
+	while (!ft_strchr(" ;\"'", cmd[0][size]) && cmd[0][size])
+		size++;
+	while (path[j])
+	{
+		pDir = opendir(path[j]);
+		if (pDir == NULL)
+			return (-1);
+		while ((pDirent = readdir(pDir)) != NULL)
+		{
+			if (size == ft_strlen(pDirent->d_name))
+			{
+				if (ft_strncmp(pDirent->d_name, cmd[0], size) == 0)
+				{
+					file = ft_strjoin(path[j], "/");
+					tmp = file;
+					file = ft_strjoin(file, pDirent->d_name);
+					free(tmp);
+					execve(file, cmd, g_envv);
+				}
+			}
+		}
+		closedir(pDir);
+		j++;
+	}
+	return (0);
+}
+
+void	exec_pipe(char *cmd, char **path, int nb_pipe)
 {
 	int i;
-	int k;
+	int pipe_num;
 	int pid;
 	int child_status;
 	int pipe_fd[2];
-	int save_fd[2];
 
 	i = 0;
-	save_fd[0] = dup(0);
-	save_fd[1] = dup(1);
+	pipe_num = 0;
+	if (pipe(pipe_fd) == -1)
+	{
+		write(1, "ERROR: PIPE\n", 13);
+		exit(EXIT_FAILURE);
+	}
 	while (cmd[i])
 	{
-		if (pipe(pipe_fd) == -1)
-			write(1, "ERROR: PIPE\n", 13);
-		k = 0;
 		if (cmd[i] == '|')
+		{
+			pipe_num++;
 			i++;
-		while (cmd[i + k] && cmd[i + k] != '|')
-			k++;
-		if (cmd[i - 1] == '|')
+		}
+		if (pipe_num % 2 == 0 || pipe_num % 2 == 2)
 		{
+			printf("pipe pair\n");
+			if ((pid = fork()) == 0)
+			{
+				dup2(pipe_fd[1], 1);
+				close(pipe_fd[0]);
+				close(pipe_fd[1]);
+				search_function(&cmd[i], path, nb_pipe);
+				printf("Error ls\n");
+			}
+			else if (pid == -1)
+				printf("Error fork\n");
 			close(pipe_fd[1]);
-			dup2(pipe_fd[0], 0);
+			wait(NULL);
 		}
 		else
-			close(pipe_fd[0]);
-		if (cmd[i + k] == '|')
 		{
-			dup2(pipe_fd[1], 1);
+			printf("pipe impair\n");
+			if ((pid = fork()) == 0)
+			{
+				dup2(pipe_fd[0], 0);
+				close(pipe_fd[1]);
+				close(pipe_fd[0]);
+				search_function(&cmd[i], path, nb_pipe);
+				printf("Error cat\n");
+			}
+			else if (pid == -1)
+				printf("Error fork2\n");
 			close(pipe_fd[0]);
+			wait(NULL);
 		}
-		else
-			close(pipe_fd[1]);
-		
-		if (search_function(cmd, path) == -1)
-			write(1, "COMMANDE PAS TROUVER\n", 22);
-		// waitpid(pid, &child_status, 0);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-		
-		dup2(save_fd[0], 0);
-		dup2(save_fd[1], 1);
-		i += k;
+		while (cmd[i] != '|' && cmd[i] != '\0')
+			i++;
 	}
 }
 
@@ -172,54 +230,10 @@ int		start_minishell(char **path)
 					nb_pipe = cmpt_pipe(t.tab_cmd_line[i]);
 					j = 0;
 					k = 0;
-					// if (t.tab_cmd_line[i][j] == '|')
-					// 	j++;
-					// while (t.tab_cmd_line[i][j + k] && t.tab_cmd_line[i][j + k] != '|')
-					// 	k++;
-					// if (t.tab_cmd_line[i][j - 1] == '|')
-					// {
-					// 	if (pipe_nb % 2 == 0)
-					// 	{
-					// 		dup2(pip1[0], 0);
-					// 		close(pip1[1]);
-					// 	}
-					// 	else
-					// 	{
-					// 		dup2(pip2[0], 0);
-					// 		close(pip2[1]);
-					// 	}
-					// }
-					// else
-					// {
-					// 	close(pip1[0]);
-					// 	close(pip2[0]);
-					// }
-					// if (t.tab_cmd_line[i][j + k] == '|')
-					// {
-					// 	pipe_nb++;
-					// 	if (pipe_nb % 2 == 1)
-					// 	{
-					// 		dup2(pip1[1], 1);
-					// 		close(pip1[0]);
-					// 	}
-					// 	else
-					// 	{
-					// 		dup2(pip2[1], 1);
-					// 		close(pip2[0]);
-					// 	}
-					// }
-					// else
-					// {
-					// 	close(pip1[1]);
-					// 	close(pip2[1]);
-					// }
 					if (nb_pipe == 0)
-						search_function(&t.tab_cmd_line[i][j], path);
+						search_function(&t.tab_cmd_line[i][j], path, nb_pipe);
 					else
-					{
-						exec_pipe(t.tab_cmd_line[i], path);
-					}
-						
+						exec_pipe(t.tab_cmd_line[i], path, nb_pipe);
 					i++;
 				}
 				ft_freestrarr(t.tab_cmd_line);

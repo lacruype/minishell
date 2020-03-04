@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 12:15:53 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/28 15:19:17 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/03/04 14:34:27 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ int					ft_path(char **cmd, char **path)
 
 	j = 0;
 	size = 0;
-	while (!ft_strchr(" ;\"'", cmd[0][size])&& cmd[0][size])
+	while (!ft_strchr(" ;\"'", cmd[0][size]) && cmd[0][size])
 		size++;
 	while (path[j])
 	{
-		pDir = opendir (path[j]);
+		pDir = opendir(path[j]);
 		if (pDir == NULL)
 			return (-1);
 		while ((pDirent = readdir(pDir)) != NULL)

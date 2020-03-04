@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 
 // int main() {
 // 	int pip[2];
@@ -27,28 +28,54 @@ int main(int ac, char **av)
 	int pipe_fd[2];
 	int save_fd[2];
 	int i;
+	pid_t pid;
 
 	i = 0;
-	save_fd[0] = dup(0);
-	save_fd[1] = dup(1);
-	pipe(pipe_fd);
-	dup2(pipe_fd[1], 1);
-	close(pipe_fd[0]);
-	if (fork() == 0)
+	// save_fd[0] = dup(0);
+	// save_fd[1] = dup(1);
+	// pipe(pipe_fd);
+	// dup2(pipe_fd[1], 1);
+	// close(pipe_fd[0]);
+	// if (fork() == 0)
+	// {
+	// 	execve("/bin/ls", av, NULL);
+
+	// }
+	// wait(0);
+	// dup2(pipe_fd[0], 0);
+	// dup2(save_fd[1], 1);
+
+	// if (fork() == 0)
+	// {
+	// 	execve("/bin/wc", av, NULL);
+
+	// }
+	// wait(0);
+
+	if (pipe(pipe_fd) == -1)
+		printf("Errr pipe\n");
+	if ((pid = fork()) == 0)
 	{
+		dup2(pipe_fd[1], 1);
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
 		execve("/bin/ls", av, NULL);
-
+		printf("Error ls\n");
 	}
-	wait(0);
-	dup2(pipe_fd[0], 0);
-	
-	dup2(save_fd[1], 1);
-
-	if (fork() == 0)
+	else if (pid == -1)
+		printf("Error fork\n");
+	close(pipe_fd[1]);
+	wait(NULL);
+	if ((pid = fork()) == 0)
 	{
-		execve("/bin/wc", av, NULL);
-
+		dup2(pipe_fd[0], 0);
+		close(pipe_fd[1]);
+		close(pipe_fd[0]);
+		printf("exec = %d\n", execve("/bin/cat", av, NULL));
+		printf("Error cat\n");
 	}
-	wait(0);
-
+	else if (pid == -1)
+		printf("Error fork2\n");
+	close(pipe_fd[0]);
+	wait(NULL);
 }
