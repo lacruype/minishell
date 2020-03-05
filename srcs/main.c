@@ -147,6 +147,7 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 	int pid;
 	int child_status;
 	int pipe_fd[2];
+	int j = 0;
 
 	i = 0;
 	pipe_num = 0;
@@ -157,14 +158,14 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 	}
 	while (cmd[i])
 	{
+		j = i;
 		if (cmd[i] == '|')
 		{
 			pipe_num++;
 			i++;
 		}
-		if (pipe_num % 2 == 0 || pipe_num % 2 == 2)
+		if (pipe_num == 0)
 		{
-			printf("pipe pair\n");
 			if ((pid = fork()) == 0)
 			{
 				dup2(pipe_fd[1], 1);
@@ -178,9 +179,8 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 			close(pipe_fd[1]);
 			wait(NULL);
 		}
-		else
+		else if (pipe_num == nb_pipe)
 		{
-			printf("pipe impair\n");
 			if ((pid = fork()) == 0)
 			{
 				dup2(pipe_fd[0], 0);
@@ -192,6 +192,28 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 			else if (pid == -1)
 				printf("Error fork2\n");
 			close(pipe_fd[0]);
+			close(pipe_fd[1]);
+			wait(NULL);
+		}
+		else
+		{
+			if ((pid = fork()) == 0)
+			{
+				close(pipe_fd[0]);
+				dup2(pipe_fd[1], 1);
+				close(pipe_fd[1]);
+				if ((pid = fork()) == 0)
+				{
+					close(pipe_fd[1]);
+					dup2(pipe_fd[0], 0);
+					close(pipe_fd[0]);
+					search_function(&cmd[i], path, nb_pipe);
+					printf("Error cat\n");
+				}
+				exit(0);
+			}
+			else if (pid == -1)
+				printf("Error fork2\n");
 			wait(NULL);
 		}
 		while (cmd[i] != '|' && cmd[i] != '\0')
