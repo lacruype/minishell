@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/03/04 14:55:10 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/03/05 16:04:26 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <stdio.h>
 # include <limits.h>
 # include <dirent.h>
-# include "libft.h"
+# include "../libft/includes/libft.h"
 
 char	**g_envv;
 

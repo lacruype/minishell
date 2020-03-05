@@ -79,7 +79,7 @@ int		search_function(char *cmd_line, char **path, int nb_pipe)
 	}
 	else
 	{
-		if (ft_path_pipe(split_cmd, path) == -1)
+		if (ft_path(split_cmd, path) == -1)
 		return (ft_error(5));
 	}
 	return (0);
@@ -99,45 +99,6 @@ int		cmpt_pipe(char *cmd)
 		i++;
 	}
 	return (nb_pipe);
-}
-
-int					ft_path_pipe(char **cmd, char **path)
-{
-	int				j;
-	size_t			size;
-	struct dirent	*pDirent;
-	DIR				*pDir;
-	char			*file;
-	char			*tmp;
-	int				flag;
-
-	j = 0;
-	size = 0;
-	while (!ft_strchr(" ;\"'", cmd[0][size]) && cmd[0][size])
-		size++;
-	while (path[j])
-	{
-		pDir = opendir(path[j]);
-		if (pDir == NULL)
-			return (-1);
-		while ((pDirent = readdir(pDir)) != NULL)
-		{
-			if (size == ft_strlen(pDirent->d_name))
-			{
-				if (ft_strncmp(pDirent->d_name, cmd[0], size) == 0)
-				{
-					file = ft_strjoin(path[j], "/");
-					tmp = file;
-					file = ft_strjoin(file, pDirent->d_name);
-					free(tmp);
-					execve(file, cmd, g_envv);
-				}
-			}
-		}
-		closedir(pDir);
-		j++;
-	}
-	return (0);
 }
 
 void	exec_pipe(char *cmd, char **path, int nb_pipe)
@@ -172,7 +133,7 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 				close(pipe_fd[0]);
 				close(pipe_fd[1]);
 				search_function(&cmd[i], path, nb_pipe);
-				printf("Error ls\n");
+				exit(0);
 			}
 			else if (pid == -1)
 				printf("Error fork\n");
@@ -187,34 +148,33 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 				close(pipe_fd[1]);
 				close(pipe_fd[0]);
 				search_function(&cmd[i], path, nb_pipe);
-				printf("Error cat\n");
+				exit(0);
 			}
 			else if (pid == -1)
 				printf("Error fork2\n");
 			close(pipe_fd[0]);
-			close(pipe_fd[1]);
 			wait(NULL);
 		}
 		else
 		{
 			if ((pid = fork()) == 0)
 			{
-				close(pipe_fd[0]);
-				dup2(pipe_fd[1], 1);
-				close(pipe_fd[1]);
-				if ((pid = fork()) == 0)
+				if (pipe_fd[0] != 0)
 				{
-					close(pipe_fd[1]);
 					dup2(pipe_fd[0], 0);
 					close(pipe_fd[0]);
-					search_function(&cmd[i], path, nb_pipe);
-					printf("Error cat\n");
 				}
+				if (pipe_fd[1] != 1)
+				{
+					dup2(pipe_fd[1], 1);
+					close(pipe_fd[1]);
+				}	
+				search_function(&cmd[i], path, nb_pipe);
 				exit(0);
 			}
 			else if (pid == -1)
 				printf("Error fork2\n");
-			wait(NULL);
+			waitpid(pid, &child_status, 0);
 		}
 		while (cmd[i] != '|' && cmd[i] != '\0')
 			i++;
@@ -227,7 +187,6 @@ int		start_minishell(char **path)
 	int		j;
 	int		k;
 	int		nb_pipe;
-	char	buf[20];
 
 	t.ret_gnl = 1;
 	t.check_exit = 0;
@@ -268,10 +227,13 @@ int		start_minishell(char **path)
 
 void	handle_sigint(int sig)
 {
-	ft_putstr_fd("\b\b  \n", 1);
-	signal(SIGINT, handle_sigint);
-	display_prompt();
-	flag_prompt = 1;
+	if (sig == SIGINT)
+	{
+		ft_putstr_fd("\b\b  \n", 1);
+		signal(SIGINT, handle_sigint);
+		display_prompt();
+		flag_prompt = 1;
+	}
 }
 
 int		main(int ac, char **av, char **env)

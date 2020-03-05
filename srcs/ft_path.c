@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 12:15:53 by rledrin           #+#    #+#             */
-/*   Updated: 2020/03/04 14:34:27 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/03/05 16:04:43 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int					ft_path(char **cmd, char **path)
 	DIR				*pDir;
 	char			*file;
 	char			*tmp;
-	int				flag;
 
 	j = 0;
 	size = 0;
