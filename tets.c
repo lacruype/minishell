@@ -54,6 +54,7 @@ int main(int ac, char **av)
 
 	if (pipe(pipe_fd) == -1)
 		printf("Errr pipe\n");
+		
 	if ((pid = fork()) == 0)
 	{
 		dup2(pipe_fd[1], 1);
@@ -66,6 +67,7 @@ int main(int ac, char **av)
 		printf("Error fork\n");
 	close(pipe_fd[1]);
 	wait(NULL);
+
 	if ((pid = fork()) == 0)
 	{
 		dup2(pipe_fd[0], 0);
@@ -78,4 +80,5 @@ int main(int ac, char **av)
 		printf("Error fork2\n");
 	close(pipe_fd[0]);
 	wait(NULL);
+
 }
