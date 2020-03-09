@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+         #
+#    By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/03/05 15:55:01 by lacruype         ###   ########.fr        #
+#    Updated: 2020/03/06 12:00:29 by rledrin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ RM			=	rm -f
 
 CC			=	gcc
 
-CFLAGS		=	-Wall -Wextra -Werror -g -O3
+CFLAGS		=	-Wall -Wextra -Werror -g3 -fsanitize=address
 
 T		=	$(words ${OBJS})
 N		=	0
