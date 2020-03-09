@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/03/05 16:16:32 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/03/09 13:03:07 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ var_minishell t;
 */
 
 int		ft_path_pipe(char **cmd, char **path);
-int		search_function(char *cmd_line, char **path, int nb_pipe);
+int		search_function(char *cmd_line, char **path);
 int		start_minishell(char **path);
 
 /*

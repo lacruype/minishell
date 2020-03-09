@@ -53,13 +53,15 @@ void	display_prompt(void)
 	int i;
 
 	i = 0;
-	while (ft_strncmp(g_envv[i], "PWD=", 4) != 0)
+	while (g_envv[i] && ft_strncmp(g_envv[i], "PWD=", 4) != 0)
 		i++;
+	if(g_envv[i] == NULL)
+		return ;
 	ft_putstr_fd(&g_envv[i][4], 1);
 	ft_putstr_fd(" ➡ ", 1);
 }
 
-int		search_function(char *cmd_line, char **path, int nb_pipe)
+int		search_function(char *cmd_line, char **path)
 {
 	int i;
 	char **split_cmd;
@@ -72,16 +74,8 @@ int		search_function(char *cmd_line, char **path, int nb_pipe)
 		write(1, "exit\n", 5);
 		exit(0);
 	}
-	if (nb_pipe == 0)
-	{
-		if (ft_path(split_cmd, path) == -1)
+	if (ft_path(split_cmd, path) == -1)
 		return (ft_error(5));
-	}
-	else
-	{
-		if (ft_path(split_cmd, path) == -1)
-		return (ft_error(5));
-	}
 	return (0);
 }
 
@@ -101,6 +95,22 @@ int		cmpt_pipe(char *cmd)
 	return (nb_pipe);
 }
 
+static void	add_child_process(char *cmd, int in, int out, char **path)
+{
+	printf("IN = %d et OUT = %d\n", in, out);
+	if (in != 0)
+	{
+		dup2(in, 0);
+		close(in);
+	}
+	if (out != 1)
+	{
+		dup2(out, 1);
+		close(out);
+	}
+	search_function(cmd, path);
+}
+
 void	exec_pipe(char *cmd, char **path, int nb_pipe)
 {
 	int i;
@@ -108,11 +118,12 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 	int pid;
 	int child_status;
 	int pipe_fd[2];
+	int pipe_fd2[2];
 	int j = 0;
 
 	i = 0;
 	pipe_num = 0;
-	if (pipe(pipe_fd) == -1)
+	if (pipe(pipe_fd) == -1 || pipe(pipe_fd2) == -1)
 	{
 		write(1, "ERROR: PIPE\n", 13);
 		exit(EXIT_FAILURE);
@@ -129,10 +140,8 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 		{
 			if ((pid = fork()) == 0)
 			{
-				dup2(pipe_fd[1], 1);
 				close(pipe_fd[0]);
-				close(pipe_fd[1]);
-				search_function(&cmd[i], path, nb_pipe);
+				add_child_process(&cmd[i], 0, pipe_fd[1], path);
 				exit(0);
 			}
 			else if (pid == -1)
@@ -142,38 +151,62 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 		}
 		else if (pipe_num == nb_pipe)
 		{
+			printf("pipe num = %d\n", pipe_num);
 			if ((pid = fork()) == 0)
 			{
-				dup2(pipe_fd[0], 0);
-				close(pipe_fd[1]);
-				close(pipe_fd[0]);
-				search_function(&cmd[i], path, nb_pipe);
+				if (pipe_num % 2 == 0)
+					add_child_process(&cmd[i], pipe_fd2[0], 1, path);
+				else
+					add_child_process(&cmd[i], pipe_fd[0], 1, path);
 				exit(0);
 			}
 			else if (pid == -1)
 				printf("Error fork2\n");
-			close(pipe_fd[0]);
+			if (pipe_num % 2 == 0)
+				close(pipe_fd2[0]);
+			else
+				close(pipe_fd[0]);
 			wait(NULL);
 		}
 		else
 		{
+			printf("pipe num = %d\n", pipe_num);
+			if (pipe_num % 2 == 0)
+			{
+				if (pipe(pipe_fd) == -1)
+				{
+					write(1, "ERROR: PIPE\n", 13);
+					exit(EXIT_FAILURE);
+				}
+			}
+			else
+			{
+				if (pipe(pipe_fd2) == -1)
+				{
+					write(1, "ERROR: PIPE\n", 13);
+					exit(EXIT_FAILURE);
+				}
+			}
 			if ((pid = fork()) == 0)
 			{
-				if (pipe_fd[0] != 0)
-				{
-					dup2(pipe_fd[0], 0);
-					close(pipe_fd[0]);
-				}
-				if (pipe_fd[1] != 1)
-				{
-					dup2(pipe_fd[1], 1);
-					close(pipe_fd[1]);
-				}	
-				search_function(&cmd[i], path, nb_pipe);
+				if (pipe_num % 2 == 0)
+					add_child_process(&cmd[i], pipe_fd2[0], pipe_fd[1], path);
+				else
+					add_child_process(&cmd[i], pipe_fd[0], pipe_fd2[1], path);
 				exit(0);
 			}
 			else if (pid == -1)
 				printf("Error fork2\n");
+			if (pipe_num % 2 == 0)
+			{
+				close(pipe_fd2[0]);
+				close(pipe_fd[1]);
+			}
+			else
+			{
+				close(pipe_fd[0]);
+				close(pipe_fd2[1]);
+			}
 			waitpid(pid, &child_status, 0);
 		}
 		while (cmd[i] != '|' && cmd[i] != '\0')
@@ -212,7 +245,7 @@ int		start_minishell(char **path)
 					j = 0;
 					k = 0;
 					if (nb_pipe == 0)
-						search_function(&t.tab_cmd_line[i][j], path, nb_pipe);
+						search_function(&t.tab_cmd_line[i][j], path);
 					else
 						exec_pipe(t.tab_cmd_line[i], path, nb_pipe);
 					i++;
