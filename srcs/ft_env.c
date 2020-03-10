@@ -6,11 +6,14 @@ void	ft_env(char **args)
 
 	i = 0;
 	if (ft_strncmp(args[0], "env", 4) != 0)
-		return(-1);
+	{
+		printf("ERROR\n");
+		return ;
+	}
 	if (args[1])
 	{
 		printf("ERROR\n");
-		return (-1);
+		return ;
 	}
 	while(g_envv[i])
 	{

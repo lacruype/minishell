@@ -15,6 +15,7 @@
 
 int pid;
 int flag_prompt = 0;
+int savefd[2];
 
 void	ft_update_g_envv(int child_status)
 {
@@ -61,13 +62,64 @@ void	display_prompt(void)
 	ft_putstr_fd(" ➡ ", 1);
 }
 
+char	*get_filename(char *cmd)
+{
+	char	*filename;
+	int		i;
+	int		j;
+
+	filename = 0;
+	i = 0;
+	j = 0;
+	i = ft_jump_space(cmd) - cmd;
+	
+	while (cmd[i + j] && cmd[i + j] != ' ')
+	{
+		filename = ft_realloc(filename, j);
+		filename[j] = cmd[i + j];
+		j++;
+	}
+	return (filename);
+}
+
 int		search_function(char *cmd_line, char **path)
 {
 	int i;
+	int j;
 	char **split_cmd;
+	char *tmp;
+	char *filename;
 
 	i = 0;
-	split_cmd = ft_split_cmd(cmd_line); // il faut gerer les quotes
+	j = 0;
+	while (cmd_line[j])
+	{
+		if ((tmp = ft_strchr("><", cmd_line[j])))
+		{
+			if (*tmp == '>' && cmd_line[j + 1] == '>')
+			{
+				filename = get_filename(&cmd_line[j + 2]);
+				dup2(open(filename, O_CREAT | O_APPEND | O_WRONLY, 0666), savefd[1]);
+			}
+			else if (*tmp == '>')
+			{
+				filename = get_filename(&cmd_line[j + 1]);
+				dup2(open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0666), savefd[1]);
+			}
+			else if (*tmp == '<')
+			{
+				filename = get_filename(&cmd_line[j + 1]);
+				dup2(open(filename, O_RDONLY), savefd[0]);
+			}
+			else
+			{
+				printf("ERROR\n");
+				return (-1);
+			}
+		}
+		j++;
+	}
+	split_cmd = ft_split_cmd(cmd_line);
 
 	if (ft_strncmp(split_cmd[0], "exit", 4) == 0) // gerer le cas exit | echo
 	{
@@ -95,7 +147,7 @@ int		cmpt_pipe(char *cmd)
 	return (nb_pipe);
 }
 
-static void	add_child_process(char *cmd, int in, int out, char **path)
+static void	exec_command(char *cmd, int in, int out, char **path)
 {
 	printf("IN = %d et OUT = %d\n", in, out);
 	if (in != 0)
@@ -122,6 +174,8 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 	int j = 0;
 
 	i = 0;
+	savefd[0] = dup(0);
+	savefd[1] = dup(1);
 	pipe_num = 0;
 	if (pipe(pipe_fd) == -1 || pipe(pipe_fd2) == -1)
 	{
@@ -141,7 +195,7 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 			if ((pid = fork()) == 0)
 			{
 				close(pipe_fd[0]);
-				add_child_process(&cmd[i], 0, pipe_fd[1], path);
+				exec_command(&cmd[i], 0, pipe_fd[1], path);
 				exit(0);
 			}
 			else if (pid == -1)
@@ -155,9 +209,9 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 			if ((pid = fork()) == 0)
 			{
 				if (pipe_num % 2 == 0)
-					add_child_process(&cmd[i], pipe_fd2[0], 1, path);
+					exec_command(&cmd[i], pipe_fd2[0], 1, path);
 				else
-					add_child_process(&cmd[i], pipe_fd[0], 1, path);
+					exec_command(&cmd[i], pipe_fd[0], 1, path);
 				exit(0);
 			}
 			else if (pid == -1)
@@ -190,9 +244,9 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 			if ((pid = fork()) == 0)
 			{
 				if (pipe_num % 2 == 0)
-					add_child_process(&cmd[i], pipe_fd2[0], pipe_fd[1], path);
+					exec_command(&cmd[i], pipe_fd2[0], pipe_fd[1], path);
 				else
-					add_child_process(&cmd[i], pipe_fd[0], pipe_fd2[1], path);
+					exec_command(&cmd[i], pipe_fd[0], pipe_fd2[1], path);
 				exit(0);
 			}
 			else if (pid == -1)

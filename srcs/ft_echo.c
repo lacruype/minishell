@@ -8,11 +8,14 @@ void	ft_echo(char **args)
 	i = 0;
 	option = 0;
 	if (ft_strncmp(args[i], "echo", 5) != 0)
-		return(-1);
+	{
+		printf("ERROR\n");
+		return ;
+	}
 	if (ft_strncmp(args[++i], "-n", 3) == 0)
 	{
-		option = 1;
-		i++;
+		printf("ERROR\n");
+		return ;
 	}
 	while (args[i++])
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/03/09 13:03:07 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/03/10 11:07:26 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,19 +74,19 @@ char	*ft_parsing(char *command_line);
 **		ft_echo.c
 */
 
-void	ft_echo(char *cmd);
+void	ft_echo(char **args);
 
 /*
 **		ft_pwd.c
 */
 
-void	ft_pwd(char *cmd);
+void	ft_pwd(char **args);
 
 /*
 **		ft_env.c
 */
 
-void	ft_env(char *cmd);
+void	ft_env(char **args);
 
 /*
 **		ft_envv.c

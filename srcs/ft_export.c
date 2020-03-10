@@ -7,7 +7,9 @@ static int	*ft_check_var_name(char *arg)
 	i = 0;
 	while (arg[i] && arg[i] != '=')
 	{
-		if (arg[i] == '\'' && i > 0 && arg[i - 1] != '\\')		// ameliorer les tests
+		if (arg[i] == '\'' || arg[i] == '\\' || arg[i] == '"')		// ameliorer les tests
+			return (-1);
+		else if (ft_isdigit(arg[i]))
 			return (-1);
 		i++;
 	}
@@ -22,10 +24,12 @@ void	ft_export(char **args)
 	char	*value;
 
 	i = 0;
-	j = 0;
 	k = 1;
 	if (ft_strncmp(args[0], "export", 7) != 0)
-		return(-1);
+	{
+		printf("ERROR\n");
+		return ;
+	}
 	if (!args[1])
 	{
 		while(g_envv[i])
@@ -39,10 +43,11 @@ void	ft_export(char **args)
 	{
 		while (args[k])
 		{
+			j = 0;
 			if ((j = ft_check_var_name(args[k])) == -1)
 			{
-				printf("ERROR\n");
-				return (-1);
+					printf("ERROR\n");
+					return ;
 			}
 			if (args[k][j] == '=')
 			{
