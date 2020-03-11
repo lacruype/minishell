@@ -6,7 +6,7 @@
 #    By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/03/10 12:13:32 by rledrin          ###   ########.fr        #
+#    Updated: 2020/03/11 11:57:13 by rledrin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}
 
 OBJS		=	${patsubst ${SRC_DIR}%.c,${OBJ_DIR}%.o,${SRCS}}
 
-NAME		=	minishell
+NAME		=	Minishell
 
 RM			=	rm -f
 

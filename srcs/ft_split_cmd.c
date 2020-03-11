@@ -6,7 +6,7 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/21 14:51:52 by rledrin           #+#    #+#             */
-/*   Updated: 2020/02/26 12:38:53 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/03/11 12:03:21 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,14 @@ int			ft_nb_word(char *cmd)
 
 	i = 0;
 	word = 0;
-	while (cmd[i] && cmd[i] != '|')
+
+	while (cmd[i] && !ft_strchr("<>|", cmd[i]))
 	{
 		while (cmd[i] == ' ' && cmd[i])
 			i++;
-		if (cmd[i] != '|' && cmd[i])
+		if (!ft_strchr("<>|", cmd[i]) && cmd[i])
 			word++;
-		while (cmd[i] != ' ' && cmd[i] && cmd[i] != '|')
+		while (cmd[i] != ' ' && cmd[i] && !ft_strchr("<>|", cmd[i]))
 			i++;
 	}
 	return (word);
@@ -39,14 +40,14 @@ char		**ft_fill(char **cmd_split, char *cmd)
 
 	i = 0;
 	j = -1;
-	while (cmd[i] && cmd[i] != '|')
+	while (cmd[i] && !ft_strchr("<>|", cmd[i]))
 	{
 		k = 0;
 		while (cmd[i] == ' ')
 			i++;
-		if (cmd[i] != '|' && cmd[i])
+		if (!ft_strchr("<>|", cmd[i]) && cmd[i])
 			j++;
-		while (cmd[i] != ' ' && cmd[i] && cmd[i] != '|')
+		while (cmd[i] != ' ' && cmd[i] && !ft_strchr("<>|", cmd[i]))
 		{
 			i++;
 			k++;

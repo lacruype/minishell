@@ -6,17 +6,21 @@ Ensuite Spliter la ligne entre chaque point-virgule sans compter ceux entre guil
 
 Checker la validité d'un dup par rapport aux processus ✅
 
-Reorganiser le parsing 
+Kill process ctrl c ✅
 
-L'histoire des backslashe
+regler le probleme du double process ✅
+
+L'histoire des backslashe ✅
 
 Effacer un carac de stdin pour enlever ctrl+C ✅
 
 Integrer le Escape_char ✅
 
-Parcourir cmd dans search function dans le cas : cat file | sort | grep maligne
+Parcourir cmd dans search function dans le cas : cat file | sort | grep maligne ✅
 
-Gerer les pipes
+Gerer les pipes ✅
+
+gerer les > < >> ✅
 
 Spliter cmd par ' ' avant de l'envoyer dans les fonction (gerer les quotes)
 
@@ -24,56 +28,14 @@ Proteger si ya pas d'environnementales
 
 gerer le cas exit | echo
 
+regler ctrlc + enter
+
+regler fleche vers le haut + enter
+
 gerer le ./Minishell
 
-gerer les > < >>
+gerer les erreur + errno
 
-Kill process ctrl c ✅
+tester les builtin
 
-regler le probleme du double process ✅
-
-compter les pipes
-
-while (i < nbpipe)
-{
-	while(cmd[j])
-	{
-		k = 0;
-		if (fork == 0)
-		{
-			if (cmd[j] == '|')
-			{
-				if ((i%2) == 1)
-					dup2(pip1[0], 0);
-				else
-					dup2(pip2[0], 0);
-			}
-			else
-			{
-				if ((i%2) == 1)
-					close(pip1[0]);
-				else
-					close(pip2[0]);
-			}
-			if (cmd[j + k] == '|')
-			{
-				if ((i%2) == 1)
-					dup2(pip1[1], 0);
-				else
-					dup2(pip2[1], 0);
-			}
-			else
-			{
-				if ((i%2) == 1)
-					close(pip1[1]);
-				else
-					close(pip2[1]);
-			}
-			if (search function == -1)
-				reset (fd)
-		}
-		j += k;
-	}
-	i++;
-}
-wait(0);
+faire unset

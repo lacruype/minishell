@@ -15,7 +15,6 @@
 
 int pid;
 int flag_prompt = 0;
-int savefd[2];
 
 void	ft_update_g_envv(int child_status)
 {
@@ -67,49 +66,62 @@ char	*get_filename(char *cmd)
 	char	*filename;
 	int		i;
 	int		j;
+	char	*tmp;
 
-	filename = 0;
+	filename = ft_strdup("");
 	i = 0;
 	j = 0;
-	i = ft_jump_space(cmd) - cmd;
-	
-	while (cmd[i + j] && cmd[i + j] != ' ')
+
+	while (cmd[i] == ' ')
+		i++;
+	while (cmd[i + j] && !(tmp = ft_strchr(" |<>", cmd[i + j])))
 	{
-		filename = ft_realloc(filename, j);
+		filename = ft_realloc(filename, (j + 2) * sizeof(char));
 		filename[j] = cmd[i + j];
 		j++;
 	}
+	if (tmp && (*tmp == '<' || *tmp == '>'))
+	{
+		printf("ERROR\n");
+		return (0);
+	}
+	filename[j] = '\0';
 	return (filename);
 }
 
-int		search_function(char *cmd_line, char **path)
+static int	redir(char *cmd)
 {
-	int i;
-	int j;
-	char **split_cmd;
-	char *tmp;
-	char *filename;
+	char	*filename;
+	char	*tmp;
+	int		fd;
+	int		j;
 
-	i = 0;
 	j = 0;
-	while (cmd_line[j])
+	fd = 0;
+	while (cmd[j] && cmd[j] != '|')
 	{
-		if ((tmp = ft_strchr("><", cmd_line[j])))
+		if ((tmp = ft_strchr("><", cmd[j])))
 		{
-			if (*tmp == '>' && cmd_line[j + 1] == '>')
+			if (*tmp == '>' && cmd[j + 1] == '>')
 			{
-				filename = get_filename(&cmd_line[j + 2]);
-				dup2(open(filename, O_CREAT | O_APPEND | O_WRONLY, 0666), savefd[1]);
+				filename = get_filename(&cmd[j + 2]);
+				fd = open(filename, O_WRONLY | O_APPEND | O_APPEND, 0666);
+				dup2(fd, 1);
+				j += 2;
 			}
-			else if (*tmp == '>')
+			else if (*tmp == '>' && (cmd[j + 1] == ' ' || ft_isalpha(cmd[j + 1])))
 			{
-				filename = get_filename(&cmd_line[j + 1]);
-				dup2(open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0666), savefd[1]);
+				filename = get_filename(&cmd[j + 1]);
+				fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0666);
+				dup2(fd, 1);
+				j++;
 			}
-			else if (*tmp == '<')
+			else if (*tmp == '<' && (cmd[j + 1] == ' ' || ft_isalpha(cmd[j + 1])))
 			{
-				filename = get_filename(&cmd_line[j + 1]);
-				dup2(open(filename, O_RDONLY), savefd[0]);
+				filename = get_filename(&cmd[j + 1]);
+				fd = open(filename, O_RDONLY);
+				dup2(fd, 0);
+				j++;
 			}
 			else
 			{
@@ -119,6 +131,19 @@ int		search_function(char *cmd_line, char **path)
 		}
 		j++;
 	}
+	return(fd);
+}
+
+int		search_function(char *cmd_line, char **path)
+{
+	int	i;
+	char **split_cmd;
+	int	savefd[2];
+	int	fd;
+
+	savefd[0] = dup(0);
+	savefd[1] = dup(1);
+	i = 0;
 	split_cmd = ft_split_cmd(cmd_line);
 
 	if (ft_strncmp(split_cmd[0], "exit", 4) == 0) // gerer le cas exit | echo
@@ -126,8 +151,12 @@ int		search_function(char *cmd_line, char **path)
 		write(1, "exit\n", 5);
 		exit(0);
 	}
+	fd = redir(cmd_line);
 	if (ft_path(split_cmd, path) == -1)
 		return (ft_error(5));
+	dup2(savefd[0], 0);
+	dup2(savefd[1], 1);
+	close(fd);
 	return (0);
 }
 
@@ -149,7 +178,13 @@ int		cmpt_pipe(char *cmd)
 
 static void	exec_command(char *cmd, int in, int out, char **path)
 {
-	printf("IN = %d et OUT = %d\n", in, out);
+	int i;
+
+	i = 0;
+	while (cmd[i] && !ft_strchr("<>", cmd[i]))
+		i++;
+	if (cmd[i])
+		search_function(cmd, path);
 	if (in != 0)
 	{
 		dup2(in, 0);
@@ -174,8 +209,6 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 	int j = 0;
 
 	i = 0;
-	savefd[0] = dup(0);
-	savefd[1] = dup(1);
 	pipe_num = 0;
 	if (pipe(pipe_fd) == -1 || pipe(pipe_fd2) == -1)
 	{
@@ -205,7 +238,6 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 		}
 		else if (pipe_num == nb_pipe)
 		{
-			printf("pipe num = %d\n", pipe_num);
 			if ((pid = fork()) == 0)
 			{
 				if (pipe_num % 2 == 0)
@@ -224,7 +256,6 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 		}
 		else
 		{
-			printf("pipe num = %d\n", pipe_num);
 			if (pipe_num % 2 == 0)
 			{
 				if (pipe(pipe_fd) == -1)
@@ -283,11 +314,13 @@ int		start_minishell(char **path)
 		if (flag_prompt != 1)
 			display_prompt();
 		flag_prompt = 0;
+		t.cmd_line = ft_strdup("");
 		if (!get_next_line(0, &t.cmd_line))
 		{
 			ft_putstr_fd("exit\n", 1);
 			exit(56);
 		}
+		printf("%s\n", t.cmd_line);
 		if (t.cmd_line != NULL && (t.cmd_line = ft_parsing(t.cmd_line)) != NULL)
 		{
 			if ((t.tab_cmd_line = ft_split_semicolon(t.cmd_line, ';')) != NULL)
@@ -307,6 +340,7 @@ int		start_minishell(char **path)
 				ft_freestrarr(t.tab_cmd_line);
 			}
 			free(t.cmd_line);
+			
 		}
 	}
 	return (0);
