@@ -6,7 +6,7 @@
 /*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 12:33:14 by lacruype          #+#    #+#             */
-/*   Updated: 2020/02/13 10:24:46 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/03/12 12:23:26 by rledrin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*ft_jump_space(char *str)
 	int i;
 
 	i = 0;
-	while (str[i] == ' ')
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == 'v' || str[i] == '\n' || str[i] == 'r' || str[i] == '\f')
 		i++;
 	return (&str[i]);
 }

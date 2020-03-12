@@ -26,8 +26,7 @@ void	ft_update_g_envv(int child_status)
 		i++;
 	if (g_envv[i] == NULL)
 		return ((void)ft_error(3));
-	tmp = g_envv[i];
-	free(tmp);
+	free(g_envv[i]);
 	tmp = ft_itoa((WEXITSTATUS(child_status)));
 	g_envv[i] = ft_strjoin("?=", tmp);
 	free(tmp);
@@ -134,33 +133,7 @@ static int	redir(char *cmd)
 	return(fd);
 }
 
-int		search_function(char *cmd_line, char **path)
-{
-	int	i;
-	char **split_cmd;
-	int	savefd[2];
-	int	fd;
-
-	savefd[0] = dup(0);
-	savefd[1] = dup(1);
-	i = 0;
-	split_cmd = ft_split_cmd(cmd_line);
-
-	if (ft_strncmp(split_cmd[0], "exit", 4) == 0) // gerer le cas exit | echo
-	{
-		write(1, "exit\n", 5);
-		exit(0);
-	}
-	fd = redir(cmd_line);
-	if (ft_path(split_cmd, path) == -1)
-		return (ft_error(5));
-	dup2(savefd[0], 0);
-	dup2(savefd[1], 1);
-	close(fd);
-	return (0);
-}
-
-int		cmpt_pipe(char *cmd)
+static int		cmpt_pipe(char *cmd)
 {
 	int i;
 	int nb_pipe;
@@ -175,6 +148,35 @@ int		cmpt_pipe(char *cmd)
 	}
 	return (nb_pipe);
 }
+
+int		search_function(char *cmd_line, char **path)
+{
+	int	i;
+	char **split_cmd;
+	int	savefd[2];
+	int	fd;
+
+	savefd[0] = dup(0);
+	savefd[1] = dup(1);
+	i = 0;
+	split_cmd = ft_split_cmd(cmd_line);
+
+	if (ft_strncmp(split_cmd[0], "exit", 4) == 0 && cmpt_pipe(cmd_line) == 0)
+	{
+		write(1, "exit\n", 5);
+		exit(0);
+	}
+	fd = redir(cmd_line);
+	if (ft_path(split_cmd, path) == -1)
+		return (ft_error(5));
+	dup2(savefd[0], 0);
+	dup2(savefd[1], 1);
+	if (fd != 0)
+		close(fd);
+	return (0);
+}
+
+
 
 static void	exec_command(char *cmd, int in, int out, char **path)
 {
@@ -303,7 +305,6 @@ int		start_minishell(char **path)
 {
 	int		i;
 	int		j;
-	int		k;
 	int		nb_pipe;
 
 	t.ret_gnl = 1;
@@ -314,13 +315,11 @@ int		start_minishell(char **path)
 		if (flag_prompt != 1)
 			display_prompt();
 		flag_prompt = 0;
-		t.cmd_line = ft_strdup("");
 		if (!get_next_line(0, &t.cmd_line))
 		{
 			ft_putstr_fd("exit\n", 1);
 			exit(56);
 		}
-		printf("%s\n", t.cmd_line);
 		if (t.cmd_line != NULL && (t.cmd_line = ft_parsing(t.cmd_line)) != NULL)
 		{
 			if ((t.tab_cmd_line = ft_split_semicolon(t.cmd_line, ';')) != NULL)
@@ -330,7 +329,6 @@ int		start_minishell(char **path)
 				{
 					nb_pipe = cmpt_pipe(t.tab_cmd_line[i]);
 					j = 0;
-					k = 0;
 					if (nb_pipe == 0)
 						search_function(&t.tab_cmd_line[i][j], path);
 					else

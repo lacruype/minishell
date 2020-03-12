@@ -22,6 +22,10 @@ Gerer les pipes ✅
 
 gerer les > < >> ✅
 
+faire cd ✅
+
+gerer les chemin trop petit avec cd
+
 Spliter cmd par ' ' avant de l'envoyer dans les fonction (gerer les quotes)
 
 Proteger si ya pas d'environnementales
@@ -39,3 +43,7 @@ gerer les erreur + errno
 tester les builtin
 
 faire unset
+
+
+
+gerer protection quand unset | pwd
