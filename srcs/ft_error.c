@@ -6,16 +6,11 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 13:42:31 by lacruype          #+#    #+#             */
-/*   Updated: 2020/03/04 13:34:06 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/03/09 15:42:21 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// static void	ft_exit(void)
-// {
-// 	exit(0);
-// }
 
 int		ft_error(int error)
 {

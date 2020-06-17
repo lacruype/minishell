@@ -32,9 +32,9 @@ Proteger si ya pas d'environnementales
 
 gerer le cas exit | echo
 
-regler ctrlc + enter
+regler ctrlc + enter 🤷
 
-regler fleche vers le haut + enter
+regler fleche vers le haut + enter 🤷
 
 gerer le ./Minishell
 
@@ -43,6 +43,8 @@ gerer les erreur + errno
 tester les builtin
 
 faire unset
+
+Faire le place et size semicolon comme le nbwords ✅
 
 
 

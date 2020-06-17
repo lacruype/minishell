@@ -159,7 +159,7 @@ int		search_function(char *cmd_line, char **path)
 	savefd[0] = dup(0);
 	savefd[1] = dup(1);
 	i = 0;
-	split_cmd = ft_split_cmd(cmd_line);
+	split_cmd = ft_split_redir(cmd_line);
 
 	if (ft_strncmp(split_cmd[0], "exit", 4) == 0 && cmpt_pipe(cmd_line) == 0)
 	{

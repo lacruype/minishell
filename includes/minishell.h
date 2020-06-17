@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/03/10 11:07:26 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/06/17 16:40:20 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	ft_echo(char **args);
 **		ft_pwd.c
 */
 
-void	ft_pwd(char **args);
+void	ft_pwd(void);
 
 /*
 **		ft_env.c
@@ -119,6 +119,6 @@ int		ft_path(char **cmd, char **path);
 int		jump_quotes(const char *str, int i);
 
 
-char	**ft_split_cmd(char *cmd);
+char			**ft_split_redir(char *s);
 
 #endif

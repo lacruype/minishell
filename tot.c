@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_semicolon.c                               :+:      :+:    :+:   */
+/*   tot.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 08:31:47 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/17 17:06:37 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/17 17:13:58 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "includes/minishell.h"
 
 static int		nb_words_semicolon(char const *str, char c)
 {
@@ -193,4 +193,14 @@ char		**ft_split_semicolon(char const *s, char c)
 		free(tab[nb_words]);
 	tab[nb_words] = NULL;
 	return (tab);
+}
+
+int main(int ac, char **av)
+{
+    char **ret;
+
+    ret = ft_split_semicolon(av[1], ' ');
+    for(int j = 0; ret[j] != NULL; j++)
+    printf("[%s]\n", ret[j]);
+    return (0);
 }

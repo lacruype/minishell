@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+         #
+#    By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/03/12 12:14:50 by rledrin          ###   ########.fr        #
+#    Updated: 2020/06/17 16:18:05 by lacruype         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ SRC			=	main.c \
 				ft_split_semicolon.c \
 				ft_path.c \
 				ft_escape_char.c \
-				ft_split_cmd.c \
+				ft_split_redir.c \
 				
 
 SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}
