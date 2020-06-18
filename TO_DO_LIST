@@ -49,3 +49,9 @@ Faire le place et size semicolon comme le nbwords ✅
 
 
 gerer protection quand unset | pwd
+
+Etoffer Jump quotes qui se fait avoir par les backslash
+
+Split redir doit passer les " backslashé
+
+Passer les " dans getfilename ou redir ca depend de coment on le sens

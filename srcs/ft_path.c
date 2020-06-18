@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 12:15:53 by rledrin           #+#    #+#             */
-/*   Updated: 2020/06/16 13:53:31 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/18 16:00:22 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int					ft_path(char **cmd, char **path)
 					tmp = file;
 					file = ft_strjoin(file, pDirent->d_name);
 					free(tmp);
-					printf("CMD = %s\n", cmd[1]);
+					// for(int j = 0; cmd[j] != NULL; j++)
+					// 	printf("CMD[%d] = [%s]\n", j, cmd[j]);
 					if (fork() == 0)
 						execve(file, cmd, g_envv);
 					wait(0);
