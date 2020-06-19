@@ -81,7 +81,7 @@ char	*get_filename(char *cmd)
 	}
 	if (tmp && (*tmp == '<' || *tmp == '>'))
 	{
-		printf("ERROR\n");
+		printf("ERRORFILENAME\n");
 		return (0);
 	}
 	filename[j] = '\0';
@@ -99,6 +99,7 @@ static int	redir(char *cmd)
 	fd = 0;
 	while (cmd[j] && cmd[j] != '|')
 	{
+		j = ft_check_quotes_closed(cmd, j);
 		if ((tmp = ft_strchr("><", cmd[j])))
 		{
 			if (*tmp == '>' && cmd[j + 1] == '>')
@@ -124,7 +125,7 @@ static int	redir(char *cmd)
 			}
 			else
 			{
-				printf("ERROR\n");
+				printf("ERRORREDIR\n");
 				return (-1);
 			}
 		}
