@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 13:42:31 by lacruype          #+#    #+#             */
-/*   Updated: 2020/03/09 15:42:21 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/19 13:13:07 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		ft_error(int error)
 {
 	ft_putstr_fd("Minishell : ", 1);
 	if (error == 0)
-		ft_putstr_fd("Quotes not closed !\n", 1);
+		ft_putstr_fd(" Double operator or Quotes not closed !\n", 1);
 	else if (error == 1)
 		ft_putstr_fd("syntax error near unexpected token\n", 1);
 	else if (error == 2)

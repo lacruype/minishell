@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parsing01.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 12:31:15 by lacruype          #+#    #+#             */
-/*   Updated: 2020/03/11 11:58:50 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/06/19 13:32:14 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int 	ft_double_op(char *cmd)
 	i = 0;
 	while (cmd[i])
 	{
-		if ((i = jump_quotes(cmd, i)) == -1)
+		if ((i = ft_check_quotes_closed(cmd, i)) == -1)
 			return (-1);
 		if (cmd[i] != '\0' && ft_strchr(op, cmd[i]) != NULL && ft_strchr(op, cmd[i + 1]) != NULL)
 			return (-1);
@@ -133,7 +133,10 @@ char		*ft_parsing(char *command_line)
 
 	tmp = command_line;
 	if (command_line && ft_double_op(command_line) == -1)
+	{
+		ft_error(0);
 		return (NULL);
+	}
 	if ((command_line = ft_escape_char(command_line)) == NULL)
 	{
 		free(tmp);
