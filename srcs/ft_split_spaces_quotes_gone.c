@@ -6,22 +6,10 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/19 14:32:07 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/19 14:35:08 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/19 16:54:09 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_split_semicolon.c                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/14 08:31:47 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/19 14:13:17 by lacruype         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
- 
 #include "../includes/minishell.h"
  
 static int      nb_word_ssqg(char const *str, char c)
@@ -40,10 +28,12 @@ static int      nb_word_ssqg(char const *str, char c)
            i++;
            while (str[i])
            {
-               if (str[i] == '"')
-                   if (str[i - 1] != '\\')
-                       break ;
-               i++;
+                if (str[i] == '\\' && str[i - 1] != '\\')
+                    i++;
+                if (str[i] == '"')
+                    if (str[i - 1] != '\\')
+                        break ;
+                i++;
            }
        }
        else if ((str[i] == '\'' && i == 0) || (str[i] == '\'' && str[i - 1] != '\\'))
@@ -60,13 +50,12 @@ static int      nb_word_ssqg(char const *str, char c)
        else if (str[i] == c)
        {
            while (str[i] == c && str[i])
-           {
-               if ((str[i] == '"' && str[i - 1] != '\\') || (str[i] == '\'' && str[i - 1] != '\\'))
-                   break ;
                i++;
-           }
            if (str[i])
-               words++;
+            {
+                words++;
+                continue ;
+            }
        }
        else
            i++;
@@ -96,9 +85,11 @@ static char     **size_ssqg(char const *str, char c, char **tab)
            i++;
            while (str[i])
            {
-               if (str[i] == '"')
-                   if (str[i - 1] != '\\')
-                       break ;
+                if (str[i] == '\\'  && str[i - 1] != '\\')
+                    i++;        
+                if (str[i] == '"')
+                    if (str[i - 1] != '\\')
+                        break ;
                taille++;
                i++;
            }
@@ -108,6 +99,8 @@ static char     **size_ssqg(char const *str, char c, char **tab)
            i++;
            while (str[i])
            {
+               if (str[i] == '\\'  && str[i - 1] != '\\')
+                    i++; 
                if (str[i] == '\'')
                    if (str[i - 1] != '\\')
                        break ;
@@ -118,26 +111,24 @@ static char     **size_ssqg(char const *str, char c, char **tab)
        else if (str[i] == c)
        {
            while (str[i] == c && str[i])
-           {
-               if ((str[i] == '"' && str[i - 1] != '\\') || (str[i] == '\'' && str[i - 1] != '\\'))
-                   break ;
                i++;
-           }
            if (str[i])
            {
                if (!(tab[words] = ft_calloc((taille + 1), sizeof(char))))
                    return (0);
                words++;
                taille = 0;
+               continue ;
            }
        }
+       else if (((str[i] == '"' || str[i] == '\'') && str[i - 1] != '\\') || (str[i] == '\\'  && str[i - 1] != '\\'))
+           i++;
        else
        {
            i++;
            taille++;
        }
-       if (((str[i] == '"' || str[i] == '\'') && str[i - 1] != '\\') || (str[i] == '\\'  && str[i - 1] != '\\'))
-           i++;
+       
    }
    if (!(tab[words] = ft_calloc((taille + 1), sizeof(char))))
                    return (0);
@@ -162,6 +153,8 @@ static char     **place_ssqg(char const *str, char c, char **tab)
            i++;
            while (str[i])
            {
+               if (str[i] == '\\'  && str[i - 1] != '\\')
+                    i++; 
                if (str[i] == '"')
                    if (str[i - 1] != '\\')
                        break ;
@@ -175,6 +168,8 @@ static char     **place_ssqg(char const *str, char c, char **tab)
            i++;
            while (str[i])
            {
+               if (str[i] == '\\'  && str[i - 1] != '\\')
+                    i++; 
                if (str[i] == '\'')
                    if (str[i - 1] != '\\')
                        break ;
@@ -186,26 +181,24 @@ static char     **place_ssqg(char const *str, char c, char **tab)
        else if (str[i] == c)
        {
            while (str[i] == c && str[i])
-           {
-               if ((str[i] == '"' && str[i - 1] != '\\') || (str[i] == '\'' && str[i - 1] != '\\'))
-                   break ;
                i++;
-           }
            if (str[i])
            {
                tab[words][taille] = '\0';
                words++;
                taille = 0;
+               continue ;
            }
        }
+       else if (((str[i] == '"' || str[i] == '\'') && str[i - 1] != '\\') || (str[i] == '\\'  && str[i - 1] != '\\'))
+           i++;
        else
        {
            tab[words][taille] = str[i];
            i++;
            taille++;
        }
-       if (((str[i] == '"' || str[i] == '\'') && str[i - 1] != '\\') || (str[i] == '\\'  && str[i - 1] != '\\'))
-           i++;
+       
    }
    tab[words][taille] = '\0';
    return (tab);
@@ -227,8 +220,9 @@ char        **ft_split_spaces_quotes_gone(char const *s, char c)
    if (tab[nb_words] && tab[nb_words][0] == '\0')
        free(tab[nb_words]);
    tab[nb_words] = NULL;
+//    for (int j = 0; tab[j] != NULL; j++)
+//     printf("TAB = [%s]\n", tab[j]);
    return (tab);
 }
- 
  
 

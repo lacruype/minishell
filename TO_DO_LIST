@@ -55,3 +55,5 @@ Etoffer Jump quotes qui se fait avoir par les backslash
 Split redir doit passer les " backslashé
 
 Passer les " dans getfilename ou redir ca depend de coment on le sens
+
+LE CHECKQUOTES CLOSED EST TOUT CLAQUER IL FAUT LE REPARER POUR QUIL PASSE LE TEST echo "\"|\"" ⚽️

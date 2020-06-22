@@ -6,7 +6,7 @@
 #    By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/06/19 14:34:18 by lacruype         ###   ########.fr        #
+#    Updated: 2020/06/22 15:32:43 by lacruype         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,8 @@ SRC			=	main.c \
 				ft_check_quotes_closed.c \
 				ft_split_redir.c \
 				ft_split_spaces_quotes_gone.c \
+				ft_export.c \
+
 
 				
 

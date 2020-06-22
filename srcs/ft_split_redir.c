@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/21 14:51:52 by rledrin           #+#    #+#             */
-/*   Updated: 2020/06/19 15:09:27 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/22 13:42:05 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,8 @@ char		**ft_split_redir(char *cmd)
 	i = 0;
 	while (cmd[i])
 	{
-		if ((cmd[i] == '"' && i == 0) || (cmd[i] == '"' && cmd[i - 1] != '\\'))
-		{
-			i++;
-			while (cmd[i])
-			{
-				if (cmd[i] == '"')
-					if (cmd[i - 1] != '\\')
-						break ;
-				i++;
-			}
-		}
-		else if ((cmd[i] == '\'' && i == 0) || (cmd[i] == '\'' && cmd[i - 1] != '\\'))
-		{
-			i++;
-			while (cmd[i])
-			{
-				if (cmd[i] == '\'')
-					if (cmd[i - 1] != '\\')
-						break ;
-				i++;
-			}
-		}
+		if ((i = (ft_check_quotes_closed(cmd, i))) == -1)
+			return (NULL);
 		else if (ft_strchr("<>|", cmd[i]) && cmd[i - 1] != '\\')
 		{
 			stock = ft_substr_gnl(cmd, 0, i);
@@ -51,7 +31,7 @@ char		**ft_split_redir(char *cmd)
 			return (stock2);
 		}
 		else
-			i++;	
+			i++;
 	}
 	return (ft_split_spaces_quotes_gone(cmd, ' '));
 }

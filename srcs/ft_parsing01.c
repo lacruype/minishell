@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 12:31:15 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/19 13:32:14 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/22 13:23:35 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,16 +136,19 @@ char		*ft_parsing(char *command_line)
 	{
 		ft_error(0);
 		return (NULL);
-	}
-	if ((command_line = ft_escape_char(command_line)) == NULL)
-	{
-		free(tmp);
-		return (NULL);
-	}
+	}			
+	// if ((command_line = ft_escape_char(command_line)) == NULL)
+	// {
+	// 	free(tmp);
+	// 	return (NULL);
+	// }
+	// 		printf("3\n");
+
 	if ((tmp = ft_cmd_env(command_line)) == NULL)
 	{
 		free(tmp);
 		return (NULL);
 	}
+
 	return (tmp);
 }

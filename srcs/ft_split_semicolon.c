@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 08:31:47 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/19 14:27:54 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/19 16:52:35 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,5 +223,7 @@ char		**ft_split_semicolon(char const *s, char c)
 	if (tab[nb_words] && tab[nb_words][0] == '\0')
 		free(tab[nb_words]);
 	tab[nb_words] = NULL;
+	// for (int j = 0; tab[j] != NULL; j++)
+	// 	printf("tab = [%s]\n", tab[j]);
 	return (tab);
 }

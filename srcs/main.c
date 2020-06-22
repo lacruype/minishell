@@ -143,40 +143,87 @@ static int		cmpt_pipe(char *cmd)
 	nb_pipe = 0;
 	while (cmd[i])
 	{
+		i = ft_check_quotes_closed(cmd, i);
 		if (cmd[i] == '|')
 			nb_pipe++;
 		i++;
 	}
 	return (nb_pipe);
 }
-
-int		search_function(char *cmd_line, char **path)
+int		exec_cmd(char *cmd_line, char **split_cmd, char **path)
 {
-	int	i;
-	char **split_cmd;
 	int	savefd[2];
 	int	fd;
 
 	savefd[0] = dup(0);
 	savefd[1] = dup(1);
-	i = 0;
-	split_cmd = ft_split_redir(cmd_line);
-
-
-	if (ft_strncmp(split_cmd[0], "exit", 4) == 0 && cmpt_pipe(cmd_line) == 0)
-	{
-		write(1, "exit\n", 5);
-		exit(0);
-	}
 	fd = redir(cmd_line);
-	if (ft_path(split_cmd, path) == -1)
+	if (ft_strncmp(split_cmd[0], "echo", 5) == 0)
+		ft_echo(split_cmd);
+	else if (ft_strncmp(split_cmd[0], "export", 7) == 0)
+		ft_export(split_cmd);
+	else if (ft_path(split_cmd, path) == -1)
 		return (ft_error(5));
 	dup2(savefd[0], 0);
 	dup2(savefd[1], 1);
 	if (fd != 0)
 		close(fd);
+	return(0);
+}
+
+int		search_function(char *cmd_line, char **path)
+{
+	char **split_cmd;
+	int	savefd[2];
+	// int	fd;
+
+	savefd[0] = dup(0);
+	savefd[1] = dup(1);
+	split_cmd = ft_split_redir(cmd_line);
+
+	exec_cmd(cmd_line, split_cmd, path);
+	// if (ft_strncmp(split_cmd[0], "exit", 4) == 0 && cmpt_pipe(cmd_line) == 0)
+	// {
+	// 	write(1, "exit\n", 5);
+	// 	exit(0);
+	// }
+	// fd = redir(cmd_line);
+	// if (ft_path(split_cmd, path) == -1)
+	// 	return (ft_error(5));
+	// dup2(savefd[0], 0);
+	// dup2(savefd[1], 1);
+	// if (fd != 0)
+	// 	close(fd);
 	return (0);
 }
+
+// int		search_function(char *cmd_line, char **path)
+// {
+// 	int	i;
+// 	char **split_cmd;
+// 	int	savefd[2];
+// 	int	fd;
+
+// 	savefd[0] = dup(0);
+// 	savefd[1] = dup(1);
+// 	i = 0;
+// 	split_cmd = ft_split_redir(cmd_line);
+
+
+// 	if (ft_strncmp(split_cmd[0], "exit", 4) == 0 && cmpt_pipe(cmd_line) == 0)
+// 	{
+// 		write(1, "exit\n", 5);
+// 		exit(0);
+// 	}
+// 	fd = redir(cmd_line);
+// 	if (ft_path(split_cmd, path) == -1)
+// 		return (ft_error(5));
+// 	dup2(savefd[0], 0);
+// 	dup2(savefd[1], 1);
+// 	if (fd != 0)
+// 		close(fd);
+// 	return (0);
+// }
 
 
 

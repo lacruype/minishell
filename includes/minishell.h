@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/06/19 14:33:50 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/22 16:19:54 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include "../libft/includes/libft.h"
 
 char	**g_envv;
-
+char	**g_var;
 
 typedef struct	variables_minishell
 {
@@ -92,6 +92,7 @@ void	ft_env(char **args);
 **		ft_envv.c
 */
 
+int		get_size_env(char **env);
 int		init_g_envv(char **env);
 
 /*
@@ -118,7 +119,7 @@ int		ft_path(char **cmd, char **path);
 
 int		ft_check_quotes_closed(const char *str, int i);
 
-
+void			ft_export(char **args);
 char			**ft_split_redir(char *s);
 
 /*

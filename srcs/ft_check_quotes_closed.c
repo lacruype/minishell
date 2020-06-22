@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 14:24:07 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/19 13:57:48 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/22 13:29:02 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,27 @@ int		ft_check_quotes_closed(const char *str, int i)
 {
 	if ((str[i] == '"' && i == 0) || (str[i] == '"' && str[i - 1] != '\\'))
 	{
-		while (str[i] != '"' && str[i] != '\\')
+		i++;
+		while (str[i])
 		{
-			if (str[i] == '\0')
-				return (-1);
+			if (str[i] == '"')
+				if (str[i - 1] != '\\')
+					return (i);
 			i++;
 		}
+		return (-1);
 	}
 	else if ((str[i] == '\'' && i == 0) || (str[i] == '\'' && str[i - 1] != '\\'))
 	{
-		while (str[i] != '\'' && str[i] != '\\')
+		i++;
+		while (str[i])
 		{
-			if (str[i] == '\0')
-				return (-1);
+			if (str[i] == '\'')
+				if (str[i - 1] != '\\')
+					return (i);
 			i++;
 		}
+		return (-1);
 	}
 	return (i);
 }
