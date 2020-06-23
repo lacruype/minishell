@@ -50,12 +50,17 @@ char	**init_path(void)
 void	display_prompt(void)
 {
 	int i;
+	char buf[255];
 
 	i = 0;
 	while (g_envv[i] && ft_strncmp(g_envv[i], "PWD=", 4) != 0)
 		i++;
 	if(g_envv[i] == NULL)
+	{
+		ft_putstr_fd(getcwd(buf, 255), 1);
+		ft_putstr_fd(" ➡ ", 1);
 		return ;
+	}
 	ft_putstr_fd(&g_envv[i][4], 1);
 	ft_putstr_fd(" ➡ ", 1);
 }
@@ -162,6 +167,10 @@ int		exec_cmd(char *cmd_line, char **split_cmd, char **path)
 		ft_echo(split_cmd);
 	else if (ft_strncmp(split_cmd[0], "export", 7) == 0)
 		ft_export(split_cmd);
+	else if (ft_strncmp(split_cmd[0], "unset", 6) == 0)
+		ft_unset(split_cmd);
+	else if (ft_strncmp(split_cmd[0], "cd", 3) == 0)
+		ft_cd(split_cmd);
 	else if (ft_path(split_cmd, path) == -1)
 		return (ft_error(5));
 	dup2(savefd[0], 0);
@@ -180,13 +189,14 @@ int		search_function(char *cmd_line, char **path)
 	savefd[0] = dup(0);
 	savefd[1] = dup(1);
 	split_cmd = ft_split_redir(cmd_line);
-
+	ft_cmd_to_lower(&split_cmd[0]);
+	if (ft_strncmp(split_cmd[0], "exit", 4) == 0 && cmpt_pipe(cmd_line) == 0)
+	{
+		write(1, "exit\n", 5);
+		exit(0);
+	}
 	exec_cmd(cmd_line, split_cmd, path);
-	// if (ft_strncmp(split_cmd[0], "exit", 4) == 0 && cmpt_pipe(cmd_line) == 0)
-	// {
-	// 	write(1, "exit\n", 5);
-	// 	exit(0);
-	// }
+
 	// fd = redir(cmd_line);
 	// if (ft_path(split_cmd, path) == -1)
 	// 	return (ft_error(5));
@@ -224,8 +234,6 @@ int		search_function(char *cmd_line, char **path)
 // 		close(fd);
 // 	return (0);
 // }
-
-
 
 static void	exec_command(char *cmd, int in, int out, char **path)
 {

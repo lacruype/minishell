@@ -1,20 +1,20 @@
 #include "../includes/minishell.h"
 
-// static int	ft_check_var_name(char *arg)
-// {
-// 	int i;
+static int	ft_check_var_name(char *arg)
+{
+	int i;
 
-// 	i = 0;
-// 	while (arg[i] && arg[i] != '=')
-// 	{
-// 		if (arg[i] == '\'' || arg[i] == '\\' || arg[i] == '"')		// ameliorer les tests
-// 			return (-1);
-// 		else if (ft_isdigit(arg[i]))
-// 			return (-1);
-// 		i++;
-// 	}
-// 	return (i);
-// }
+	i = 0;
+	if (ft_isdigit(arg[0]))
+			return (-1);
+	while (arg[i] && arg[i] != '=')
+	{
+		if (arg[i] == '\'' || arg[i] == '\\' || arg[i] == '"' || arg[i] == '-')		// ameliorer les tests
+			return (-1);
+		i++;
+	}
+	return (0);
+}
 
 static void	ft_print_env(void)
 {
@@ -68,7 +68,12 @@ void	ft_export(char **args)
 	{
 		while (args[k])
 		{
-			write(1, "pASSE", 5);
+			if (ft_check_var_name(args[k]) == -1)
+			{
+				ft_error(6);
+				k++;
+				continue ;
+			}
 			equal = 0;
 			j = 0;
 			while (args[k][j])

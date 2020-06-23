@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 11:15:34 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/19 16:09:46 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/23 16:55:37 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,3 +44,15 @@
 // 	printf("REND = [%s]\n", str);
 // 	return (str);
 // }
+
+void    ft_cmd_to_lower(char **cmd)
+{
+    int i;
+
+    i = 0;
+    while ((*cmd)[i])
+    {
+        (*cmd)[i] = ft_tolower((*cmd)[i]);
+        i++;
+    }
+}

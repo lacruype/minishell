@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 13:42:31 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/19 13:13:07 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/23 13:27:51 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,8 @@ int		ft_error(int error)
 		ft_putstr_fd("Escaping chars has failed !\n", 1);
 	else if (error == 5)
 		ft_putstr_fd("Command doesn't exit !\n", 1);
+	else if (error == 6)
+		ft_putstr_fd("not a valid idetifier\n", 1);
+		
 	return (-1);
 }

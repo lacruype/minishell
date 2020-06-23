@@ -1,38 +1,59 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/23 13:52:16 by lacruype          #+#    #+#             */
+/*   Updated: 2020/06/23 15:59:58 by lacruype         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-void		ft_unset(char **args)
+static char    **ft_delete_env(char **tab, int i)
 {
-	int		i;
-	int		k;
-	char	**fenv;
+    int size;
+    char **ret;
+    int j;
+    int k;
 
-	k = 0;
-	if (ft_strncmp(args[0], "unset", 6) != 0)
-	{
-		printf("ERROR\n");
-		return ;
-	}
-	while (args[k])
-	{
-		i = 0;
-		while(g_envv[i])
-		{
-			if (ft_strncmp(g_envv[i], args[k], (ft_strlen(args[k]) - 1)) == 0)
-			{
-				fenv = ft_calloc(i + 1, sizeof(char *));
-				ft_memcpy(fenv, g_envv, i);
-				free(g_envv[i++]);
-				while (g_envv[i])
-				{
-					fenv = ft_realloc(fenv, i);
-					fenv[i - 1] = g_envv[i];
-					i++;
-				}
-				fenv[i] = 0;
-				free(g_envv);
-				g_envv = fenv;
-			}
-		}
-		k++;
-	}
+    j = 0;
+    k = 0;
+    size = get_size_env(tab);
+    if(!(ret = ft_calloc(size, sizeof(char*))))
+        return (NULL);
+    while (tab[j] != NULL)
+    {
+        if (j == i)
+            j++;
+        ret[k++] = tab[j++];
+    }
+    free(tab[i]);
+    free(tab);
+    return(ret);
+}
+
+
+void    ft_unset(char **args)
+{
+    int i;
+    int j;
+    int len;
+
+
+    i = 1;
+    while (args[i] != NULL)
+    {
+        j = 0;
+        while (g_envv[j] != NULL)
+        {
+            len = ft_strlen(args[i]);
+            if (ft_strncmp(args[i], g_envv[j], len - 1) == 0 && g_envv[j][len] == '=')
+                g_envv = ft_delete_env(g_envv, j);
+            j++;
+        }
+        i++;
+    }
 }

@@ -24,36 +24,36 @@ gerer les > < >> ✅
 
 faire cd ✅
 
-gerer les chemin trop petit avec cd
+gerer les chemin trop petit avec cd ✅
 
-Spliter cmd par ' ' avant de l'envoyer dans les fonction (gerer les quotes)
+Spliter cmd par ' ' avant de l'envoyer dans les fonction (gerer les quotes) ✅
 
-Proteger si ya pas d'environnementales
-
-gerer le cas exit | echo
-
-regler ctrlc + enter 🤷
-
-regler fleche vers le haut + enter 🤷
-
-gerer le ./Minishell
-
-gerer les erreur + errno
-
-tester les builtin
-
-faire unset
+tester les builtin ✅
 
 Faire le place et size semicolon comme le nbwords ✅
 
+Etoffer Jump quotes qui se fait avoir par les backslash ✅
 
+Split redir doit passer les " backslashé ✅
+
+Passer les " dans getfilename ou redir ca depend de coment on le sens ✅
+
+LE CHECKQUOTES CLOSED EST TOUT CLAQUER IL FAUT LE REPARER POUR QUIL PASSE LE TEST echo "\"|\""  ✅
+
+Checker les noms des variable globales dans export ✅
+
+faire unset ✅
 
 gerer protection quand unset | pwd
 
-Etoffer Jump quotes qui se fait avoir par les backslash
+gerer les erreur + errno (variable $?)
 
-Split redir doit passer les " backslashé
+regler fleche vers le haut + enter 🤷
 
-Passer les " dans getfilename ou redir ca depend de coment on le sens
+regler ctrlc + enter 🤷
 
-LE CHECKQUOTES CLOSED EST TOUT CLAQUER IL FAUT LE REPARER POUR QUIL PASSE LE TEST echo "\"|\"" ⚽️
+gerer le cas exit | echo
+
+Proteger si ya pas d'environnementales
+
+gerer le ./Minishell

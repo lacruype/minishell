@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/06/22 16:19:54 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/23 16:54:00 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ int		create_file(char *filename, int app, int quote);
 int		quote(char *cmd);
 
 /*
-**		ft_utils.c
+**		ft_utils02.c
 */
 
-char	*ft_escape_char(char *str);
+void    ft_cmd_to_lower(char **cmd);
 
 /*
 **		ft_parsing01.c
@@ -127,5 +127,17 @@ char			**ft_split_redir(char *s);
 */
 
 char        **ft_split_spaces_quotes_gone(char const *s, char c);
+
+/*
+**		ft_escape_char.c
+*/
+
+void	ft_unset(char **args);
+
+/*
+**		ft_cd.c
+*/
+
+void 	ft_cd(char **args);
 
 #endif
