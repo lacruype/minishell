@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 12:15:53 by rledrin           #+#    #+#             */
-/*   Updated: 2020/06/18 16:00:22 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/25 16:40:33 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,13 @@ int					ft_path(char **cmd, char **path)
 	size = 0;
 	while (!ft_strchr(" ;\"'", cmd[0][size]) && cmd[0][size])
 		size++;
+	if (path == NULL || **path == '\0')
+		return (ft_error("Minishell", cmd[0], 2));
 	while (path[j])
 	{
 		pDir = opendir(path[j]);
 		if (pDir == NULL)
-			return (-1);
+			return (ft_error("Minishell", cmd[0], 0));
 		while ((pDirent = readdir(pDir)) != NULL)
 		{
 			if (size == ft_strlen(pDirent->d_name))
@@ -40,16 +42,16 @@ int					ft_path(char **cmd, char **path)
 					tmp = file;
 					file = ft_strjoin(file, pDirent->d_name);
 					free(tmp);
-					// for(int j = 0; cmd[j] != NULL; j++)
-					// 	printf("CMD[%d] = [%s]\n", j, cmd[j]);
-					if (fork() == 0)
+					if (ft_strncmp("..", cmd[0], 3) && ft_strncmp(".", cmd[0], 2) && fork() == 0)
 						execve(file, cmd, g_envv);
 					wait(0);
+					closedir(pDir);
+					return (0);
 				}
 			}
 		}
 		closedir(pDir);
 		j++;
 	}
-	return (0);
+	return (-2);
 }

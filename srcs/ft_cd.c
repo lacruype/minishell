@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/23 16:17:02 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/23 16:45:39 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/25 16:50:55 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static int	ft_find_env(int *i, char *elem)
 {
 	ssize_t	len;
-	// int 	tmpint;
 
 	*i = 0;
 	len = ft_strlen(elem);
@@ -25,12 +24,6 @@ static int	ft_find_env(int *i, char *elem)
 			return (1);
 		(*i)++;
 	}
-	// if (!ft_strncmp(elem, "HOME=", 5))
-	// 	return (0);
-	// tmpint = get_size_env(g_envv);
-	// g_envv = ft_realloc(g_envv, (tmpint + 2) * sizeof(char*));
-	// g_envv[tmpint + 1] = NULL;
-	// g_envv[tmpint] = ft_strjoin(elem, "/");
 	*i = -1;
 	return (0);
 }
@@ -61,12 +54,10 @@ static void	ft_set_pwd(char *path, int pwd_indc, int oldpwd_indc)
 	int		j;
 
 	j = 0;
-	
+	printf("Groueorg = %d\n", oldpwd_indc);
 	tmp = ft_substr(g_envv[pwd_indc], 4, ft_strlen(g_envv[pwd_indc]) - 4);
-	// free(g_envv[oldpwd_indc]);
 	if (oldpwd_indc != -1)
 		g_envv[oldpwd_indc] = ft_strjoin("OLDPWD=", tmp);
-	// free(tmp);
 	if (path[0] == '/')
 		g_envv[pwd_indc] = ft_strdup("PWD=");
 	else
@@ -96,20 +87,16 @@ static void	ft_set_pwd(char *path, int pwd_indc, int oldpwd_indc)
 		i = ft_strlen(g_envv[pwd_indc]);
 		g_envv[pwd_indc] = ft_realloc(g_envv[pwd_indc], i + 2);
 		g_envv[pwd_indc][i++] = '/';
-		//printf("AAAA %s\n", &(path[j]));
 		if(path[j] == '/')
 				j++;
 		while (path[j] && path[j] != '/')
 		{
 			g_envv[pwd_indc] = ft_realloc(g_envv[pwd_indc], i + 2);
 			g_envv[pwd_indc][i] = path[j];
-			//printf("AAAA J = %d %c %s %d\n", j, path[j], g_envv[pwd_indc], i);
 			j++;
 			i++;
-			//printf("TEST %s\n", &(path[j]));
 		}
 		g_envv[pwd_indc][i] = '\0'; 
-		//printf("AAAA %s\n", g_envv[pwd_indc]);
 		if (!path[j])
 			break;
 		j++;
@@ -141,24 +128,9 @@ void		ft_cd(char **args)
 	{
 		i = 0;
 		if (!ft_find_env(&env[0], "HOME="))
-		{
-			printf ("ERROR\n");
-			return ;
-		}
+			return ((void)ft_error("Minishell", "cd", 3));
 		args[1] = ft_strdup(&g_envv[env[0]][5]);
 	}
-	// if (!ft_find_env(&env[1], "PWD=") || !ft_find_env(&env[2], "OLDPWD="))
-	// 	return ;
-	// if (ft_strncmp(args[0], "cd", 3) != 0)
-	// {
-	// 	printf("ERROR\n");
-	// 	return ;
-	// }
-	// if (!ft_find_env(&env[1], "PWD=") || !ft_find_env(&env[2], "OLDPWD="))
-	// {
-	// 	printf("ERROR\n");
-	// 	return ;
-	// }
 	while (args[1][i])
 	{
 		ft_get_dir(&dir, &args[1][i]);
@@ -177,7 +149,7 @@ void		ft_cd(char **args)
 				free(path);
 				free(dir);
 				tmp = 0;
-				printf ("ERROR\n");
+				ft_error("Minishell", "cd", 2);
 				return ;
 			}
 		}
@@ -189,7 +161,10 @@ void		ft_cd(char **args)
 	if (*path)
 	{
 		if (ft_find_env(&env[1], "PWD="))
+		{
+			ft_find_env(&env[2], "OLDPWD=");
 			ft_set_pwd(path, env[1], env[2]);
+		}
 		chdir(path);
 	}
 }

@@ -6,29 +6,39 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 13:42:31 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/23 13:27:51 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/25 16:36:17 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int		ft_error(int error)
+int		ft_error(char *cmd, char *arg, int error)
 {
-	ft_putstr_fd("Minishell : ", 1);
+	ft_putstr_fd(cmd, 1);
+	ft_putstr_fd(" : ", 1);
+	if (*arg && error != 1)
+	{
+		ft_putstr_fd(arg, 1);
+		ft_putstr_fd(" : ", 1);
+	}
 	if (error == 0)
-		ft_putstr_fd(" Double operator or Quotes not closed !\n", 1);
+		ft_putstr_fd("command not found", 1);
 	else if (error == 1)
-		ft_putstr_fd("syntax error near unexpected token\n", 1);
-	else if (error == 2)
-		ft_putstr_fd("Quote is not closed !\n", 1);
+	{
+		ft_putstr_fd("syntax error near unexpected token '", 1);
+		ft_putstr_fd(arg, 1);
+		ft_putstr_fd("'", 1);
+	}
 	else if (error == 3)
-		ft_putstr_fd("Didn't find the $? !\n", 1);
-	else if (error == 4)
-		ft_putstr_fd("Escaping chars has failed !\n", 1);
-	else if (error == 5)
-		ft_putstr_fd("Command doesn't exit !\n", 1);
-	else if (error == 6)
-		ft_putstr_fd("not a valid idetifier\n", 1);
-		
+		ft_putstr_fd("HOME not set", 1);
+	else
+	{
+		errno = error;
+		ft_putstr_fd(strerror(errno), 1);
+	}
+	ft_putchar_fd('\n', 1);
+	// else if (error == 6)
+	// 	ft_putstr_fd("not a valid idetifier\n", 1);
+	
 	return (-1);
 }

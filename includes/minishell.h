@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/06/23 16:54:00 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/25 16:25:59 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <signal.h>
-
+# include <errno.h>
 # include <stdio.h>
 # include <limits.h>
 # include <dirent.h>
@@ -46,7 +46,7 @@ var_minishell t;
 
 int		ft_path_pipe(char **cmd, char **path);
 int		search_function(char *cmd_line, char **path);
-int		start_minishell(char **path);
+int		start_minishell(void);
 
 /*
 **		ft_utils.c
@@ -99,7 +99,7 @@ int		init_g_envv(char **env);
 **		ft_error.c
 */
 
-int		ft_error(int error);
+int		ft_error(char *cmd, char *arg, int error);
 
 /*
 **		LE_SPLIT.c

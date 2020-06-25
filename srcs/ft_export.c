@@ -70,7 +70,7 @@ void	ft_export(char **args)
 		{
 			if (ft_check_var_name(args[k]) == -1)
 			{
-				ft_error(6);
+				ft_error("export", args[k], 6);
 				k++;
 				continue ;
 			}
@@ -86,7 +86,6 @@ void	ft_export(char **args)
 			if (equal)
 			{
 				tmp = get_size_env(g_envv);
-				printf("tmp = %d\n", tmp);
 				g_envv = ft_realloc(g_envv, (tmp + 2) * sizeof(char*));
 				g_envv[tmp + 1] = NULL;
 				g_envv[tmp] = ft_strdup(args[k]);

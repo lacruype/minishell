@@ -44,16 +44,26 @@ Checker les noms des variable globales dans export ✅
 
 faire unset ✅
 
-gerer protection quand unset | pwd
+gerer le ./Minishell ✅
+
+gerer protection quand unset | pwd ✅
+
+regler ctrlc + enter ✅
 
 gerer les erreur + errno (variable $?)
 
-regler fleche vers le haut + enter 🤷
+regler fleche vers le haut + enter ✅
 
-regler ctrlc + enter 🤷
-
-gerer le cas exit | echo
+gerer le cas exit | echo ✅
 
 Proteger si ya pas d'environnementales
 
-gerer le ./Minishell
+gerer l'erreur du Pdir dans path ✅ 
+
+erreur dans ft_path avec le unset path ✅ 
+
+$unfauxtruc ca fait rien du tout
+
+ctrl+D quand une ligne n'est pas vide ne quitte pas
+
+si on ne trouve pas l'executable du ./truc -> no such fle or directory

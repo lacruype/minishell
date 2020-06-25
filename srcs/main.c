@@ -25,19 +25,21 @@ void	ft_update_g_envv(int child_status)
 	while (ft_strncmp(g_envv[i], "?=", 2) != 0 && g_envv[i] != NULL)
 		i++;
 	if (g_envv[i] == NULL)
-		return ((void)ft_error(3));
+		return ((void)ft_error("Minishell", "", 3));
 	free(g_envv[i]);
 	tmp = ft_itoa((WEXITSTATUS(child_status)));
 	g_envv[i] = ft_strjoin("?=", tmp);
 	free(tmp);
 }
 
-char	**init_path(void)
+char	**init_path(char **path)
 {
 	int i;
-	char **path;
 
 	i = 0;
+	if (path != NULL)
+		ft_freestrarr(path);
+	path = NULL;
 	while (g_envv[i] != NULL)
 	{
 		if (ft_strncmp((const char*)g_envv[i], "PATH", 4) == 0)
@@ -63,6 +65,7 @@ void	display_prompt(void)
 	}
 	ft_putstr_fd(&g_envv[i][4], 1);
 	ft_putstr_fd(" ➡ ", 1);
+	flag_prompt = 0;
 }
 
 char	*get_filename(char *cmd)
@@ -171,8 +174,16 @@ int		exec_cmd(char *cmd_line, char **split_cmd, char **path)
 		ft_unset(split_cmd);
 	else if (ft_strncmp(split_cmd[0], "cd", 3) == 0)
 		ft_cd(split_cmd);
-	else if (ft_path(split_cmd, path) == -1)
-		return (ft_error(5));
+	else if (ft_strncmp(split_cmd[0], "./", 2) == 0)
+	{
+		if (fork() == 0)
+			if (execve(&(split_cmd[0][2]), split_cmd, g_envv) == -1)
+				exit(0);
+		wait(0);
+	}
+	else if (ft_path(split_cmd, path) == -2)
+		return (ft_error("Minishell" , "", 0));
+		
 	dup2(savefd[0], 0);
 	dup2(savefd[1], 1);
 	if (fd != 0)
@@ -266,7 +277,7 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 	int pipe_fd[2];
 	int pipe_fd2[2];
 	int j = 0;
-
+	char **split_cmd;
 	i = 0;
 	pipe_num = 0;
 	if (pipe(pipe_fd) == -1 || pipe(pipe_fd2) == -1)
@@ -282,6 +293,16 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 			pipe_num++;
 			i++;
 		}
+		split_cmd = ft_split_redir(&cmd[i]);
+		ft_cmd_to_lower(&split_cmd[0]);
+		if (ft_strncmp(split_cmd[0], "exit", 5) == 0)
+		{
+			while (cmd[i] != '|' && cmd[i] != '\0')
+				i++;
+			ft_freestrarr(split_cmd);
+			continue ;
+		}
+		ft_freestrarr(split_cmd);
 		if (pipe_num == 0)
 		{
 			if ((pid = fork()) == 0)
@@ -358,25 +379,31 @@ void	exec_pipe(char *cmd, char **path, int nb_pipe)
 	}
 }
 
-int		start_minishell(char **path)
+int		start_minishell()
 {
 	int		i;
 	int		j;
 	int		nb_pipe;
+	char	**path;
 
 	t.ret_gnl = 1;
 	t.check_exit = 0;
 	nb_pipe = 0;
+	flag_prompt = 1;
+	path = NULL;
 	while (t.ret_gnl == 1 && t.check_exit == 0)
 	{
-		if (flag_prompt != 1)
+		path = init_path(path);
+		if (flag_prompt == 1)
 			display_prompt();
-		flag_prompt = 0;
 		if (!get_next_line(0, &t.cmd_line))
 		{
 			ft_putstr_fd("exit\n", 1);
 			exit(56);
 		}
+		flag_prompt = 1;
+		if (t.cmd_line[0] == '\0')
+			continue ;
 		if (t.cmd_line != NULL && (t.cmd_line = ft_parsing(t.cmd_line)) != NULL)
 		{
 			if ((t.tab_cmd_line = ft_split_semicolon(t.cmd_line, ';')) != NULL)
@@ -398,32 +425,30 @@ int		start_minishell(char **path)
 			
 		}
 	}
+	ft_freestrarr(path);
 	return (0);
 }
 
 void	handle_sigint(int sig)
 {
+	flag_prompt = 0;
 	if (sig == SIGINT)
 	{
 		ft_putstr_fd("\b\b  \n", 1);
 		signal(SIGINT, handle_sigint);
 		display_prompt();
-		flag_prompt = 1;
 	}
 }
 
 int		main(int ac, char **av, char **env)
 {
 	(void)av;
-	char	**path;
 	if (ac != 1)
 		return (0);
 	signal(SIGINT, handle_sigint);
 	if (init_g_envv(env) == -1)
 		return (-1);
-	path = init_path();
-	if (start_minishell(path) == -1)
+	if (start_minishell() == -1)
 		return (-1);
-	ft_freestrarr(path);
 	return (0);
 }

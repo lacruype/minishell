@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 12:31:15 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/22 13:23:35 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/25 16:02:13 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,19 +109,32 @@ char	*ft_strchr(const char *str, int c)
 	return ((char*)(str + i));
 }
 
-int 	ft_double_op(char *cmd)
+int		ft_double_op(char *cmd)
 {
-	int i;
-	char *op;
+	int		i;
+	char	*tmp1;
+	char	*tmp2;
+	char	*op;
 
 	op = (char[3]){";|"};
 	i = 0;
 	while (cmd[i])
 	{
 		if ((i = ft_check_quotes_closed(cmd, i)) == -1)
+			return (ft_error("Minishell", "", 3));
+		if (cmd[i] != '\0' && (tmp1 = ft_strchr(op, cmd[i])) != NULL
+			&& (tmp2 = ft_strchr(op, cmd[i + 1])) != NULL)
+		{
+			if (*tmp1 == *tmp2 && *tmp1 == ';')
+				ft_error("Minishell", ";;", 1);
+			else if (*tmp1 == *tmp2 && *tmp1 == '|')
+				ft_error("Minishell", "||", 1);
+			else if (*tmp1 == ';')
+				ft_error("Minishell", ";", 1);
+			else
+				ft_error("Minishell", "|", 1);
 			return (-1);
-		if (cmd[i] != '\0' && ft_strchr(op, cmd[i]) != NULL && ft_strchr(op, cmd[i + 1]) != NULL)
-			return (-1);
+		}
 		i++;
 	}
 	return (0);
@@ -133,22 +146,11 @@ char		*ft_parsing(char *command_line)
 
 	tmp = command_line;
 	if (command_line && ft_double_op(command_line) == -1)
-	{
-		ft_error(0);
 		return (NULL);
-	}			
-	// if ((command_line = ft_escape_char(command_line)) == NULL)
-	// {
-	// 	free(tmp);
-	// 	return (NULL);
-	// }
-	// 		printf("3\n");
-
 	if ((tmp = ft_cmd_env(command_line)) == NULL)
 	{
 		free(tmp);
 		return (NULL);
 	}
-
 	return (tmp);
 }
