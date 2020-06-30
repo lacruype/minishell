@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/23 16:17:02 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/30 14:35:01 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/30 15:10:57 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void		ft_cd(char **args)
 	{
 		i = 0;
 		if (!ft_find_env(&env[0], "HOME="))
-			return ((void)ft_error("Minishell", "cd", 3));
+			return ((void)ft_error("Minishell", "cd", -3));
 		args[1] = ft_strdup(&g_envv[env[0]][5]);
 	}
 	while (args[1][i])

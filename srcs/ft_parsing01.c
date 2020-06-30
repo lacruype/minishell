@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 12:31:15 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/29 14:19:25 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/30 15:17:02 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,18 +80,18 @@ int		ft_double_op(char *cmd)
 	while (cmd[i])
 	{
 		if ((i = ft_check_quotes_closed(cmd, i)) == -1)
-			return (ft_error("Minishell", "", 3));
+			return (ft_error("Minishell", "", -4));
 		if (cmd[i] != '\0' && (tmp1 = ft_strchr(op, cmd[i])) != NULL
 			&& (tmp2 = ft_strchr(op, cmd[i + 1])) != NULL)
 		{
 			if (*tmp1 == *tmp2 && *tmp1 == ';')
-				ft_error("Minishell", ";;", 1);
+				ft_error("Minishell", ";;", -10);
 			else if (*tmp1 == *tmp2 && *tmp1 == '|')
-				ft_error("Minishell", "||", 1);
+				ft_error("Minishell", "||", -10);
 			else if (*tmp1 == ';')
-				ft_error("Minishell", ";", 1);
+				ft_error("Minishell", ";", -10);
 			else
-				ft_error("Minishell", "|", 1);
+				ft_error("Minishell", "|", -10);
 			return (-1);
 		}
 		i++;

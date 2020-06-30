@@ -168,7 +168,7 @@ int		exec_cmd(char *cmd_line, char **split_cmd, char **path)
 		wait(0);
 	}
 	else if (ft_path(split_cmd, path) == -2)
-		return (ft_error("Minishell" , "", 0));
+		return (ft_error("Minishell" , "", -100));
 		
 	dup2(savefd[0], 0);
 	dup2(savefd[1], 1);
