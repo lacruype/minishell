@@ -12,25 +12,8 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
 int pid;
 int flag_prompt = 0;
-
-void	ft_update_g_envv(int child_status)
-{
-	char *tmp;
-	int i;
-
-	i = 0;
-	while (ft_strncmp(g_envv[i], "?=", 2) != 0 && g_envv[i] != NULL)
-		i++;
-	if (g_envv[i] == NULL)
-		return ((void)ft_error("Minishell", "", 3));
-	free(g_envv[i]);
-	tmp = ft_itoa((WEXITSTATUS(child_status)));
-	g_envv[i] = ft_strjoin("?=", tmp);
-	free(tmp);
-}
 
 char	**init_path(char **path)
 {
@@ -178,7 +161,10 @@ int		exec_cmd(char *cmd_line, char **split_cmd, char **path)
 	{
 		if (fork() == 0)
 			if (execve(&(split_cmd[0][2]), split_cmd, g_envv) == -1)
+			{
+				ft_error("Minishell", split_cmd[0], 2);
 				exit(0);
+			}
 		wait(0);
 	}
 	else if (ft_path(split_cmd, path) == -2)
@@ -186,6 +172,7 @@ int		exec_cmd(char *cmd_line, char **split_cmd, char **path)
 		
 	dup2(savefd[0], 0);
 	dup2(savefd[1], 1);
+	exit_status = 0;
 	if (fd != 0)
 		close(fd);
 	return(0);
@@ -206,6 +193,7 @@ int		search_function(char *cmd_line, char **path)
 		write(1, "exit\n", 5);
 		exit(0);
 	}
+	
 	exec_cmd(cmd_line, split_cmd, path);
 
 	// fd = redir(cmd_line);
@@ -393,6 +381,7 @@ int		start_minishell()
 	path = NULL;
 	while (t.ret_gnl == 1 && t.check_exit == 0)
 	{
+		ctrl_backslash = 0;
 		path = init_path(path);
 		if (flag_prompt == 1)
 			display_prompt();
@@ -422,7 +411,6 @@ int		start_minishell()
 				ft_freestrarr(t.tab_cmd_line);
 			}
 			free(t.cmd_line);
-			
 		}
 	}
 	ft_freestrarr(path);
@@ -440,12 +428,26 @@ void	handle_sigint(int sig)
 	}
 }
 
+void	handle_sigquit(int sig)
+{
+	if (sig == SIGQUIT && ctrl_backslash != 0)
+	{
+		flag_prompt = 0;
+		signal(SIGQUIT, handle_sigquit);
+		ft_putstr_fd("Quit: 3\n", 1);
+		display_prompt();
+	}
+	else
+		ft_putstr_fd("\b\b  \b\b", 1);
+}
+
 int		main(int ac, char **av, char **env)
 {
 	(void)av;
 	if (ac != 1)
 		return (0);
 	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT,handle_sigquit);
 	if (init_g_envv(env) == -1)
 		return (-1);
 	if (start_minishell() == -1)

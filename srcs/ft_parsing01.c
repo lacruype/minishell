@@ -6,55 +6,11 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 12:31:15 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/25 16:02:13 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/29 14:19:25 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// static char		*ft_cmd_env(char *cmd)
-// {
-// 	int i;
-// 	int j;
-// 	int k;
-// 	size_t size;
-// 	size_t len;
-// 	char *new_ptr;
-
-// 	i = 0;
-// 	j = 0;
-// 	k = 0;
-// 	size = 0;
-// 	len = 0;
-// 	while (cmd[i])
-// 	{	
-// 		while (1)
-// 		{
-// 			if (cmd[i] == '$' && cmd[i + 1] != '\0' && cmd[i + 1] != ' ' && cmd[i + 1] != ';')
-// 			{
-// 				while (!ft_strchr(" ;\"'", cmd[i + size])&& cmd[i + size])
-// 					size++;
-// 				while (g_envv[j] && ft_strncmp(g_envv[j], &cmd[i + 1], size - 1) != 0)
-// 					j++;
-// 				if (!g_envv[j])
-// 					return (cmd);
-// 				len = ft_strlen(cmd) + ft_strlen(g_envv[j]) - ((size + 1) * 2);
-// 				if (!(new_ptr = calloc(len + 1, sizeof(char))))
-// 					return (cmd);
-// 				len = ft_strlen(g_envv[j]) - (size + 1);
-// 				ft_memcpy(new_ptr, cmd, (size_t)i);
-// 				ft_memcpy(&new_ptr[i], &g_envv[j][size], len + 1);
-// 				ft_memcpy(&new_ptr[i + len + 1], &cmd[i + size], strlen(&cmd[i +size]));
-// 				free(cmd);
-// 				cmd = new_ptr;
-// 			}
-// 			i++;
-// 			if (cmd[i] == '\0')
-// 				break ;
-// 		}
-// 	}
-// 	return (cmd);
-// }
 
 char	*ft_find_env(char *cmd)
 {
@@ -79,23 +35,26 @@ char	*ft_find_env(char *cmd)
 	return (NULL);
 }
 
-static char		*ft_cmd_env(char *cmd)
-{
-	int i;
-	char *env;
+// char		*ft_cmd_env(char *cmd)
+// {
+// 	int i;
+// 	char *env;
 
-	i = 0;
-	while (cmd[i])
-	{
-		if (i >= 1 && cmd[i] == '$' && cmd[i - 1] != '\\')
-		{
-			if ((env = ft_find_env(&cmd[i])) != NULL)
-				cmd = ft_putstrstr(cmd, env, i);
-		}
-		i++;
-	}
-	return (cmd);
-}
+// 	i = 0;
+// 	while (cmd[i])
+// 	{
+
+// 		if (i >= 1 && cmd[i] == '$' && cmd[i - 1] != '\\')
+// 		{
+// 			printf("SALUT\n");
+
+// 			if ((env = ft_find_env(&cmd[i])) != NULL)
+// 				cmd = ft_putstrstr(cmd, env, i);
+// 		}
+// 		i++;
+// 	}
+// 	return (cmd);
+// }
 
 char	*ft_strchr(const char *str, int c)
 {

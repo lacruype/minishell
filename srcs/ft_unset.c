@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/23 13:52:16 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/23 15:59:58 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/29 15:26:29 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,10 @@ static char    **ft_delete_env(char **tab, int i)
     {
         if (j == i)
             j++;
-        ret[k++] = tab[j++];
+        if (tab[j] != NULL)
+            ret[k++] = tab[j++];
     }
+    ret[k] = NULL;
     free(tab[i]);
     free(tab);
     return(ret);
@@ -52,7 +54,8 @@ void    ft_unset(char **args)
             len = ft_strlen(args[i]);
             if (ft_strncmp(args[i], g_envv[j], len - 1) == 0 && g_envv[j][len] == '=')
                 g_envv = ft_delete_env(g_envv, j);
-            j++;
+            if (g_envv[j] != NULL)
+                j++;
         }
         i++;
     }

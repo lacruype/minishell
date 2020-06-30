@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 12:15:53 by rledrin           #+#    #+#             */
-/*   Updated: 2020/06/25 16:40:33 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/30 14:44:47 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,11 @@ int					ft_path(char **cmd, char **path)
 					tmp = file;
 					file = ft_strjoin(file, pDirent->d_name);
 					free(tmp);
+					ctrl_backslash = 1;
 					if (ft_strncmp("..", cmd[0], 3) && ft_strncmp(".", cmd[0], 2) && fork() == 0)
 						execve(file, cmd, g_envv);
 					wait(0);
+					
 					closedir(pDir);
 					return (0);
 				}

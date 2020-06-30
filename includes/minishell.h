@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/06/25 16:25:59 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/30 14:48:36 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 
 char	**g_envv;
 char	**g_var;
+int		exit_status;
+int		ctrl_backslash;
+
 
 typedef struct	variables_minishell
 {
@@ -47,6 +50,7 @@ var_minishell t;
 int		ft_path_pipe(char **cmd, char **path);
 int		search_function(char *cmd_line, char **path);
 int		start_minishell(void);
+void	handle_sigquit(int sig);
 
 /*
 **		ft_utils.c
@@ -62,6 +66,7 @@ int		quote(char *cmd);
 **		ft_utils02.c
 */
 
+char		*ft_cmd_env(char *cmd);
 void    ft_cmd_to_lower(char **cmd);
 
 /*

@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/23 16:17:02 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/25 16:50:55 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/30 14:35:01 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,13 +101,6 @@ static void	ft_set_pwd(char *path, int pwd_indc, int oldpwd_indc)
 			break;
 		j++;
 	}
-	// printf("AAAA = %s\n", path);
-	// if (!j && path[0])
-	// 	g_envv[pwd_indc] = ft_strjoin("PWD=", path);
-	// else if (!j)
-	// 	g_envv[pwd_indc] = ft_strjoin("PWD=", "/");
-	// free(g_envv[pwd_indc]);
-	// free(*path);
 }
 
 void		ft_cd(char **args)

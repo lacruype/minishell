@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/06/30 14:00:13 by lacruype          #+#    #+#             */
+/*   Updated: 2020/06/30 14:00:15 by lacruype         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	ft_echo(char **args)
@@ -9,11 +21,6 @@ void	ft_echo(char **args)
 	i = 0;
 	j = 0;
 	option = 0;
-	// if (ft_strncmp(args[0], "echo", 5) != 0)
-	// {
-	// 	printf("ERROR\n");
-	// 	return ;
-	// }
 	if (!args[1])
 	{
 		write(1, "\n", 1);
