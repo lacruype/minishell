@@ -1,37 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_redir.c                                   :+:      :+:    :+:   */
+/*   ft_utils03.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/21 14:51:52 by rledrin           #+#    #+#             */
-/*   Updated: 2020/07/01 14:44:39 by lacruype         ###   ########.fr       */
+/*   Created: 2020/07/01 16:47:45 by lacruype          #+#    #+#             */
+/*   Updated: 2020/07/01 16:54:26 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char		**ft_split_redir(char *cmd)
+void	f(char c)
 {
-	int		i;
-	char	*stock;
-	char	**stock2;
-
-	i = 0;
-	while (cmd[i])
-	{
-		if ((i = (ft_check_quotes_closed(cmd, i))) == -1)
-			return (NULL);
-		else if (ft_strchr("<>|", cmd[i]) && cmd[i - 1] != '\\')
-		{
-			stock = ft_substr_gnl(cmd, 0, i);
-			stock2 = ft_split_spaces_quotes_gone(stock, ' ');
-			free(stock);
-			return (stock2);
-		}
-		else
-			i++;
-	}
-	return (ft_split_spaces_quotes_gone(cmd, ' '));
+	write(1, &c, 1);
 }

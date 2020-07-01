@@ -6,7 +6,7 @@
 #    By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/07/01 13:45:58 by lacruype         ###   ########.fr        #
+#    Updated: 2020/07/01 16:54:08 by lacruype         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRC			=	main.c \
 				ft_echo.c \
 				ft_utils.c \
 				ft_utils02.c \
+				ft_utils03.c \
 				ft_pwd.c \
 				ft_envv.c \
 				ft_error.c \

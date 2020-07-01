@@ -6,48 +6,13 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 12:31:15 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/30 16:44:30 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/01 14:52:28 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char		*ft_find_env(char *cmd)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while (g_envv[i] != NULL)
-	{
-		j = 0;
-		while (g_envv[i][j] != '=' && g_envv[i][j])
-			j++;
-		if (g_envv[i][j] == '=')
-		{
-			if (ft_strncmp(cmd, g_envv[i], j) == 0)
-				return (g_envv[i]);
-			else
-				return (NULL);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-char		*ft_strchr(const char *str, int c)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0' && str[i] != (char)c)
-		i++;
-	if (str[i] != (char)c)
-		return (NULL);
-	return ((char*)(str + i));
-}
-
-int			ft_double_op(char *cmd)
+static int	ft_double_op(char *cmd)
 {
 	int		i;
 	char	*tmp1;
@@ -82,7 +47,7 @@ char		*ft_parsing(char *command_line)
 	tmp = command_line;
 	if (command_line && ft_double_op(command_line) == -1)
 		return (NULL);
-	if ((tmp = ft_cmd_env(command_line)) == NULL)
+	if ((tmp = ft_cmd_env(command_line, -1)) == NULL)
 	{
 		free(tmp);
 		return (NULL);

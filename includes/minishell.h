@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/07/01 13:47:10 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/01 16:49:22 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int		start_minishell(void);
 void	handle_sigquit(int sig);
 
 /*
-**		ft_utils.c
+**		ft_utils.c 
 */
 
 void	*ft_realloc(void *src, size_t new_size);
@@ -63,21 +63,26 @@ int		create_file(char *filename, int app, int quote);
 int		quote(char *cmd);
 
 /*
-**		ft_utils02.c
+**		ft_utils02.c ✅
 */
 
-char	*ft_cmd_env(char *cmd);
-void	ft_cmd_env02(char **cmd, char **new_ptr, int cmd_index);
+char	*ft_cmd_env(char *cmd, int i);
 void    ft_cmd_to_lower(char **cmd);
 
 /*
-**		ft_parsing01.c
+**		ft_utils02.c ✅
+*/
+
+void    f(char c);
+
+/*
+**		ft_parsing.c ✅
 */
 
 char	*ft_parsing(char *command_line);
 
 /*
-**		ft_echo.c
+**		ft_echo.c ✅
 */
 
 void	ft_echo(char **args);
@@ -136,10 +141,11 @@ char			**ft_split_redir(char *s);
 char        **ft_split_spaces_quotes_gone(char const *s, char c);
 
 /*
-**		ft_escape_char.c
+**		ft_unset.c
 */
 
 void	ft_unset(char **args);
+char		**ft_delete_env(char **tab, int i);
 
 /*
 **		ft_cd.c
