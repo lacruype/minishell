@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/06/30 14:48:36 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/01 13:47:10 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ int		quote(char *cmd);
 **		ft_utils02.c
 */
 
-char		*ft_cmd_env(char *cmd);
+char	*ft_cmd_env(char *cmd);
+void	ft_cmd_env02(char **cmd, char **new_ptr, int cmd_index);
 void    ft_cmd_to_lower(char **cmd);
 
 /*
@@ -105,6 +106,7 @@ int		init_g_envv(char **env);
 */
 
 int		ft_error(char *cmd, char *arg, int error);
+void	ft_error02(char *arg, int error);
 
 /*
 **		LE_SPLIT.c
@@ -124,7 +126,7 @@ int		ft_path(char **cmd, char **path);
 
 int		ft_check_quotes_closed(const char *str, int i);
 
-void			ft_export(char **args);
+int			ft_export(char **args);
 char			**ft_split_redir(char *s);
 
 /*
@@ -143,6 +145,7 @@ void	ft_unset(char **args);
 **		ft_cd.c
 */
 
-void 	ft_cd(char **args);
+int  	ft_cd(char **args);
+void	ft_set_pwd(char *path, int pwd_indc, int oldpwd_indc);
 
 #endif

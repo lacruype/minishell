@@ -6,33 +6,33 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 14:24:07 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/25 15:40:45 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/30 16:36:14 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int		ft_check_quotes_closed(const char *str, int i)
+int		ft_check_quotes_closed(const char *s, int i)
 {
-	if ((str[i] == '"' && i == 0) || (str[i] == '"' && str[i - 1] != '\\'))
+	if ((s[i] == '"' && i == 0) || (s[i] == '"' && s[i - 1] != '\\'))
 	{
 		i++;
-		while (str[i])
+		while (s[i])
 		{
-			if (str[i] == '"')
-				if (str[i - 1] != '\\')
+			if (s[i] == '"')
+				if (s[i - 1] != '\\')
 					return (i);
 			i++;
 		}
 		return (-1);
 	}
-	else if ((str[i] == '\'' && i == 0) || (str[i] == '\'' && str[i - 1] != '\\'))
+	else if ((s[i] == '\'' && i == 0) || (s[i] == '\'' && s[i - 1] != '\\'))
 	{
 		i++;
-		while (str[i])
+		while (s[i])
 		{
-			if (str[i] == '\'')
-				if (str[i - 1] != '\\')
+			if (s[i] == '\'')
+				if (s[i - 1] != '\\')
 					return (i);
 			i++;
 		}

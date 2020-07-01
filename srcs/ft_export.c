@@ -52,16 +52,18 @@ static void	ft_print_env(void)
 	}
 }
 
-void	ft_export(char **args)
+int		ft_export(char **args)
 {
 	int	i;
 	int	k;
 	int j;
 	int equal;
 	int tmp;
+	int ret;
 
 	i = 0;
 	k = 1;
+	ret = 0;
 	if (!args[1])
 		ft_print_env();
 	else
@@ -70,7 +72,8 @@ void	ft_export(char **args)
 		{
 			if (ft_check_var_name(args[k]) == -1)
 			{
-				ft_error("export", args[k], 6);
+				ft_error("Minishell", args[k], -2);
+				ret = -1;
 				k++;
 				continue ;
 			}
@@ -82,7 +85,6 @@ void	ft_export(char **args)
 					equal = 1;
 				j++;
 			}
-			
 			if (equal)
 			{
 				tmp = get_size_env(g_envv);
@@ -109,4 +111,5 @@ void	ft_export(char **args)
 			k++;
 		}
 	}
+	return (ret);
 }

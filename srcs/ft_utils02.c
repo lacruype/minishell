@@ -6,58 +6,25 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 11:15:34 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/30 14:33:03 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/01 13:46:17 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// char	*ft_escape_char(char *str)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	while (str[i])
-// 	{
-// 		if (str[i] == '\'')
-// 		{
-// 			while (str[++i] != '\'')
-// 			{
-// 				if (str[i] == '\0')
-// 					return (0);
-// 				if (ft_strchr("$\"\\;|<>", str[i]))
-// 					str = ft_putstrstr(str, "\\", i++);
-// 			}
-// 		}
-// 		else if (str[i] == '"')
-// 		{
-// 			while (str[++i] != '"')
-// 			{
-// 				if (str[i] == '\0')
-// 					return (0);
-// 				if (ft_strchr(";|<>", str[i]))
-// 					str = ft_putstrstr(str, "\\", i++);
-// 			}
-// 		}
-// 		i++;
-// 	}
-// 	printf("REND = [%s]\n", str);
-// 	return (str);
-// }
-
-char        *ft_fake_env(char *cmd, int pos)
+char		*ft_fake_env(char *cmd, int pos)
 {
-    int len;
-    char *ret;
+	int		len;
+	char	*ret;
 
-    len = 0;
-    while (!ft_strchr(" ;\"'", cmd[len + pos])&& cmd[len + pos])
-        len++;
-    ret = calloc(ft_strlen(cmd) - len + 1, sizeof(char));
-    ft_memcpy(ret, cmd, pos);
-    ft_memcpy(&ret[pos], &cmd[pos + len], ft_strlen(cmd) - (pos + len));
-    free(cmd);
-    return (ret);
+	len = 0;
+	while (!ft_strchr(" ;\"'", cmd[len + pos]) && cmd[len + pos])
+		len++;
+	ret = calloc(ft_strlen(cmd) - len + 1, sizeof(char));
+	ft_memcpy(ret, cmd, pos);
+	ft_memcpy(&ret[pos], &cmd[pos + len], ft_strlen(cmd) - (pos + len));
+	free(cmd);
+	return (ret);
 }
 
 char		*ft_cmd_env(char *cmd)
@@ -67,13 +34,11 @@ char		*ft_cmd_env(char *cmd)
 	size_t size;
 	size_t len;
 	char *new_ptr;
-	char *itoa;
 
 	i = 0;
 	len = 0;
 	while (cmd[i] != '\0')
 	{
-		
 		if (cmd[i] == '$' && cmd[i + 1] != '\0' && cmd[i + 1] != ' ' && cmd[i + 1] != ';')
 		{
 			size = 0;
@@ -84,26 +49,14 @@ char		*ft_cmd_env(char *cmd)
 				j++;
 			if (!g_envv[j])
 			{
-
 				if (cmd[i + 1] == '?')
 				{
-					itoa = ft_itoa(exit_status);
-					len = ft_strlen(cmd) + ft_strlen(itoa);
-					if (!(new_ptr = calloc(len + 1, sizeof(char))))
-						return (cmd);
-					len = ft_strlen(itoa);
-					ft_memcpy(new_ptr, cmd, (size_t)i);
-					ft_memcpy(&new_ptr[i], itoa, len + 1);
-					ft_memcpy(&new_ptr[i + len], &cmd[i + size], ft_strlen(&cmd[i + size]));
-					free(cmd);
-					free(itoa);
-					cmd = new_ptr;
-					// i++;
+					ft_cmd_env02(&cmd, &new_ptr, i);
 					continue ;
 				}
-                cmd = ft_fake_env(cmd, i);
-                continue ;
-            }
+				cmd = ft_fake_env(cmd, i);
+				continue ;
+			}
 			len = ft_strlen(cmd) + ft_strlen(g_envv[j]) - (size * 2);
 			if (!(new_ptr = calloc(len + 1, sizeof(char))))
 				return (cmd);
@@ -119,14 +72,36 @@ char		*ft_cmd_env(char *cmd)
 	return (cmd);
 }
 
-void    ft_cmd_to_lower(char **cmd)
+void		ft_cmd_to_lower(char **cmd)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while ((*cmd)[i])
-    {
-        (*cmd)[i] = ft_tolower((*cmd)[i]);
-        i++;
-    }
+	i = 0;
+	while ((*cmd)[i])
+	{
+		(*cmd)[i] = ft_tolower((*cmd)[i]);
+		i++;
+	}
+}
+
+/*
+**	If the envVar is not find in g_envv and it's the exit_status ⬇
+*/
+
+void	ft_cmd_env02(char **cmd, char **new_ptr, int cmd_index)
+{
+	char *itoa;
+	size_t len;
+
+	itoa = ft_itoa(exit_status);
+	len = ft_strlen(*cmd) + ft_strlen(itoa);
+	if (!(*new_ptr = calloc(len + 1, sizeof(char))))
+		return ;
+	len = ft_strlen(itoa);
+	ft_memcpy(*new_ptr, *cmd, (size_t)cmd_index);
+	ft_memcpy(&(*new_ptr)[cmd_index], itoa, len + 1);
+	ft_memcpy(&(*new_ptr)[cmd_index + len + 1], &(*cmd)[cmd_index + 1], ft_strlen(&(*cmd)[cmd_index + 1]));
+	free(*cmd);
+	free(itoa);
+	*cmd = *new_ptr;
 }

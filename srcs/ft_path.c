@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 12:15:53 by rledrin           #+#    #+#             */
-/*   Updated: 2020/06/30 14:44:47 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/06/30 15:54:15 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int					ft_path(char **cmd, char **path)
 	{
 		pDir = opendir(path[j]);
 		if (pDir == NULL)
-			return (ft_error("Minishell", cmd[0], 0));
+			return (ft_error("Minishell", cmd[0], -100));
 		while ((pDirent = readdir(pDir)) != NULL)
 		{
 			if (size == ft_strlen(pDirent->d_name))
