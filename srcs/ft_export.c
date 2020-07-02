@@ -6,29 +6,13 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/01 13:54:43 by rledrin           #+#    #+#             */
-/*   Updated: 2020/07/01 16:52:50 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/02 14:23:43 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	ft_check_var_name(char *arg)
-{
-	int i;
-
-	i = 0;
-	if (ft_isdigit(arg[0]))
-		return (-1);
-	while (arg[i] && arg[i] != '=')
-	{
-		if (arg[i] == '\'' || arg[i] == '\\' || arg[i] == '"' || arg[i] == '-')
-			return (-1);
-		i++;
-	}
-	return (0);
-}
-
-static void	ft_print_env(void)
+static	void	ft_print_env(void)
 {
 	int i;
 	int j;
@@ -40,7 +24,7 @@ static void	ft_print_env(void)
 		ft_putstr_fd("declare -x ", 1);
 		while (g_envv[i][j])
 		{
-			(j > 0 && g_envv[i][j - 1] == '=') ? ft_putchar_fd('"', 1) : write(1, "", 0);
+			(j > 0 && g_envv[i][j - 1] == '=') ? f('"') : write(1, "", 0);
 			ft_putchar_fd(g_envv[i][j++], 1);
 		}
 		(g_envv[i][j - 1] == '=') ? ft_putchar_fd('"', 1) : write(1, "", 0);
@@ -57,16 +41,15 @@ static void	ft_print_env(void)
 	}
 }
 
-static void	ft_add_var(int equal, char *var)
+static	void	ft_add_var(int equal, char *var)
 {
 	int		tmp;
 
 	if (equal)
 	{
-		tmp = get_size_env(g_envv);
-		g_envv = ft_realloc(g_envv, (tmp + 2) * sizeof(char*));
-		g_envv[tmp + 1] = NULL;
-		g_envv[tmp] = ft_strdup(var);
+		g_envv = ft_realloc(g_envv, (get_size_env(g_envv) + 2) * sizeof(char*));
+		g_envv[get_size_env(g_envv) + 1] = NULL;
+		g_envv[get_size_env(g_envv)] = ft_strdup(var);
 	}
 	else
 	{
@@ -79,6 +62,7 @@ static void	ft_add_var(int equal, char *var)
 		}
 		else
 		{
+			tmp++;
 			g_var = ft_realloc(g_var, (tmp + 1) * sizeof(char*));
 			g_var[tmp] = NULL;
 			g_var[tmp - 1] = ft_strdup(var);
@@ -86,41 +70,51 @@ static void	ft_add_var(int equal, char *var)
 	}
 }
 
-static int	ft_check_var_exist(char *args, int equal)
+static	int		ft_check_var_exist02(char *args, int e)
+{
+	int i;
+
+	i = 0;
+	while (g_envv[i])
+	{
+		if (!ft_strncmp(args, g_envv[i], e - 1) && g_envv[i][e - 1] == '=')
+		{
+			g_envv = ft_delete_env(g_envv, i);
+			return (0);
+		}
+		i++;
+	}
+	i = 0;
+	while (g_var[i])
+	{
+		if (!ft_strncmp(args, g_var[i], e - 1))
+		{
+			g_var = ft_delete_env(g_var, i);
+			return (0);
+		}
+		i++;
+	}
+	return (0);
+}
+
+/*
+** e = equal ⬇️
+*/
+
+static	int		ft_check_var_exist01(char *args, int e)
 {
 	int	i;
 
 	i = 0;
-	if (equal)
-	{
-		while (g_envv[i])
-		{
-			if (!ft_strncmp(args, g_envv[i], equal - 1))
-			{
-				g_envv = ft_delete_env(g_envv, i);
-				return (0);
-			}
-			i++;
-		}
-		i = 0;
-		while (g_var[i])
-		{
-				printf("TEST = [%s] equal = [%d]\n", g_var[i], equal);
-
-			if (!ft_strncmp(args, g_var[i], equal - 1))
-			{
-				g_var = ft_delete_env(g_var, i);
-				return (0);
-			}
-			i++;
-		}
-	}
+	if (e)
+		return (ft_check_var_exist02(args, e));
 	else
 	{
-		while(g_var[i])
+		while (g_var[i])
 		{
-			if (!ft_strncmp(args, g_var[i], ft_strlen(args)))
-				return(-1);
+			if (!ft_strncmp(args, g_var[i],
+				ft_strlen(args)) && g_var[i][ft_strlen(args)] == '\0')
+				return (-1);
 			i++;
 		}
 		i = 0;
@@ -134,7 +128,7 @@ static int	ft_check_var_exist(char *args, int equal)
 	return (0);
 }
 
-int			ft_export(char **args)
+int				ft_export(char **args)
 {
 	int all[4];
 
@@ -148,7 +142,7 @@ int			ft_export(char **args)
 		{
 			if (ft_check_var_name(args[all[0]]) == -1)
 			{
-				all[3] = ft_error("Minishell", args[all[0]++], -2);
+				all[3] = ft_error("Minishell", args[all[0]], -2);
 				continue ;
 			}
 			all[2] = 0;
@@ -156,7 +150,7 @@ int			ft_export(char **args)
 			while (args[all[0]][all[1]])
 				if (args[all[0]][all[1]++] == '=')
 					all[2] = all[1];
-			if (ft_check_var_exist(args[all[0]], all[2]) != -1)
+			if (ft_check_var_exist01(args[all[0]], all[2]) != -1)
 				ft_add_var(all[2], args[all[0]]);
 		}
 	}

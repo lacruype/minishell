@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 11:15:34 by lacruype          #+#    #+#             */
-/*   Updated: 2020/07/01 14:43:13 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/02 14:07:03 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ char			*ft_cmd_env(char *cmd, int i)
 				if (cmd[i + 1] == '?')
 					ft_cmd_env02(&cmd, &new_ptr, i);
 				else
-					cmd = ft_fake_env(cmd, i);
+					cmd = ft_fake_env(cmd, i--);
 				continue ;
 			}
 			ft_cmd_env03(&cmd, &new_ptr, i, s);

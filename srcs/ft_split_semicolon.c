@@ -6,13 +6,13 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 08:31:47 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/19 16:52:35 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/02 14:35:12 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int		nb_words_semicolon(char const *str, char c)
+static	int		nb_words_semicolon(char const *str, char c)
 {
 	int i;
 	int words;
@@ -34,7 +34,8 @@ static int		nb_words_semicolon(char const *str, char c)
 				i++;
 			}
 		}
-		else if ((str[i] == '\'' && i == 0) || (str[i] == '\'' && str[i - 1] != '\\'))
+		else if ((str[i] == '\'' && i == 0)
+			|| (str[i] == '\'' && str[i - 1] != '\\'))
 		{
 			i++;
 			while (str[i])
@@ -48,23 +49,25 @@ static int		nb_words_semicolon(char const *str, char c)
 		else if (str[i] == c)
 		{
 			while (str[i] == c && str[i])
-            {
-                if ((str[i] == '"' && str[i - 1] != '\\') || (str[i] == '\'' && str[i - 1] != '\\'))
-                    break ;
-                i++;
-            }
+			{
+				if ((str[i] == '"' && str[i - 1] != '\\')
+					|| (str[i] == '\'' && str[i - 1] != '\\'))
+					break ;
+				i++;
+			}
 			if (str[i])
 				words++;
 		}
 		else
-	   		i++;
-		if (((str[i] == '"' || str[i] == '\'') && str[i - 1] != '\\') || (str[i] == '\\'  && str[i - 1] != '\\'))
+			i++;
+		if (((str[i] == '"' || str[i] == '\'') && str[i - 1] != '\\')
+			|| (str[i] == '\\' && str[i - 1] != '\\'))
 			i++;
 	}
 	return (words);
 }
 
-static char		**size_words_semicolon(char const *str, char c, char **tab)
+static	char	**size_words_semicolon(char const *str, char c, char **tab)
 {
 	int i;
 	int words;
@@ -75,8 +78,8 @@ static char		**size_words_semicolon(char const *str, char c, char **tab)
 	taille = 0;
 	words = 0;
 	len = ft_strlen_gnl((char*)str);
-    while (str[i] == c)
-        i++;
+	while (str[i] == c)
+		i++;
 	while (str[i] && i <= len)
 	{
 		if ((str[i] == '"' && i == 0) || (str[i] == '"' && str[i - 1] != '\\'))
@@ -90,13 +93,14 @@ static char		**size_words_semicolon(char const *str, char c, char **tab)
 					{
 						taille++;
 						i++;
-						break;
+						break ;
 					}
 				taille++;
 				i++;
 			}
 		}
-		else if ((str[i] == '\'' && i == 0) || (str[i] == '\'' && str[i - 1] != '\\'))
+		else if ((str[i] == '\'' && i == 0)
+			|| (str[i] == '\'' && str[i - 1] != '\\'))
 		{
 			i++;
 			while (str[i])
@@ -111,11 +115,12 @@ static char		**size_words_semicolon(char const *str, char c, char **tab)
 		else if (str[i] == c)
 		{
 			while (str[i] == c && str[i])
-            {
-                if ((str[i] == '"' && str[i - 1] != '\\') || (str[i] == '\'' && str[i - 1] != '\\'))
-                    break ;
-                i++;
-            }
+			{
+				if ((str[i] == '"' && str[i - 1] != '\\')
+					|| (str[i] == '\'' && str[i - 1] != '\\'))
+					break ;
+				i++;
+			}
 			if (str[i])
 			{
 				if (!(tab[words] = ft_calloc((taille + 1), sizeof(char))))
@@ -131,11 +136,11 @@ static char		**size_words_semicolon(char const *str, char c, char **tab)
 		}
 	}
 	if (!(tab[words] = ft_calloc((taille + 1), sizeof(char))))
-					return (0);
+		return (0);
 	return (tab);
 }
 
-static char		**place_words_semicolon(char const *str, char c, char **tab)
+static	char	**place_words_semicolon(char const *str, char c, char **tab)
 {
 	int i;
 	int words;
@@ -144,8 +149,8 @@ static char		**place_words_semicolon(char const *str, char c, char **tab)
 	i = 0;
 	taille = 0;
 	words = 0;
-    while (str[i] == c)
-        i++;
+	while (str[i] == c)
+		i++;
 	while (str[i])
 	{
 		if ((str[i] == '"' && i == 0) || (str[i] == '"' && str[i - 1] != '\\'))
@@ -161,14 +166,15 @@ static char		**place_words_semicolon(char const *str, char c, char **tab)
 						tab[words][taille] = str[i];
 						taille++;
 						i++;
-						break;
+						break ;
 					}
 				tab[words][taille] = str[i];
 				taille++;
 				i++;
 			}
 		}
-		else if ((str[i] == '\'' && i == 0) || (str[i] == '\'' && str[i - 1] != '\\'))
+		else if ((str[i] == '\'' && i == 0)
+			|| (str[i] == '\'' && str[i - 1] != '\\'))
 		{
 			i++;
 			while (str[i])
@@ -184,11 +190,12 @@ static char		**place_words_semicolon(char const *str, char c, char **tab)
 		else if (str[i] == c)
 		{
 			while (str[i] == c && str[i])
-            {
-                if ((str[i] == '"' && str[i - 1] != '\\') || (str[i] == '\'' && str[i - 1] != '\\'))
-                    break ;
-                i++;
-            }
+			{
+				if ((str[i] == '"' && str[i - 1] != '\\')
+					|| (str[i] == '\'' && str[i - 1] != '\\'))
+					break ;
+				i++;
+			}
 			if (str[i])
 			{
 				tab[words][taille] = '\0';

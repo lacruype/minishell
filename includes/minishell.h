@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/07/01 16:49:22 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/02 14:18:28 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,11 @@ char	*ft_cmd_env(char *cmd, int i);
 void    ft_cmd_to_lower(char **cmd);
 
 /*
-**		ft_utils02.c ✅
+**		ft_utils03.c ✅
 */
 
 void    f(char c);
+int		ft_check_var_name(char *arg);
 
 /*
 **		ft_parsing.c ✅
