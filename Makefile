@@ -6,7 +6,7 @@
 #    By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/07/02 14:30:53 by lacruype         ###   ########.fr        #
+#    Updated: 2020/07/02 16:49:58 by lacruype         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,9 +39,6 @@ SRC			=	main.c \
 				ft_unset.c \
 				ft_cd.c \
 				ft_cd02.c \
-
-
-				
 
 SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}
 

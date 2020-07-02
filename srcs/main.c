@@ -79,7 +79,7 @@ char	*get_filename(char *cmd)
 	return (filename);
 }
 
-static int	redir(char *cmd)
+int	redir(char *cmd)
 {
 	char	*filename;
 	char	*tmp;
@@ -140,45 +140,6 @@ static int		cmpt_pipe(char *cmd)
 		i++;
 	}
 	return (nb_pipe);
-}
-int		exec_cmd(char *cmd_line, char **split_cmd, char **path)
-{
-	int	savefd[2];
-	int	fd;
-	int ret;
-
-	savefd[0] = dup(0);
-	savefd[1] = dup(1);
-	fd = redir(cmd_line);
-	ret = 0;
-	if (ft_strncmp(split_cmd[0], "echo", 5) == 0)
-		ft_echo(split_cmd);
-	else if (ft_strncmp(split_cmd[0], "export", 7) == 0)
-		ret = ft_export(split_cmd);
-	else if (ft_strncmp(split_cmd[0], "unset", 6) == 0)
-		ft_unset(split_cmd);
-	else if (ft_strncmp(split_cmd[0], "cd", 3) == 0)
-		ret = ft_cd(split_cmd);
-	else if (ft_strncmp(split_cmd[0], "./", 2) == 0)
-	{
-		if (fork() == 0)
-			if (execve(&(split_cmd[0][2]), split_cmd, g_envv) == -1)
-			{
-				ft_error("Minishell", split_cmd[0], 2);
-				exit(0);
-			}
-		wait(0);
-	}
-	else if (ft_path(split_cmd, path) == -2)
-		return (ft_error("Minishell" , "", -100));
-		
-	dup2(savefd[0], 0);
-	dup2(savefd[1], 1);
-	if (ret != -1)
-		exit_status = 0;
-	if (fd != 0)
-		close(fd);
-	return(0);
 }
 
 int		search_function(char *cmd_line, char **path)

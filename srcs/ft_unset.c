@@ -6,13 +6,13 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/23 13:52:16 by lacruype          #+#    #+#             */
-/*   Updated: 2020/07/01 16:28:35 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/02 16:30:01 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char		**ft_delete_env(char **tab, int i)
+char			**ft_delete_env(char **tab, int i)
 {
 	int		size;
 	char	**ret;

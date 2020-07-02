@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/23 16:17:02 by lacruype          #+#    #+#             */
-/*   Updated: 2020/07/01 13:48:15 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/02 15:03:54 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static int	ft_cd3(char ***args, int *i, char **path)
 	return (tmp);
 }
 
-int		ft_cd(char **args)
+int			ft_cd(char **args)
 {
 	int		i;
 	int		env[3];

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rledrin <rledrin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 12:33:14 by lacruype          #+#    #+#             */
-/*   Updated: 2020/03/12 12:23:26 by rledrin          ###   ########.fr       */
+/*   Updated: 2020/07/02 16:33:08 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	*ft_realloc(void *ptr, size_t size)
 	return (newptr);
 }
 
-
 void	ft_freestrarr(char **arr)
 {
 	int i;
@@ -55,7 +54,8 @@ char	*ft_jump_space(char *str)
 	int i;
 
 	i = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == 'v' || str[i] == '\n' || str[i] == 'r' || str[i] == '\f')
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == 'v'
+		|| str[i] == '\n' || str[i] == 'r' || str[i] == '\f')
 		i++;
 	return (&str[i]);
 }
@@ -67,7 +67,7 @@ int		create_file(char *filename, int app, int quote)
 
 	i = 0;
 	if (!filename[0])
-		return(1);
+		return (1);
 	if (ft_strlen(filename) > 255)
 		return (-1);
 	while (filename[i] && !quote)
@@ -107,10 +107,8 @@ int		quote(char *cmd)
 			if (!cmd[i++])
 				return (0);
 			if (cmd[i] == '"')
-				break;
+				break ;
 		}
 	}
-	if (i != 0)
-		return(i - 1);
-	return (0);
+	return (i != 0 ? (i - 1) : 0);
 }

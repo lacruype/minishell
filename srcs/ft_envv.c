@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/10 15:48:18 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/29 16:12:49 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/02 15:03:13 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		get_size_env(char **env)
 	return (i);
 }
 
-int				init_g_envv(char **env)
+int		init_g_envv(char **env)
 {
 	int i;
 

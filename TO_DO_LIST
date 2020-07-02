@@ -66,10 +66,8 @@ si on ne trouve pas l'executable du ./truc -> no such file or directory  ✅
 
 gerer les erreur + errno (variable $?)  ✅
 
-Proteger si ya pas d'environnementales
-
 LE CTRL+\ ✅
 
-Couper en deux ft_cmd_env dans utils02, en creant une fonction versatile pour remplacer l'algo de copie a l'interieur
-
 valeur derreur commande not found fausse
+
+Proteger si ya pas d'environnementales

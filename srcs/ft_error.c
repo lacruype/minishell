@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 13:42:31 by lacruype          #+#    #+#             */
-/*   Updated: 2020/06/30 16:38:12 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/02 15:03:29 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,4 @@ void	ft_error02(char *arg, int error)
 		errno = error;
 		ft_putstr_fd(strerror(errno), 1);
 	}
-	
 }

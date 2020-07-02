@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/31 11:17:54 by rledrin           #+#    #+#             */
-/*   Updated: 2020/07/02 14:18:28 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/02 17:05:41 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int		search_function(char *cmd_line, char **path);
 int		start_minishell(void);
 void	handle_sigquit(int sig);
 
+int	redir(char *cmd);
+
 /*
 **		ft_utils.c 
 */
@@ -75,6 +77,7 @@ void    ft_cmd_to_lower(char **cmd);
 
 void    f(char c);
 int		ft_check_var_name(char *arg);
+int		exec_cmd(char *cmd_line, char **split_cmd, char **path);
 
 /*
 **		ft_parsing.c ✅
@@ -121,7 +124,7 @@ void	ft_error02(char *arg, int error);
 char	**ft_split_semicolon(char const *s, char c);
 
 /*
-**		ft_path.c
+**		ft_path.c ✅
 */
 
 int		ft_path(char **cmd, char **path);
