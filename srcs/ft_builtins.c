@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/13 10:38:04 by rledrin           #+#    #+#             */
-/*   Updated: 2020/06/23 15:57:52 by lacruype         ###   ########.fr       */
+/*   Created: 2020/07/03 14:20:01 by lacruype          #+#    #+#             */
+/*   Updated: 2020/07/03 14:55:14 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void		ft_pwd(void)
+void	ft_pwd(void)
 {
 	char buf[256];
 	char *ret;
@@ -21,4 +21,33 @@ void		ft_pwd(void)
 	if (ret == NULL)
 		return ;
 	ft_putstr_fd(ret, 1);
+}
+
+void	ft_echo(char **args)
+{
+	int	i;
+	int	j;
+	int	option;
+
+	i = 0;
+	j = 0;
+	option = 0;
+	if (!args[1])
+	{
+		write(1, "\n", 1);
+		return ;
+	}
+	if (ft_strncmp(args[1], "-n", 3) == 0)
+	{
+		option = 1;
+		i = 1;
+	}
+	while (args[++i])
+	{
+		ft_putstr_fd(args[i], 1);
+		if (args[i + 1] != NULL)
+			write(1, " ", 1);
+	}
+	if (!option)
+		write(1, "\n", 1);
 }

@@ -6,136 +6,67 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/19 14:32:07 by lacruype          #+#    #+#             */
-/*   Updated: 2020/07/02 16:40:10 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/06 14:58:22 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static	int		nb_word_ssqg(char const *str, char c)
+static	int		place_ssqg02(const char *str, int *i, char quote)
 {
-	int i;
-	int words;
-
-	i = 0;
-	words = 1;
-	while (str[i] == c)
-		i++;
-	while (str[i])
-	{
-		if ((str[i] == '"' && i == 0) || (str[i] == '"' && str[i - 1] != '\\'))
-		{
-			i++;
-			while (str[i])
-			{
-				if (str[i] == '\\' && str[i - 1] != '\\')
-					i++;
-				if (str[i] == '"')
-					if (str[i - 1] != '\\')
-						break ;
-				i++;
-			}
-		}
-		else if ((str[i] == '\'' && i == 0)
-			|| (str[i] == '\'' && str[i - 1] != '\\'))
-		{
-			i++;
-			while (str[i])
-			{
-				if (str[i] == '\'')
-					if (str[i - 1] != '\\')
-						break ;
-				i++;
-			}
-		}
-		else if (str[i] == c)
-		{
-			while (str[i] == c && str[i])
-				i++;
-			if (str[i])
-			{
-				words++;
-				continue ;
-			}
-		}
-		else
-			i++;
-		if (((str[i] == '"' || str[i] == '\'') && str[i - 1] != '\\')
-			|| (str[i] == '\\' && str[i - 1] != '\\'))
-			i++;
-	}
-	return (words);
+	if (str[*i] == '\\' && str[*i - 1] != '\\')
+		(*i)++;
+	if (str[*i] == quote)
+		if (str[*i - 1] != '\\')
+			return (1);
+	return (0);
 }
 
-static	char	**size_ssqg(char const *str, char c, char **tab)
+static	int		place_ssqg03(char const *str, char **tab, int *taille, int *i)
 {
-	int i;
-	int words;
-	int taille;
-	int len;
-
-	i = 0;
-	taille = 0;
-	words = 0;
-	len = ft_strlen_gnl((char*)str);
-	while (str[i] == c)
-		i++;
-	while (str[i] && i <= len)
+	if ((str[*i] == '"' && *i == 0) || (str[*i] == '"' && str[*i - 1] != '\\'))
 	{
-		if ((str[i] == '"' && i == 0) || (str[i] == '"' && str[i - 1] != '\\'))
+		while (str[++(*i)])
 		{
-			i++;
-			while (str[i])
-			{
-				if (str[i] == '\\' && str[i - 1] != '\\')
-					i++;
-				if (str[i] == '"')
-					if (str[i - 1] != '\\')
-						break ;
-				taille++;
-				i++;
-			}
+			if (place_ssqg02(str, i, '"') == 1)
+				break ;
+			(*tab)[(*taille)++] = str[*i];
 		}
-		else if ((str[i] == '\'' && i == 0)
-			|| (str[i] == '\'' && str[i - 1] != '\\'))
+		return (1);
+	}
+	else if ((str[*i] == '\'' && *i == 0)
+		|| (str[*i] == '\'' && str[*i - 1] != '\\'))
+	{
+		while (str[++(*i)])
 		{
-			i++;
-			while (str[i])
-			{
-				if (str[i] == '\\' && str[i - 1] != '\\')
-					i++;
-				if (str[i] == '\'')
-					if (str[i - 1] != '\\')
-						break ;
-				taille++;
-				i++;
-			}
+			if (place_ssqg02(str, i, '\'') == 1)
+				break ;
+			(*tab)[(*taille)++] = str[*i];
 		}
-		else if (str[i] == c)
+		return (1);
+	}
+	return (0);
+}
+
+static	int		place_ssqg04(char const *str, char *tab, int *i, int *words)
+{
+	if (str[*i] == ' ')
+	{
+		while (str[*i] == ' ' && str[*i])
+			(*i)++;
+		if (str[*i])
 		{
-			while (str[i] == c && str[i])
-				i++;
-			if (str[i])
-			{
-				if (!(tab[words] = ft_calloc((taille + 1), sizeof(char))))
-					return (0);
-				words++;
-				taille = 0;
-				continue ;
-			}
-		}
-		else if (((str[i] == '"' || str[i] == '\'') && str[i - 1] != '\\')
-			|| (str[i] == '\\' && str[i - 1] != '\\'))
-			i++;
-		else
-		{
-			i++;
-			taille++;
+			*tab = '\0';
+			(*words)++;
+			return (2);
 		}
 	}
-	if (!(tab[words] = ft_calloc((taille + 1), sizeof(char))))
+	else if (((str[*i] == '"' || str[*i] == '\'') && str[*i - 1] != '\\')
+		|| (str[*i] == '\\' && str[*i - 1] != '\\'))
+		(*i)++;
+	else
 		return (0);
-	return (tab);
+	return (1);
 }
 
 static	char	**place_ssqg(char const *str, char c, char **tab)
@@ -143,6 +74,7 @@ static	char	**place_ssqg(char const *str, char c, char **tab)
 	int i;
 	int words;
 	int taille;
+	int ret;
 
 	i = 0;
 	taille = 0;
@@ -151,58 +83,15 @@ static	char	**place_ssqg(char const *str, char c, char **tab)
 		i++;
 	while (str[i])
 	{
-		if ((str[i] == '"' && i == 0) || (str[i] == '"' && str[i - 1] != '\\'))
-		{
-			i++;
-			while (str[i])
-			{
-				if (str[i] == '\\' && str[i - 1] != '\\')
-					i++;
-				if (str[i] == '"')
-					if (str[i - 1] != '\\')
-						break ;
-				tab[words][taille] = str[i];
-				taille++;
-				i++;
-			}
-		}
-		else if ((str[i] == '\'' && i == 0)
-			|| (str[i] == '\'' && str[i - 1] != '\\'))
-		{
-			i++;
-			while (str[i])
-			{
-				if (str[i] == '\\' && str[i - 1] != '\\')
-					i++;
-				if (str[i] == '\'')
-					if (str[i - 1] != '\\')
-						break ;
-				tab[words][taille] = str[i];
-				taille++;
-				i++;
-			}
-		}
-		else if (str[i] == c)
-		{
-			while (str[i] == c && str[i])
-				i++;
-			if (str[i])
-			{
-				tab[words][taille] = '\0';
-				words++;
-				taille = 0;
-				continue ;
-			}
-		}
-		else if (((str[i] == '"' || str[i] == '\'') && str[i - 1] != '\\')
-			|| (str[i] == '\\' && str[i - 1] != '\\'))
-			i++;
+		if (place_ssqg03(str, &tab[words], &taille, &i) == 1)
+			continue ;
+		else if ((ret = place_ssqg04(str,
+			&tab[words][taille], &i, &words)) == 2)
+			taille = 0;
+		if (ret != 0)
+			continue ;
 		else
-		{
-			tab[words][taille] = str[i];
-			i++;
-			taille++;
-		}
+			tab[words][taille++] = str[i++];
 	}
 	tab[words][taille] = '\0';
 	return (tab);

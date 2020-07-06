@@ -6,7 +6,7 @@
 #    By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/09 16:37:58 by lacruype          #+#    #+#              #
-#    Updated: 2020/07/02 16:49:58 by lacruype         ###   ########.fr        #
+#    Updated: 2020/07/06 15:02:20 by lacruype         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,25 +20,29 @@ SRC_DIR		=	srcs/
 
 INCLUDE		=	includes
 
-SRC			=	main.c \
-				ft_echo.c \
+SRC			=	ft_builtins.c \
+				ft_cd.c \
+				ft_cd02.c \
+				ft_env.c \
+				ft_error.c \
+				ft_export.c \
+				ft_parsing.c \
+				ft_path.c \
+				ft_pipe.c \
+				ft_redir.c \
+				ft_split_semicolon.c \
+				ft_split_semicolon02.c \
+				ft_split_semicolon03.c \
+				ft_split_semicolon04.c \
+				ft_split_spaces_quotes_gone.c \
+				ft_split_spaces_quotes_gone02.c \
+				ft_split_spaces_quotes_gone03.c \
+				ft_start_minishell.c \
+				ft_unset.c \
 				ft_utils.c \
 				ft_utils02.c \
 				ft_utils03.c \
-				ft_pwd.c \
-				ft_envv.c \
-				ft_error.c \
-				ft_parsing.c \
-				ft_env.c \
-				ft_split_semicolon.c \
-				ft_path.c \
-				ft_check_quotes_closed.c \
-				ft_split_redir.c \
-				ft_split_spaces_quotes_gone.c \
-				ft_export.c \
-				ft_unset.c \
-				ft_cd.c \
-				ft_cd02.c \
+				main.c \
 
 SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}
 

@@ -6,13 +6,13 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/01 13:54:43 by rledrin           #+#    #+#             */
-/*   Updated: 2020/07/02 14:23:43 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/03 13:31:49 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static	void	ft_print_env(void)
+static	void	ft_export_only(void)
 {
 	int i;
 	int j;
@@ -135,7 +135,7 @@ int				ft_export(char **args)
 	all[0] = 0;
 	all[3] = 0;
 	if (!args[1])
-		ft_print_env();
+		ft_export_only();
 	else
 	{
 		while (args[++all[0]])

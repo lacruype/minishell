@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/01 16:47:45 by lacruype          #+#    #+#             */
-/*   Updated: 2020/07/02 16:55:43 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/03 15:00:52 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,35 @@
 void			f(char c)
 {
 	write(1, &c, 1);
+}
+
+int				ft_check_quotes_closed(const char *s, int i)
+{
+	if ((s[i] == '"' && i == 0) || (s[i] == '"' && s[i - 1] != '\\'))
+	{
+		i++;
+		while (s[i])
+		{
+			if (s[i] == '"')
+				if (s[i - 1] != '\\')
+					return (i);
+			i++;
+		}
+		return (-1);
+	}
+	else if ((s[i] == '\'' && i == 0) || (s[i] == '\'' && s[i - 1] != '\\'))
+	{
+		i++;
+		while (s[i])
+		{
+			if (s[i] == '\'')
+				if (s[i - 1] != '\\')
+					return (i);
+			i++;
+		}
+		return (-1);
+	}
+	return (i);
 }
 
 int				ft_check_var_name(char *arg)
@@ -43,6 +72,10 @@ static	void	exec_cmd02(char **split_cmd, char **path, int *ret)
 		ft_unset(split_cmd);
 	else if (ft_strncmp(split_cmd[0], "cd", 3) == 0)
 		*ret = ft_cd(split_cmd);
+	else if (ft_strncmp(split_cmd[0], "pwd", 4) == 0)
+		ft_pwd();
+	else if (ft_strncmp(split_cmd[0], "env", 4) == 0)
+		ft_env(split_cmd);
 	else if (ft_strncmp(split_cmd[0], "./", 2) == 0)
 	{
 		if (fork() == 0)

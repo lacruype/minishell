@@ -6,30 +6,71 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 15:02:35 by lacruype          #+#    #+#             */
-/*   Updated: 2020/07/02 15:02:58 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/03 14:23:15 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	ft_env(char **args)
+int				get_size_env(char **env)
 {
-	int	i;
+	int i;
+
+	i = -1;
+	while (env[++i] != NULL)
+		;
+	return (i);
+}
+
+int				init_g_envv(char **env)
+{
+	int i;
+
+	i = -1;
+	if (!(g_envv = malloc(sizeof(char*) * (get_size_env(env) + 1))))
+		return (-1);
+	while (env[++i])
+		g_envv[i] = ft_strdup((const char *)env[i]);
+	g_envv[i] = NULL;
+	if (!(g_var = calloc(1, sizeof(char*))))
+		return (0);
+	return (0);
+}
+
+static	void	ft_print_env(void)
+{
+	int i;
 
 	i = 0;
-	if (ft_strncmp(args[0], "env", 4) != 0)
+	while (g_envv[i] != NULL)
 	{
-		printf("ERROR\n");
-		return ;
+		ft_putstr_fd(g_envv[i], 1);
+		ft_putchar_fd('\n', 1);
+		i++;
 	}
-	if (args[1])
+}
+
+void			ft_env(char **args)
+{
+	int	i;
+	int j;
+
+	i = 1;
+	while (args[i] != NULL)
 	{
-		printf("ERROR\n");
-		return ;
+		j = 0;
+		while (args[i][j] != '=' && args[i][j])
+			j++;
+		if (args[i][j] != '=')
+			return ((void)ft_error("env", args[i], 2));
+		i++;
 	}
-	while (g_envv[i])
+	ft_print_env();
+	i = 1;
+	while (args[i])
 	{
-		ft_putstr_fd(g_envv[i++], 1);
+		ft_putstr_fd(args[i], 1);
 		write(1, "\n", 1);
+		i++;
 	}
 }
