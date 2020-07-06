@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 12:15:53 by rledrin           #+#    #+#             */
-/*   Updated: 2020/07/03 14:06:51 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/06 16:43:52 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static	void	ft_path02(struct dirent *p_dirent,
 
 	file = ft_strjoin(path[j], "/");
 	file = ft_strjoin_gnl(file, p_dirent->d_name);
-	ctrl_backslash = 1;
+	g_ctrl_backslash = 1;
 	if (ft_strncmp("..", cmd[0], 3)
 		&& ft_strncmp(".", cmd[0], 2) && fork() == 0)
 		execve(file, cmd, g_envv);

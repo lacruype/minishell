@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 11:15:34 by lacruype          #+#    #+#             */
-/*   Updated: 2020/07/02 14:07:03 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/06 16:43:39 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void			ft_cmd_to_lower(char **cmd)
 }
 
 /*
-**	If the envVar is not found in g_envv and it's the exit_status's one ⬇
+**	If the envVar is not found in g_envv and it's the g_exit_status's one ⬇
 */
 
 static	void	ft_cmd_env02(char **cmd, char **new_ptr, int cmd_index)
@@ -48,7 +48,7 @@ static	void	ft_cmd_env02(char **cmd, char **new_ptr, int cmd_index)
 	char	*itoa;
 	size_t	len;
 
-	itoa = ft_itoa(exit_status);
+	itoa = ft_itoa(g_exit_status);
 	len = ft_strlen(*cmd) + ft_strlen(itoa);
 	if (!(*new_ptr = calloc(len + 1, sizeof(char))))
 		return ;

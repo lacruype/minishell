@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/01 16:47:45 by lacruype          #+#    #+#             */
-/*   Updated: 2020/07/03 15:00:52 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/06 16:43:39 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int				exec_cmd(char *cmd_line, char **split_cmd, char **path)
 	dup2(savefd[0], 0);
 	dup2(savefd[1], 1);
 	if (ret != -1)
-		exit_status = 0;
+		g_exit_status = 0;
 	if (fd != 0)
 		close(fd);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 14:34:27 by lacruype          #+#    #+#             */
-/*   Updated: 2020/07/03 15:00:00 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/06 16:45:33 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int					cmpt_pipe(char *cmd)
 	return (nb_pipe);
 }
 
-static	void		exec_pipe3(var_minishell *t, char *cmd)
+static	void		exec_pipe3(t_var_minishell *t, char *cmd)
 {
 	(t->pi % 2 == 0) ? pipe(t->pipe_fd) : pipe(t->pi_fd2);
 	if ((t->pid = fork()) == 0)
@@ -47,7 +47,7 @@ static	void		exec_pipe3(var_minishell *t, char *cmd)
 	waitpid(t->pid, &t->child_status, 0);
 }
 
-static	void		exec_pipe2(var_minishell *t, char *cmd)
+static	void		exec_pipe2(t_var_minishell *t, char *cmd)
 {
 	ft_freestrarr(t->split_cmd);
 	if (t->pi == 0)
@@ -76,7 +76,7 @@ static	void		exec_pipe2(var_minishell *t, char *cmd)
 		exec_pipe3(t, cmd);
 }
 
-void				exec_pipe(var_minishell *t, char *cmd)
+void				exec_pipe(t_var_minishell *t, char *cmd)
 {
 	t->k = 0;
 	t->l = 0;

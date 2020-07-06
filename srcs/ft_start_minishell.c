@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 14:10:32 by lacruype          #+#    #+#             */
-/*   Updated: 2020/07/03 14:58:42 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/06 16:45:33 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ void			display_prompt(void)
 	}
 	ft_putstr_fd(&g_envv[i][4], 1);
 	ft_putstr_fd(" ➡ ", 1);
-	flag_prompt = 0;
+	g_flag_prompt = 0;
 }
 
-static	int		start_minishell2(var_minishell *t)
+static	int		start_minishell2(t_var_minishell *t)
 {
-	flag_prompt = 1;
+	g_flag_prompt = 1;
 	if (t->cmd_line[0] == '\0')
 		return (8);
 	if (t->cmd_line != NULL && (t->cmd_line = ft_parsing(t->cmd_line)) != NULL)
@@ -75,18 +75,18 @@ static	int		start_minishell2(var_minishell *t)
 	return (0);
 }
 
-int				start_minishell(var_minishell *t)
+int				start_minishell(t_var_minishell *t)
 {
 	t->ret_gnl = 1;
 	t->check_exit = 0;
 	t->nb_pipe = 0;
-	flag_prompt = 1;
+	g_flag_prompt = 1;
 	t->path = NULL;
 	while (t->ret_gnl == 1 && t->check_exit == 0)
 	{
-		ctrl_backslash = 0;
+		g_ctrl_backslash = 0;
 		t->path = init_path(t->path);
-		if (flag_prompt == 1)
+		if (g_flag_prompt == 1)
 			display_prompt();
 		if (!get_next_line(0, &t->cmd_line))
 			return (write(1, "exit\n", 5));

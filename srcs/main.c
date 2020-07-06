@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 13:16:52 by rledrin           #+#    #+#             */
-/*   Updated: 2020/07/06 16:12:23 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/06 16:45:33 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void		exec_com(char *cmd, int in, int out, char **path)
 
 void		handle_sigint(int sig)
 {
-	flag_prompt = 0;
+	g_flag_prompt = 0;
 	if (sig == SIGINT)
 	{
 		ft_putstr_fd("\b\b  \n", 1);
@@ -65,9 +65,9 @@ void		handle_sigint(int sig)
 
 void		handle_sigquit(int sig)
 {
-	if (sig == SIGQUIT && ctrl_backslash != 0)
+	if (sig == SIGQUIT && g_ctrl_backslash != 0)
 	{
-		flag_prompt = 0;
+		g_flag_prompt = 0;
 		signal(SIGQUIT, handle_sigquit);
 		ft_putstr_fd("Quit: 3\n", 1);
 		display_prompt();
@@ -78,10 +78,10 @@ void		handle_sigquit(int sig)
 
 int			main(int ac, char **av, char **env)
 {
-	var_minishell t;
+	t_var_minishell t;
 
 	(void)av;
-	flag_prompt = 0;
+	g_flag_prompt = 0;
 	if (ac != 1)
 		return (0);
 	signal(SIGINT, handle_sigint);

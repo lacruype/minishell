@@ -6,7 +6,7 @@
 /*   By: lacruype <lacruype@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/12 13:42:31 by lacruype          #+#    #+#             */
-/*   Updated: 2020/07/03 14:25:22 by lacruype         ###   ########.fr       */
+/*   Updated: 2020/07/06 16:43:39 by lacruype         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@ static void		ft_error02(char *arg, int error)
 {
 	if (error == -10)
 	{
-		exit_status = 258;
+		g_exit_status = 258;
 		ft_putstr_fd("syntax error near unexpected token '", 1);
 		ft_putstr_fd(arg, 1);
 		ft_putstr_fd("'", 1);
 	}
 	else if (error == -100)
 	{
-		exit_status = 127;
+		g_exit_status = 127;
 		ft_putstr_fd("command not found", 1);
 	}
 	else
@@ -37,7 +37,7 @@ int				ft_error(char *cmd, char *arg, int error)
 {
 	ft_putstr_fd(cmd, 1);
 	ft_putstr_fd(": ", 1);
-	exit_status = 1;
+	g_exit_status = 1;
 	if (*arg && error != -10)
 	{
 		ft_putstr_fd(arg, 1);
