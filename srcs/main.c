@@ -15,10 +15,7 @@
 int			search_function(char *cmd_line, char **path)
 {
 	char	**split_cmd;
-	int		savefd[2];
 
-	savefd[0] = dup(0);
-	savefd[1] = dup(1);
 	split_cmd = ft_split_redir(cmd_line);
 	ft_cmd_to_lower(&split_cmd[0]);
 	if (ft_strncmp(split_cmd[0], "exit", 4) == 0 && cmpt_pipe(cmd_line) == 0)

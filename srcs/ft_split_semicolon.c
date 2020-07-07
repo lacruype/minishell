@@ -14,11 +14,9 @@
 
 char		**ft_split_semicolon(char const *s, char c)
 {
-	int		i;
 	int		nb_words;
 	char	**tab;
 
-	i = 0;
 	nb_words = nb_words_semicolon(s, c);
 	if (!(tab = ft_calloc((nb_words + 1), sizeof(char*))))
 		return (0);

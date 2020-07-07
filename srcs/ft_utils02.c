@@ -70,10 +70,8 @@ static	void	ft_cmd_env03(char **cmd,
 	char **new_ptr, int cmd_index, size_t size)
 {
 	size_t	len;
-	int		k;
 	int		g_envv_index;
 
-	k = 0;
 	g_envv_index = 0;
 	while (g_envv[g_envv_index] &&
 		ft_strncmp(g_envv[g_envv_index], &(*cmd)[cmd_index + 1], size - 1) != 0)

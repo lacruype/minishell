@@ -99,11 +99,9 @@ static	char	**place_ssqg(char const *str, char c, char **tab)
 
 char			**ft_split_spaces_quotes_gone(char const *s, char c)
 {
-	int		i;
 	int		nb_words;
 	char	**tab;
 
-	i = 0;
 	nb_words = nb_word_ssqg(s, c);
 	if (!(tab = ft_calloc((nb_words + 1), sizeof(char*))))
 		return (0);

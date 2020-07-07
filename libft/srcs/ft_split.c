@@ -85,11 +85,9 @@ char	**place_mots(char const *str, char c, char **tab)
 
 char	**ft_split(char const *s, char c)
 {
-	int		i;
 	int		nb_mots;
 	char	**tab;
 
-	i = 0;
 	nb_mots = nombre_mots(s, c);
 	if (!(tab = malloc(sizeof(char*) * (nb_mots + 1))))
 		return (0);

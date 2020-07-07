@@ -26,11 +26,9 @@ void	ft_pwd(void)
 void	ft_echo(char **args)
 {
 	int	i;
-	int	j;
 	int	option;
 
 	i = 0;
-	j = 0;
 	option = 0;
 	if (!args[1])
 	{
