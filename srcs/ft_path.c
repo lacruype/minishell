@@ -25,10 +25,13 @@ static	size_t	ft_path03(char **cmd)
 static	void	ft_path02(struct dirent *p_dirent,
 	char **path, char **cmd, int j)
 {
-	char *file;
+	char	*file;
+	char	*tmp;
 
 	file = ft_strjoin(path[j], "/");
+	tmp = file;
 	file = ft_strjoin_gnl(file, p_dirent->d_name);
+	free(tmp);
 	g_ctrl_backslash = 1;
 	if (ft_strncmp("..", cmd[0], 3)
 		&& ft_strncmp(".", cmd[0], 2) && fork() == 0)

@@ -56,7 +56,6 @@ static	char		*get_filename(char *cmd)
 	}
 	if (tmp && (*tmp == '<' || *tmp == '>'))
 	{
-		printf("ERRORFILENAME\n");
 		return (0);
 	}
 	filename[j] = '\0';

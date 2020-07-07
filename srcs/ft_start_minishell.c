@@ -52,7 +52,10 @@ static	int		start_minishell2(t_var_minishell *t)
 {
 	g_flag_prompt = 1;
 	if (t->cmd_line[0] == '\0')
+	{
+		free(t->cmd_line);
 		return (8);
+	}
 	if (t->cmd_line != NULL && (t->cmd_line = ft_parsing(t->cmd_line)) != NULL)
 	{
 		if ((t->tab_cmd_line = ft_split_semicolon(t->cmd_line, ';')) != NULL)
@@ -70,8 +73,8 @@ static	int		start_minishell2(t_var_minishell *t)
 			}
 			ft_freestrarr(t->tab_cmd_line);
 		}
-		free(t->cmd_line);
 	}
+	free(t->cmd_line);
 	return (0);
 }
 
@@ -84,15 +87,19 @@ int				start_minishell(t_var_minishell *t)
 	t->path = NULL;
 	while (t->ret_gnl == 1 && t->check_exit == 0)
 	{
+		t->cmd_line = 0;
 		g_ctrl_backslash = 0;
 		t->path = init_path(t->path);
 		if (g_flag_prompt == 1)
 			display_prompt();
 		if (!get_next_line(0, &t->cmd_line))
+		{
+			free(t->cmd_line);
+			ft_freestrarr(t->path);
 			return (write(1, "exit\n", 5));
+		}
 		if ((t->ret = start_minishell2(t)) == 8)
 			continue;
 	}
-	ft_freestrarr(t->path);
 	return (0);
 }

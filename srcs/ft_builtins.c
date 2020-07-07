@@ -21,6 +21,7 @@ void	ft_pwd(void)
 	if (ret == NULL)
 		return ;
 	ft_putstr_fd(ret, 1);
+	ft_putstr_fd("\n", 1);
 }
 
 void	ft_echo(char **args)

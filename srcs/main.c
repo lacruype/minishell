@@ -21,9 +21,11 @@ int			search_function(char *cmd_line, char **path)
 	if (ft_strncmp(split_cmd[0], "exit", 4) == 0 && cmpt_pipe(cmd_line) == 0)
 	{
 		write(1, "exit\n", 5);
+		ft_freestrarr(split_cmd);
 		exit(0);
 	}
 	exec_cmd(cmd_line, split_cmd, path);
+	ft_freestrarr(split_cmd);
 	return (0);
 }
 
@@ -86,6 +88,12 @@ int			main(int ac, char **av, char **env)
 	if (init_g_envv(env) == -1)
 		return (-1);
 	if (start_minishell(&t) == -1)
-		return (-1);
+	{
+		;
+	}
+	printf ("ldjdlkjdmldkld\n");
+	ft_freestrarr(g_envv);
+	if (g_var)
+		ft_freestrarr(g_var);
 	return (0);
 }

@@ -63,13 +63,18 @@ void		ft_set_pwd(char *path, int pwd_indc, int oldpwd_indc)
 	int		j;
 
 	j = 0;
+	printf("HA\n");
 	tmp = ft_substr(g_envv[pwd_indc], 4, ft_strlen(g_envv[pwd_indc]) - 4);
+	printf("TMP = [%s]\n", tmp);
+	if (oldpwd_indc != -1)
+		free(g_envv[oldpwd_indc]);
 	if (oldpwd_indc != -1)
 		g_envv[oldpwd_indc] = ft_strjoin("OLDPWD=", tmp);
+	free(tmp);
+	if (path[0] == '/')
+		free(g_envv[pwd_indc]);
 	if (path[0] == '/')
 		g_envv[pwd_indc] = ft_strdup("PWD=");
-	else
-		g_envv[pwd_indc] = ft_strdup(g_envv[pwd_indc]);
 	while (path[j])
 	{
 		if (ft_set_pwd2(pwd_indc, &i, &j, &path))
