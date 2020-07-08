@@ -23,7 +23,7 @@ char				**ft_split_redir(char *cmd)
 	{
 		if ((i = (ft_check_quotes_closed(cmd, i))) == -1)
 			return (NULL);
-		else if (ft_strchr("<>|", cmd[i]) && cmd[i - 1] != '\\')
+		if (ft_strchr("<>|", cmd[i]) && i > 0 && cmd[i - 1] != '\\')
 		{
 			stock = ft_substr_gnl(cmd, 0, i);
 			stock2 = ft_split_spaces_quotes_gone(stock, ' ');
@@ -54,41 +54,40 @@ static	char		*get_filename(char *cmd)
 		filename[j] = cmd[i + j];
 		j++;
 	}
-	if (tmp && (*tmp == '<' || *tmp == '>'))
-	{
+	if (tmp || !(*filename))
+		free(filename);
+	if (tmp || !(*filename))
 		return (0);
-	}
 	filename[j] = '\0';
 	return (filename);
 }
 
-static	int			redir02(int j, char *cmd, char *filename, int fd)
+static	int			redir02(int *j, char *c, char *filename, int *fd)
 {
-	char *tmp;
-
-	tmp = ft_strchr("><", cmd[j]);
-	if (*tmp == '>' && cmd[j + 1] == '>')
+	if (c[*j] == '>' && c[(*j) + 1] == '>')
 	{
-		filename = get_filename(&cmd[j + 2]);
-		fd = open(filename, O_WRONLY | O_APPEND | O_APPEND, 0666);
-		dup2(fd, 1);
-		j += 2;
+		filename = get_filename(&c[(*j) + 2]);
+		*fd = open(filename, O_CREAT | O_WRONLY | O_APPEND, 0666);
+		dup2(*fd, 1);
+		(*j)++;
 	}
-	else if (*tmp == '>' && (cmd[j + 1] == ' ' || ft_isalpha(cmd[j + 1])))
+	else if (c[*j] == '>' && (c[(*j) + 1] == ' ' || ft_isalpha(c[(*j) + 1])))
 	{
-		filename = get_filename(&cmd[j + 1]);
-		fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0666);
-		dup2(fd, 1);
-		j++;
+		filename = get_filename(&c[(*j)++ + 1]);
+		*fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0666);
+		dup2(*fd, 1);
 	}
-	else if (*tmp == '<' && (cmd[j + 1] == ' ' || ft_isalpha(cmd[j + 1])))
+	else if (c[*j] == '<' && (c[(*j) + 1] == ' ' || ft_isalpha(c[(*j) + 1])))
 	{
-		filename = get_filename(&cmd[j + 1]);
-		fd = open(filename, O_RDONLY);
-		dup2(fd, 0);
-		j++;
+		filename = get_filename(&c[(*j)++ + 1]);
+		*fd = open(filename, O_RDONLY);
+		dup2(*fd, 0);
 	}
-	return ((fd != 0) ? 1 : 0);
+	if (filename)
+		free(filename);
+	else
+		return (0);
+	return ((*fd != 0) ? 1 : 0);
 }
 
 int					redir(char *cmd)
@@ -106,11 +105,8 @@ int					redir(char *cmd)
 		j = ft_check_quotes_closed(cmd, j);
 		if ((tmp = ft_strchr("><", cmd[j])))
 		{
-			if (!redir02(j, cmd, filename, fd))
-			{
-				printf("ERRORREDIR\n");
-				return (-1);
-			}
+			if (!redir02(&j, cmd, filename, &fd))
+				return (ft_error("Minishell", "newline", -10));
 		}
 	}
 	return (fd);

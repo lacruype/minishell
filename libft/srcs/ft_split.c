@@ -99,4 +99,3 @@ char	**ft_split(char const *s, char c)
 	tab[nb_mots] = NULL;
 	return (tab);
 }
-

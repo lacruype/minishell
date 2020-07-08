@@ -87,11 +87,7 @@ int			main(int ac, char **av, char **env)
 	signal(SIGQUIT, handle_sigquit);
 	if (init_g_envv(env) == -1)
 		return (-1);
-	if (start_minishell(&t) == -1)
-	{
-		;
-	}
-	printf ("ldjdlkjdmldkld\n");
+	start_minishell(&t);
 	ft_freestrarr(g_envv);
 	if (g_var)
 		ft_freestrarr(g_var);

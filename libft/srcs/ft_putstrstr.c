@@ -37,4 +37,3 @@ char	*ft_putstrstr(char *s1, char *s2, int pos)
 	free(s1);
 	return (dest);
 }
-

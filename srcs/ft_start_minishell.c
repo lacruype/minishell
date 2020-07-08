@@ -60,8 +60,8 @@ static	int		start_minishell2(t_var_minishell *t)
 	{
 		if ((t->tab_cmd_line = ft_split_semicolon(t->cmd_line, ';')) != NULL)
 		{
-			t->i = 0;
-			while (t->tab_cmd_line[t->i] != NULL)
+			t->i = -1;
+			while (t->tab_cmd_line[++t->i] != NULL)
 			{
 				t->nb_pipe = cmpt_pipe(t->tab_cmd_line[t->i]);
 				t->j = 0;
@@ -69,7 +69,6 @@ static	int		start_minishell2(t_var_minishell *t)
 					search_function(&t->tab_cmd_line[t->i][t->j], t->path);
 				else
 					exec_pipe(t, t->tab_cmd_line[t->i]);
-				t->i++;
 			}
 			ft_freestrarr(t->tab_cmd_line);
 		}

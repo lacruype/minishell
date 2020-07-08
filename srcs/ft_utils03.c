@@ -98,7 +98,8 @@ int				exec_cmd(char *cmd_line, char **split_cmd, char **path)
 
 	savefd[0] = dup(0);
 	savefd[1] = dup(1);
-	fd = redir(cmd_line);
+	if ((fd = redir(cmd_line)) == -1)
+		return (-1);
 	exec_cmd02(split_cmd, path, &ret);
 	dup2(savefd[0], 0);
 	dup2(savefd[1], 1);
