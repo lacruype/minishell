@@ -27,16 +27,17 @@ static char		*ft_fake_env(char *cmd, int pos)
 	return (ret);
 }
 
-void			ft_cmd_to_lower(char **cmd)
+char			*ft_cmd_to_lower(char *cmd)
 {
 	int	i;
 
 	i = 0;
-	while ((*cmd)[i])
+	while (cmd[i])
 	{
-		(*cmd)[i] = ft_tolower((*cmd)[i]);
+		cmd[i] = ft_tolower(cmd[i]);
 		i++;
 	}
+	return (cmd);
 }
 
 /*

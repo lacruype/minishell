@@ -91,7 +91,6 @@ void				exec_pipe(t_var_minishell *t, char *cmd)
 		if (cmd[t->l] == '|' && cmd[t->l++])
 			t->pi++;
 		t->split_cmd = ft_split_redir(&cmd[t->l]);
-		ft_cmd_to_lower(&t->split_cmd[0]);
 		if (ft_strncmp(t->split_cmd[0], "exit", 5) == 0)
 		{
 			while (cmd[t->l] != '|' && cmd[t->l] != '\0')

@@ -12,11 +12,6 @@
 
 #include "../includes/minishell.h"
 
-void			f(char c)
-{
-	write(1, &c, 1);
-}
-
 int				ft_check_quotes_closed(const char *s, int i)
 {
 	if ((s[i] == '"' && i == 0) || (s[i] == '"' && s[i - 1] != '\\'))
@@ -62,24 +57,38 @@ int				ft_check_var_name(char *arg)
 	return (0);
 }
 
+static int		ft_search_builtin(char *cmd, char **split_cmd, int *ret)
+{
+	if (ft_strncmp(cmd, "echo", 5) == 0)
+		ft_echo(split_cmd);
+	else if (ft_strncmp(cmd, "export", 7) == 0)
+		*ret = ft_export(split_cmd);
+	else if (ft_strncmp(cmd, "unset", 6) == 0)
+		ft_unset(split_cmd);
+	else if (ft_strncmp(cmd, "cd", 3) == 0)
+		*ret = ft_cd(split_cmd);
+	else if (ft_strncmp(cmd, "pwd", 4) == 0)
+		ft_pwd();
+	else if (ft_strncmp(cmd, "env", 4) == 0)
+		ft_env(split_cmd);
+	else
+		return (1);
+	return (0);
+}
+
 static	void	exec_cmd02(char **split_cmd, char **path, int *ret)
 {
-	if (ft_strncmp(split_cmd[0], "echo", 5) == 0)
-		ft_echo(split_cmd);
-	else if (ft_strncmp(split_cmd[0], "export", 7) == 0)
-		*ret = ft_export(split_cmd);
-	else if (ft_strncmp(split_cmd[0], "unset", 6) == 0)
-		ft_unset(split_cmd);
-	else if (ft_strncmp(split_cmd[0], "cd", 3) == 0)
-		*ret = ft_cd(split_cmd);
-	else if (ft_strncmp(split_cmd[0], "pwd", 4) == 0)
-		ft_pwd();
-	else if (ft_strncmp(split_cmd[0], "env", 4) == 0)
-		ft_env(split_cmd);
-	else if (ft_strncmp(split_cmd[0], "./", 2) == 0)
+	char		*cmd;
+
+	cmd = ft_strdup(*split_cmd);
+	ft_cmd_to_lower(cmd);
+	if (ft_search_builtin(cmd, split_cmd, ret) == 0)
+		;
+	else if (ft_strncmp(split_cmd[0], "./", 2) == 0 ||
+			ft_strncmp(split_cmd[0], "/", 1) == 0)
 	{
 		if (fork() == 0)
-			if (execve(&(split_cmd[0][2]), split_cmd, g_envv) == -1)
+			if (execve(&(split_cmd[0][0]), split_cmd, g_envv) == -1)
 			{
 				ft_error("Minishell", split_cmd[0], 2);
 				exit(0);
@@ -87,7 +96,11 @@ static	void	exec_cmd02(char **split_cmd, char **path, int *ret)
 		wait(0);
 	}
 	else if (ft_path(split_cmd, path) == -2)
+	{
+		free(cmd);
 		return ((void)ft_error("Minishell", "", -100));
+	}
+	free(cmd);
 }
 
 int				exec_cmd(char *cmd_line, char **split_cmd, char **path)

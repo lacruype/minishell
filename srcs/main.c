@@ -17,7 +17,6 @@ int			search_function(char *cmd_line, char **path)
 	char	**split_cmd;
 
 	split_cmd = ft_split_redir(cmd_line);
-	ft_cmd_to_lower(&split_cmd[0]);
 	if (ft_strncmp(split_cmd[0], "exit", 4) == 0 && cmpt_pipe(cmd_line) == 0)
 	{
 		write(1, "exit\n", 5);

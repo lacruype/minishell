@@ -84,6 +84,7 @@ void			ft_env(char **args);
 **		ft_error.c ✅
 */
 
+void			f(char c);
 int				ft_error(char *cmd, char *arg, int error);
 
 /*
@@ -91,51 +92,6 @@ int				ft_error(char *cmd, char *arg, int error);
 */
 
 int				ft_export(char **args);
-
-/*
-**		ft_parsing.c ✅
-*/
-
-char			*ft_parsing(char *command_line);
-
-/*
-**		ft_start_minishell.c ✅
-*/
-
-void			display_prompt(void);
-int				start_minishell(t_var_minishell *p);
-
-/*
-**		ft_redir.c ✅
-*/
-
-char			**ft_split_redir(char *cmd);
-int				redir(char *cmd);
-
-/*
-**		ft_utils.c ✅
-*/
-
-void			*ft_realloc(void *src, size_t new_size);
-void			ft_freestrarr(char **arr);
-char			*ft_jump_space(char *str);
-int				create_file(char *filename, int app, int quote);
-int				quote(char *cmd);
-
-/*
-**		ft_utils02.c ✅
-*/
-
-char			*ft_cmd_env(char *cmd, int i);
-void			ft_cmd_to_lower(char **cmd);
-
-/*
-**		ft_utils03.c ✅
-*/
-
-void			f(char c);
-int				ft_check_var_name(char *arg);
-int				exec_cmd(char *cmd_line, char **split_cmd, char **path);
 
 /*
 **		ft_parsing.c ✅
@@ -207,13 +163,6 @@ char			**ft_delete_env(char **tab, int i);
 void			ft_unset(char **args);
 
 /*
-**		ft_path.c ✅
-*/
-
-int				cmpt_pipe(char *cmd);
-void			exec_pipe(t_var_minishell *t, char *cmd);
-
-/*
 **		ft_utils.c ✅
 */
 
@@ -227,14 +176,13 @@ int				quote(char *cmd);
 **		ft_utils02.c ✅
 */
 
-void			ft_cmd_to_lower(char **cmd);
+char			*ft_cmd_to_lower(char *cmd);
 char			*ft_cmd_env(char *cmd, int i);
 
 /*
 **		ft_utils03.c ✅
 */
 
-void			f(char c);
 int				ft_check_quotes_closed(const char *s, int i);
 int				ft_check_var_name(char *arg);
 int				exec_cmd(char *cmd_line, char **split_cmd, char **path);

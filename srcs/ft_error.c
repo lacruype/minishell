@@ -12,6 +12,11 @@
 
 #include "../includes/minishell.h"
 
+void			f(char c)
+{
+	write(1, &c, 1);
+}
+
 static void		ft_error02(char *arg, int error)
 {
 	if (error == -10)
