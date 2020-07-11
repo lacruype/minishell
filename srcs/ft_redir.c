@@ -105,6 +105,8 @@ int					redir(char *cmd)
 		j = ft_check_quotes_closed(cmd, j);
 		if ((tmp = ft_strchr("><", cmd[j])))
 		{
+			// printf("TEST2\n");
+
 			if (!redir02(&j, cmd, filename, &fd))
 				return (ft_error("Minishell", "newline", -10));
 		}

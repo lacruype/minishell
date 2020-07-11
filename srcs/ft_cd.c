@@ -51,8 +51,8 @@ static int	ft_cd2(char **args, int i, char **path)
 	char	*tmp;
 	char	*dir;
 	DIR		*d;
+	int		ret;
 
-	tmp = 0;
 	ft_get_dir(&dir, &args[1][i]);
 	if (*dir)
 	{
@@ -65,10 +65,11 @@ static int	ft_cd2(char **args, int i, char **path)
 		}
 		else
 		{
-			free(tmp);
 			free(*path);
 			free(dir);
-			return (ft_error("Minishell", "cd", 2));
+			ret = ft_right(tmp, 'r');
+			free(tmp);
+			return(ft_error("Minishell", "cd", ret));
 		}
 	}
 	free(dir);
@@ -113,11 +114,11 @@ int			ft_cd(char **args)
 	}
 	if (*path)
 	{
+		chdir(path);
 		if (ft_find_env(&env[1], "PWD="))
 			ft_find_env(&env[2], "OLDPWD=");
 		if (ft_find_env(&env[1], "PWD="))
 			ft_set_pwd(path, env[1], env[2]);
-		chdir(path);
 		free(path);
 	}
 	return (0);

@@ -37,7 +37,7 @@ char			**ft_delete_env(char **tab, int i)
 	return (ret);
 }
 
-void			ft_unset(char **args)
+int				ft_unset(char **args)
 {
 	int i;
 	int j;
@@ -58,4 +58,5 @@ void			ft_unset(char **args)
 		}
 		i++;
 	}
+	return (0);
 }

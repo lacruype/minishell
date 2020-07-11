@@ -23,6 +23,8 @@
 # include <limits.h>
 # include <dirent.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
+# include <sys/types.h>
 # include "../libft/includes/libft.h"
 
 char			**g_envv;
@@ -57,8 +59,8 @@ typedef struct	s_variables_minishell
 **		ft_builtins.c ✅
 */
 
-void			ft_pwd(void);
-void			ft_echo(char **args);
+int			ft_pwd(void);
+int			ft_echo(char **args);
 
 /*
 **		ft_cd.c
@@ -78,7 +80,8 @@ void			ft_set_pwd(char *path, int pwd_indc, int oldpwd_indc);
 
 int				get_size_env(char **env);
 int				init_g_envv(char **env);
-void			ft_env(char **args);
+int				ft_env(char **args);
+int				ft_right(char *path, char mod);
 
 /*
 **		ft_error.c ✅
@@ -103,7 +106,7 @@ char			*ft_parsing(char *command_line);
 **		ft_path.c ✅
 */
 
-int				ft_path(char **cmd, char **path);
+int				ft_path(char **cmd, char **path, int *status);
 
 /*
 **		ft_pipe.c ✅
@@ -160,7 +163,7 @@ int				start_minishell(t_var_minishell *t);
 */
 
 char			**ft_delete_env(char **tab, int i);
-void			ft_unset(char **args);
+int				ft_unset(char **args);
 
 /*
 **		ft_utils.c ✅

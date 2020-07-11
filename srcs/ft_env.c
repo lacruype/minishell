@@ -50,7 +50,7 @@ static	void	ft_print_env(void)
 	}
 }
 
-void			ft_env(char **args)
+int			ft_env(char **args)
 {
 	int	i;
 	int j;
@@ -62,7 +62,7 @@ void			ft_env(char **args)
 		while (args[i][j] != '=' && args[i][j])
 			j++;
 		if (args[i][j] != '=')
-			return ((void)ft_error("env", args[i], 2));
+			return (ft_error("env", args[i], 2));
 		i++;
 	}
 	ft_print_env();
@@ -73,4 +73,20 @@ void			ft_env(char **args)
 		write(1, "\n", 1);
 		i++;
 	}
+	return (0);
+}
+
+int				ft_right(char *path, char mod)
+{
+	struct stat buf;
+	int ret = 0;
+
+	ret = stat(path, &buf);
+	if (ret == -1)
+		return (2);
+	if (mod == 'r' && buf.st_mode & S_IRUSR)
+		return (1);
+	else if (mod == 'x' && buf.st_mode & S_IXUSR)
+		return (1);
+	return (13);
 }

@@ -12,19 +12,20 @@
 
 #include "../includes/minishell.h"
 
-void	ft_pwd(void)
+int		ft_pwd(void)
 {
 	char buf[256];
 	char *ret;
 
 	ret = getcwd(buf, 256);
 	if (ret == NULL)
-		return ;
+		return (-1);
 	ft_putstr_fd(ret, 1);
 	ft_putstr_fd("\n", 1);
+	return (0);
 }
 
-void	ft_echo(char **args)
+int	ft_echo(char **args)
 {
 	int	i;
 	int	option;
@@ -34,7 +35,7 @@ void	ft_echo(char **args)
 	if (!args[1])
 	{
 		write(1, "\n", 1);
-		return ;
+		return (0);
 	}
 	if (ft_strncmp(args[1], "-n", 3) == 0)
 	{
@@ -49,4 +50,5 @@ void	ft_echo(char **args)
 	}
 	if (!option)
 		write(1, "\n", 1);
+	return(0);
 }
