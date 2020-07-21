@@ -50,7 +50,7 @@ static	void	ft_print_env(void)
 	}
 }
 
-int			ft_env(char **args)
+int				ft_env(char **args)
 {
 	int	i;
 	int j;
@@ -78,9 +78,10 @@ int			ft_env(char **args)
 
 int				ft_right(char *path, char mod)
 {
-	struct stat buf;
-	int ret = 0;
+	struct stat	buf;
+	int			ret;
 
+	ret = 0;
 	ret = stat(path, &buf);
 	if (ret == -1)
 		return (2);

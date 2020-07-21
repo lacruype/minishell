@@ -30,13 +30,6 @@ int			search_function(char *cmd_line, char **path)
 
 void		exec_com(char *cmd, int in, int out, char **path)
 {
-	// int i;
-
-	// i = 0;
-	// while (cmd[i] && !ft_strchr("<>", cmd[i]))
-	// 	i++;
-	// if (cmd[i])
-	// 	search_function(cmd, path);
 	if (in != 0)
 	{
 		dup2(in, 0);

@@ -25,7 +25,7 @@ int		ft_pwd(void)
 	return (0);
 }
 
-int	ft_echo(char **args)
+int		ft_echo(char **args)
 {
 	int	i;
 	int	option;
@@ -50,5 +50,5 @@ int	ft_echo(char **args)
 	}
 	if (!option)
 		write(1, "\n", 1);
-	return(0);
+	return (0);
 }

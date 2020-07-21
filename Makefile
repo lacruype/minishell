@@ -42,6 +42,7 @@ SRC			=	ft_builtins.c \
 				ft_utils.c \
 				ft_utils02.c \
 				ft_utils03.c \
+				ft_utils04.c \
 				main.c \
 
 SRCS		=	${addprefix ${SRC_DIR}, ${SRC}}
@@ -54,7 +55,7 @@ RM			=	rm -f
 
 CC			=	gcc
 
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror -g3 -fsanitize=address
 
 T		=	$(words ${OBJS})
 N		=	0

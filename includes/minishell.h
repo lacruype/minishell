@@ -59,8 +59,8 @@ typedef struct	s_variables_minishell
 **		ft_builtins.c ✅
 */
 
-int			ft_pwd(void);
-int			ft_echo(char **args);
+int				ft_pwd(void);
+int				ft_echo(char **args);
 
 /*
 **		ft_cd.c
@@ -121,6 +121,7 @@ void			exec_pipe(t_var_minishell *t, char *cmd);
 
 char			**ft_split_redir(char *cmd);
 int				redir(char *cmd);
+char			*get_filename(char *cmd);
 
 /*
 **		ft_split_semicolon.c
@@ -189,6 +190,12 @@ char			*ft_cmd_env(char *cmd, int i);
 int				ft_check_quotes_closed(const char *s, int i);
 int				ft_check_var_name(char *arg);
 int				exec_cmd(char *cmd_line, char **split_cmd, char **path);
+
+/*
+**		ft_utils04.c ✅
+*/
+
+char			*ft_strjoin_free(char *s1, char *s2);
 
 /*
 **		main.c ✅

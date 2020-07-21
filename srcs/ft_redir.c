@@ -36,27 +36,46 @@ char				**ft_split_redir(char *cmd)
 	return (ft_split_spaces_quotes_gone(cmd, ' '));
 }
 
-static	char		*get_filename(char *cmd)
+static	int			get_filename02(char *cmd, int i, int *j, char *filename)
+{
+	int		ret;
+	char	*tmp;
+
+	ret = 0;
+	tmp = 0;
+	if ((ret = quote(&(cmd[i + *j]))) != 0)
+	{
+		tmp = ft_substr(cmd, i + *j + 1, ret);
+		filename = ft_strjoin_free(filename, tmp);
+		free(tmp);
+		*j = *j + ret + 1;
+		return (1);
+	}
+	return (0);
+}
+
+char				*get_filename(char *cmd)
 {
 	char	*filename;
 	int		i;
 	int		j;
-	char	*tmp;
 
 	filename = ft_strdup("");
 	i = 0;
 	j = 0;
 	while (cmd[i] == ' ')
 		i++;
-	while (cmd[i + j] && !(tmp = ft_strchr(" |<>", cmd[i + j])))
+	while (cmd[i + j] && (!(ft_strchr(" |<>", cmd[i + j]))))
 	{
+		if (get_filename02(cmd, i, &j, filename) == 1)
+			continue ;
 		filename = ft_realloc(filename, (j + 2) * sizeof(char));
 		filename[j] = cmd[i + j];
 		j++;
 	}
-	if (tmp || !(*filename))
+	if (!(*filename))
 		free(filename);
-	if (tmp || !(*filename))
+	if (!(*filename))
 		return (0);
 	filename[j] = '\0';
 	return (filename);
@@ -71,13 +90,14 @@ static	int			redir02(int *j, char *c, char *filename, int *fd)
 		dup2(*fd, 1);
 		(*j)++;
 	}
-	else if (c[*j] == '>' && (c[(*j) + 1] == ' ' || ft_isalpha(c[(*j) + 1])))
+	else if (c[*j] == '>')
 	{
 		filename = get_filename(&c[(*j)++ + 1]);
 		*fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0666);
 		dup2(*fd, 1);
 	}
-	else if (c[*j] == '<' && (c[(*j) + 1] == ' ' || ft_isalpha(c[(*j) + 1])))
+	else if (c[*j] == '<' &&
+		!ft_strchr("@$%&\\/:*?\"'<>|~`#^+={}[];", c[(*j) + 1]))
 	{
 		filename = get_filename(&c[(*j)++ + 1]);
 		*fd = open(filename, O_RDONLY);
@@ -85,9 +105,7 @@ static	int			redir02(int *j, char *c, char *filename, int *fd)
 	}
 	if (filename)
 		free(filename);
-	else
-		return (0);
-	return ((*fd != 0) ? 1 : 0);
+	return ((*fd != 0 || filename) ? 1 : 0);
 }
 
 int					redir(char *cmd)
@@ -105,8 +123,6 @@ int					redir(char *cmd)
 		j = ft_check_quotes_closed(cmd, j);
 		if ((tmp = ft_strchr("><", cmd[j])))
 		{
-			// printf("TEST2\n");
-
 			if (!redir02(&j, cmd, filename, &fd))
 				return (ft_error("Minishell", "newline", -10));
 		}

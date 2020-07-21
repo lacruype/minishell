@@ -23,7 +23,7 @@ void		ft_set_pwd(char *path, int pwd_indc, int oldpwd_indc)
 	if (oldpwd_indc != -1)
 		g_envv[oldpwd_indc] = ft_strjoin("OLDPWD=", tmp);
 	free(tmp);
-	tmp = getcwd(0,0);
+	tmp = getcwd(0, 0);
 	free(g_envv[pwd_indc]);
 	g_envv[pwd_indc] = ft_strjoin("PWD=", tmp);
 	free(tmp);

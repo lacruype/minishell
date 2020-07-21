@@ -42,8 +42,8 @@ static	int		ft_path02(struct dirent *p_dirent,
 	waitpid(pid, &status, 0);
 	free(file);
 	if (WIFEXITED(status))
-		return(WEXITSTATUS(status));
-	return(0);
+		return (WEXITSTATUS(status));
+	return (0);
 }
 
 int				ft_path(char **cmd, char **path, int *status)

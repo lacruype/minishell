@@ -57,19 +57,18 @@ static int	ft_cd2(char **args, int i, char **path)
 	if (*dir)
 	{
 		tmp = ft_strjoin(*path, dir);
+		free(*path);
 		if ((d = opendir(tmp)))
 		{
 			closedir(d);
-			free(*path);
 			*path = tmp;
 		}
 		else
 		{
-			free(*path);
 			free(dir);
 			ret = ft_right(tmp, 'r');
 			free(tmp);
-			return(ft_error("Minishell", "cd", ret));
+			return (ft_error("Minishell", "cd", ret));
 		}
 	}
 	free(dir);

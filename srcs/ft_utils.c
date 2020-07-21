@@ -110,5 +110,5 @@ int		quote(char *cmd)
 				break ;
 		}
 	}
-	return (i != 0 ? (i - 1) : 0);
+	return (((i != 0) ? (i - 1) : 0));
 }

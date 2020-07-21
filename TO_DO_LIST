@@ -1,0 +1,9 @@
+Sauvegarder la version actuelle
+
+Pour les redir :
+créer les fichier en amont
+et dans ft_redir uniquement ouvrir les fichier deja créé
+et gerer les fd du coup les ouvrir et faire de bons dup au bons moments
+reverifier les gestions derreurs
+Regarder les leaks avec ls | cat > 3 | cat >> 5
+Les guillemets pour les noms de fichier
