@@ -36,18 +36,21 @@ char				**ft_split_redir(char *cmd)
 	return (ft_split_spaces_quotes_gone(cmd, ' '));
 }
 
-static	int			get_filename02(char *cmd, int i, int *j, char *filename)
+static	int			get_filename02(char *cmd, int i, int *j, char **filename)
 {
 	int		ret;
 	char	*tmp;
+	char	*tmp2;
 
 	ret = 0;
 	tmp = 0;
 	if ((ret = quote(&(cmd[i + *j]))) != 0)
 	{
 		tmp = ft_substr(cmd, i + *j + 1, ret);
-		filename = ft_strjoin_free(filename, tmp);
+		tmp2 = *filename;
+		*filename = ft_strjoin(*filename, tmp);
 		free(tmp);
+		free(tmp2);
 		*j = *j + ret + 1;
 		return (1);
 	}
@@ -67,7 +70,7 @@ char				*get_filename(char *cmd)
 		i++;
 	while (cmd[i + j] && (!(ft_strchr(" |<>", cmd[i + j]))))
 	{
-		if (get_filename02(cmd, i, &j, filename) == 1)
+		if (get_filename02(cmd, i, &j, &filename) == 1)
 			continue ;
 		filename = ft_realloc(filename, (j + 2) * sizeof(char));
 		filename[j] = cmd[i + j];

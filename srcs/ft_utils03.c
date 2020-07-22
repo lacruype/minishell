@@ -72,13 +72,18 @@ static int		ft_search_builtin(char *cmd, char **split_cmd, int *ret)
 	else if (ft_strncmp(cmd, "env", 4) == 0)
 		*ret = ft_env(split_cmd);
 	else
+	{
+		free(cmd);
 		return (1);
+	}
+	free(cmd);
 	return (0);
 }
 
 static	void	exec_cmd02(char **split_cmd, char **path, int *ret, int *status)
 {
 	char		*cmd;
+	int			pid;
 
 	cmd = ft_strdup(*split_cmd);
 	ft_cmd_to_lower(cmd);
@@ -87,21 +92,19 @@ static	void	exec_cmd02(char **split_cmd, char **path, int *ret, int *status)
 	else if (ft_strncmp(split_cmd[0], "./", 2) == 0 ||
 			ft_strncmp(split_cmd[0], "/", 1) == 0)
 	{
-		if (fork() == 0)
+		if ((pid = fork()) == 0)
 			if (execve(&(split_cmd[0][0]), split_cmd, g_envv) == -1)
 			{
 				if (ft_right(split_cmd[0], 'x') == 13)
 					exit(ft_error("Minishell", "", 13));
 				exit(ft_error("Minishell", split_cmd[0], 2));
 			}
-		wait(0);
+		waitpid(pid, status, 0);
+		if (WIFEXITED(*status))
+			*status = WEXITSTATUS(*status);
 	}
 	else if ((*ret = ft_path(split_cmd, path, status)) == -100 || *ret == 2)
-	{
-		free(cmd);
 		return ((void)ft_error("Minishell", "", *ret));
-	}
-	free(cmd);
 }
 
 int				exec_cmd(char *cmd_line, char **split_cmd, char **path)

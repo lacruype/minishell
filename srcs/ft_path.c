@@ -36,7 +36,7 @@ static	int		ft_path02(struct dirent *p_dirent,
 	free(tmp);
 	g_ctrl_backslash = 1;
 	if (ft_strncmp("..", cmd[0], 3)
-		&& ft_strncmp(".", cmd[0], 2) && (pid = fork()) == 0)
+		&& ft_strncmp(".", cmd[0], 2) && ((pid = fork())) == 0)
 		if (execve(file, cmd, g_envv) == -1)
 			exit(1);
 	waitpid(pid, &status, 0);
