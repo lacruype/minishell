@@ -124,7 +124,7 @@ int				exec_cmd(char *cmd_line, char **split_cmd, char **path)
 	dup2(savefd[1], 1);
 	if (ret == 0)
 		g_exit_status = 0;
-	else if (ret == 12)
+	else if (ret == 12 && g_exit_status != 131 && g_exit_status != 130)
 		g_exit_status = status;
 	if (fd != 0)
 		close(fd);

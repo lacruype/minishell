@@ -37,6 +37,22 @@ char			**ft_delete_env(char **tab, int i)
 	return (ret);
 }
 
+static	void	ft_unset02(char **args, int i, int len)
+{
+	int j;
+
+	j = 0;
+	while (g_var[j] != NULL)
+	{
+		len = ft_strlen(args[i]);
+		if (ft_strncmp(args[i], g_var[j],
+			len) == 0)
+			g_var = ft_delete_env(g_var, j);
+		if (g_var[j] != NULL)
+			j++;
+	}
+}
+
 int				ft_unset(char **args)
 {
 	int i;
@@ -51,11 +67,12 @@ int				ft_unset(char **args)
 		{
 			len = ft_strlen(args[i]);
 			if (ft_strncmp(args[i], g_envv[j],
-				len - 1) == 0 && g_envv[j][len] == '=')
+				len) == 0 && g_envv[j][len] == '=')
 				g_envv = ft_delete_env(g_envv, j);
 			if (g_envv[j] != NULL)
 				j++;
 		}
+		ft_unset02(args, i, len);
 		i++;
 	}
 	return (0);

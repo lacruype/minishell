@@ -195,7 +195,9 @@ int				exec_cmd(char *cmd_line, char **split_cmd, char **path);
 **		ft_utils04.c ✅
 */
 
-char			*ft_strjoin_free(char *s1, char *s2);
+void			ft_cmd_env04(char *cmd, int i, size_t *s, int *j);
+int				single_quote(char *cmd);
+void			search_function02(char **split_cmd, int i, int *error);
 
 /*
 **		main.c ✅

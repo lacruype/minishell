@@ -95,7 +95,8 @@ int				start_minishell(t_var_minishell *t)
 		{
 			free(t->cmd_line);
 			ft_freestrarr(t->path);
-			return (write(1, "exit\n", 5));
+			write(1, "exit\n", 5);
+			exit(g_exit_status);
 		}
 		if ((t->ret = start_minishell2(t)) == 8)
 			continue;

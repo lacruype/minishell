@@ -57,11 +57,11 @@ int				ft_path(char **cmd, char **path, int *status)
 	size = ft_path03(cmd);
 	if (path == NULL || **path == '\0')
 		return (2);
-	while (path[++j])
+	while (path[++j] != NULL)
 	{
 		p_dir = opendir(path[j]);
 		if (p_dir == NULL)
-			return (-100);
+			continue ;
 		while ((p_dirent = readdir(p_dir)) != NULL)
 			if (size == ft_strlen(p_dirent->d_name))
 				if (ft_strncmp(p_dirent->d_name, cmd[0], size) == 0)
@@ -72,5 +72,5 @@ int				ft_path(char **cmd, char **path, int *status)
 				}
 		closedir(p_dir);
 	}
-	return (-2);
+	return (-100);
 }

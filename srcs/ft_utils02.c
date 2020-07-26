@@ -17,8 +17,8 @@ static char		*ft_fake_env(char *cmd, int pos)
 	int		len;
 	char	*ret;
 
-	len = 0;
-	while (!ft_strchr(" ;\"'", cmd[len + pos]) && cmd[len + pos])
+	len = 1;
+	while (!ft_strchr(" ;\"$'", cmd[len + pos]) && cmd[len + pos])
 		len++;
 	ret = calloc(ft_strlen(cmd) - len + 1, sizeof(char));
 	ft_memcpy(ret, cmd, pos);
@@ -68,52 +68,56 @@ static	void	ft_cmd_env02(char **cmd, char **new_ptr, int cmd_index)
 */
 
 static	void	ft_cmd_env03(char **cmd,
-	char **new_ptr, int cmd_index, size_t size)
+	char **new_ptr, int c_ind, size_t size)
 {
 	size_t	len;
-	int		g_envv_index;
+	int		env_indx;
 
-	g_envv_index = 0;
-	while (g_envv[g_envv_index] &&
-		ft_strncmp(g_envv[g_envv_index], &(*cmd)[cmd_index + 1], size - 1) != 0)
-		g_envv_index++;
-	len = ft_strlen(*cmd) + ft_strlen(g_envv[g_envv_index]) - (size * 2);
+	env_indx = 0;
+	while (g_envv[env_indx])
+	{
+		if (ft_strncmp(g_envv[env_indx], &(*cmd)[c_ind + 1], size - 1) == 0
+			&& ft_strchr("=\0", g_envv[env_indx][size - 1]) != NULL)
+			break ;
+		env_indx++;
+	}
+	len = ft_strlen(*cmd) + ft_strlen(g_envv[env_indx]) - (size * 2);
 	if (!(*new_ptr = calloc(len + 1, sizeof(char))))
 		return ;
-	len = ft_strlen(g_envv[g_envv_index]) - (size + 1);
-	ft_memcpy(*new_ptr, *cmd, (size_t)cmd_index);
-	ft_memcpy(&(*new_ptr)[cmd_index], &g_envv[g_envv_index][size], len + 1);
-	ft_memcpy(&(*new_ptr)[cmd_index + len + 1],
-		&(*cmd)[cmd_index + size], ft_strlen(&(*cmd)[cmd_index + size]));
+	len = ft_strlen(g_envv[env_indx]) - (size + 1);
+	ft_memcpy(*new_ptr, *cmd, (size_t)c_ind);
+	ft_memcpy(&(*new_ptr)[c_ind], &g_envv[env_indx][size], len + 1);
+	ft_memcpy(&(*new_ptr)[c_ind + len + 1],
+		&(*cmd)[c_ind + size], ft_strlen(&(*cmd)[c_ind + size]));
 	free(*cmd);
 	*cmd = *new_ptr;
 }
 
-char			*ft_cmd_env(char *cmd, int i)
+char			*ft_cmd_env(char *c, int i)
 {
 	int		j;
 	size_t	s;
 	char	*new_ptr;
 
-	while (cmd[++i] != '\0')
-		if (cmd[i] == '$' && cmd[i + 1] != '\0'
-			&& cmd[i + 1] != ' ' && cmd[i + 1] != ';')
+	while (c[++i] != '\0')
+	{
+		i = (single_quote(&c[i]) != 0 ? (i + single_quote(&c[i])) : i);
+		if (c[i] == '$' && c[i + 1] != '\0'
+			&& c[i + 1] != ' ' && c[i + 1] != ';')
 		{
-			s = 0;
+			s = 1;
 			j = 0;
-			while (!ft_strchr(" ;\"'", cmd[i + s]) && cmd[i + s])
-				s++;
-			while (g_envv[j] && ft_strncmp(g_envv[j], &cmd[i + 1], s - 1) != 0)
-				j++;
+			ft_cmd_env04(c, i, &s, &j);
 			if (!g_envv[j])
 			{
-				if (cmd[i + 1] == '?')
-					ft_cmd_env02(&cmd, &new_ptr, i);
+				if (c[i + 1] == '?')
+					ft_cmd_env02(&c, &new_ptr, i);
 				else
-					cmd = ft_fake_env(cmd, i--);
+					c = ft_fake_env(c, i--);
 				continue ;
 			}
-			ft_cmd_env03(&cmd, &new_ptr, i, s);
+			ft_cmd_env03(&c, &new_ptr, i, s);
 		}
-	return (cmd);
+	}
+	return (c);
 }

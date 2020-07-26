@@ -15,16 +15,24 @@
 int			search_function(char *cmd_line, char **path)
 {
 	char	**split_cmd;
+	int		i;
+	int		error;
 
+	i = 0;
+	error = 0;
 	split_cmd = ft_split_redir(cmd_line);
 	if (ft_strncmp(split_cmd[0], "exit", 4) == 0 && cmpt_pipe(cmd_line) == 0)
 	{
-		write(1, "exit\n", 5);
+		search_function02(split_cmd, i, &error);
 		ft_freestrarr(split_cmd);
-		exit(0);
+		if (error != -79)
+			exit(g_exit_status);
 	}
-	exec_cmd(cmd_line, split_cmd, path);
-	ft_freestrarr(split_cmd);
+	else
+	{
+		exec_cmd(cmd_line, split_cmd, path);
+		ft_freestrarr(split_cmd);
+	}
 	return (0);
 }
 
@@ -51,6 +59,7 @@ void		handle_sigint(int sig)
 		ft_putstr_fd("\b\b  \n", 1);
 		signal(SIGINT, handle_sigint);
 		display_prompt();
+		g_exit_status = 130;
 	}
 }
 
@@ -65,6 +74,7 @@ void		handle_sigquit(int sig)
 	}
 	else
 		ft_putstr_fd("\b\b  \b\b", 1);
+	g_exit_status = 131;
 }
 
 int			main(int ac, char **av, char **env)

@@ -55,7 +55,7 @@ RM			=	rm -f
 
 CC			=	gcc
 
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror -fsanitize=address
 
 T		=	$(words ${OBJS})
 N		=	0

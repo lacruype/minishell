@@ -17,6 +17,25 @@ void			f(char c)
 	write(1, &c, 1);
 }
 
+static void		ft_error03(int error)
+{
+	if (error == -78)
+	{
+		g_exit_status = 2;
+		ft_putstr_fd("Numeric argument needed", 1);
+	}
+	else if (error == -79)
+	{
+		g_exit_status = 1;
+		ft_putstr_fd("Too many arguments", 1);
+	}
+	else
+	{
+		errno = error;
+		ft_putstr_fd(strerror(errno), 1);
+	}
+}
+
 static void		ft_error02(char *arg, int error)
 {
 	if (error == -10)
@@ -32,10 +51,7 @@ static void		ft_error02(char *arg, int error)
 		ft_putstr_fd("command not found", 1);
 	}
 	else
-	{
-		errno = error;
-		ft_putstr_fd(strerror(errno), 1);
-	}
+		ft_error03(error);
 }
 
 int				ft_error(char *cmd, char *arg, int error)
