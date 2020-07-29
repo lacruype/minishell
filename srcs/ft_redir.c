@@ -77,9 +77,10 @@ char				*get_filename(char *cmd)
 		j++;
 	}
 	if (!(*filename))
+	{
 		free(filename);
-	if (!(*filename))
 		return (0);
+	}
 	filename[j] = '\0';
 	return (filename);
 }
@@ -88,23 +89,25 @@ static	int			redir02(int *j, char *c, char *filename, int *fd)
 {
 	if (c[*j] == '>' && c[(*j) + 1] == '>')
 	{
-		filename = get_filename(&c[(*j) + 2]);
-		*fd = open(filename, O_CREAT | O_WRONLY | O_APPEND, 0666);
-		dup2(*fd, 1);
-		(*j)++;
+		if ((filename = get_filename(&c[(*j) + 2])) != 0)
+		{
+			*fd = open(filename, O_CREAT | O_WRONLY | O_APPEND, 0666);
+			dup2(*fd, 1);
+			(*j)++;
+		}
 	}
 	else if (c[*j] == '>')
 	{
-		filename = get_filename(&c[(*j)++ + 1]);
-		*fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0666);
-		dup2(*fd, 1);
+		if ((filename = get_filename(&c[(*j)++ + 1])) != NULL)
+			*fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0666);
+		if (filename)
+			dup2(*fd, 1);
 	}
 	else if (c[*j] == '<' &&
 		!ft_strchr("@$%&\\/:*?\"'<>|~`#^+={}[];", c[(*j) + 1]))
 	{
 		filename = get_filename(&c[(*j)++ + 1]);
-		*fd = open(filename, O_RDONLY);
-		dup2(*fd, 0);
+		dup2((*fd = open(filename, O_RDONLY)), 0);
 	}
 	if (filename)
 		free(filename);

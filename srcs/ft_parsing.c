@@ -66,17 +66,19 @@ static void		ft_create_files(char *c, int *j, int *fd)
 	{
 		if (c[*j] == '>' && c[(*j) + 1] == '>')
 		{
-			filename = get_filename(&c[(*j) + 2]);
+			if ((filename = get_filename(&c[(*j)++ + 2])) == 0)
+				continue ;
 			*fd = open(filename, O_CREAT | O_WRONLY | O_APPEND, 0666);
-			(*j)++;
 			free(filename);
 		}
 		else if (c[*j] == '>' &&
 			ft_strchr("@$%&\\/:*?\"'<>|~`#^+={}[];", c[(*j) + 1]))
 		{
-			filename = get_filename(&c[(*j)++ + 1]);
-			*fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0666);
-			free(filename);
+			if ((filename = get_filename(&c[(*j) + 1])))
+			{
+				*fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0666);
+				free(filename);
+			}
 		}
 		(*j)++;
 	}
