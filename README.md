@@ -1,3 +1,6 @@
+# Minishell
+_____________________________________________________________________________________________________________
+
 I - Introduction
 
 School project. Even though the subject has changed quite a bit over the years, the overall stayed the same : 
